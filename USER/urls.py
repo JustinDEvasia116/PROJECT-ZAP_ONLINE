@@ -11,6 +11,8 @@ urlpatterns =[
     path('otp/<uid>',views.otplogin, name='otplogin'),
     path('getotp',views.getotp, name='getotp'),
     path("home",views.homepage,name="home"),
+    path("",views.startpage,name="start"),
+    path('logout',views.logout, name='logout'),
 
 
     ]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

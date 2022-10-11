@@ -7,6 +7,7 @@ from django.contrib.auth.models import User, auth
 from django.contrib import messages
 from django.contrib.auth import login
 from django.contrib.auth.decorators import login_required
+from django.views.decorators.cache import never_cache
 from USER.models import Accounts
 from ADMIN.models import *
 from .models import *
@@ -46,6 +47,9 @@ def loginpage(request):
     if request.method == 'POST' and 'username' in request.POST and 'password' in request.POST and 'otp' not in request.POST:
         username = request.POST['username']
         password = request.POST['password']
+        if len(username) == 0 or len(password) == 0:
+            messages.info(request, 'Please enter all fields')
+            return redirect(to='login')      
         user = User.objects.get(username=username)
         
         user = auth.authenticate(request, username=username, password=password)
@@ -102,29 +106,37 @@ def signup(request):
 
 
 
+@login_required(login_url='login')
+@never_cache
 def homepage(request):
     product = Product.objects.all()
     categories = Category.objects.all()
+    if request.user.is_authenticated:
+        print(request.user.is_authenticated)
+        user = request.user
+        print('user=', user)
+        return render(request, 'home.html', {'user': user, 'products': product, 'categories': categories})
+    else:
+        return render(request, 'start.html', {'products': product, 'categories': categories})
 
-    return render(request, 'home.html', {'products': product, 'categories': categories})
+def startpage(request):
+    product = Product.objects.all()
+    categories = Category.objects.all()
+
+    return render(request, 'start.html', {'products': product, 'categories': categories})
 
 def getotp(request):
     phone = request.POST['phone']
+    otp = random.randint(100000, 999999)
+    num = Accounts.objects.filter(phone=phone).update(otp=otp)
     if not Accounts.objects.filter(phone=phone).exists():
         messages.info(request, "Phone Number Not Registered")
-        return redirect('login')
+        return redirect('home')
     else:
-        number = Accounts.objects.get(phone=phone)
-        num = Accounts.objects.filter(phone=phone)
-        
-        print('1', number.phone)
-        user = User.objects.get(id=number.user_id)
-        num[0].otp = random.randint(100000, 999999)
-        num[0].save()
-        print(num[0].otp)
+       num = Accounts.objects.filter(phone=phone)
+       message_handler = MessageHandler(phone,num[0].otp).sent_otp_on_phone()
+       return redirect(f'otp/{num[0].uid}')
 
-        message_handler = MessageHandler(phone,num[0].otp).sent_otp_on_phone()
-        return redirect(f'otp/{num[0].uid}')
 
 def otplogin(request,uid):
     if request.method == 'POST':
@@ -138,6 +150,12 @@ def otplogin(request,uid):
     else:
      return render(request,"otp.html")
 
+
+@never_cache
+def logout(request):
+    # user=request.user
+    auth.logout(request)
+    return redirect('start')
 
 
 

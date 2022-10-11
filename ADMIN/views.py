@@ -114,3 +114,38 @@ def editproduct(request):
         product=Product.objects.get(id=id)
         category=Category.objects.all()
         return render(request, 'edit_product.html',{'product':product,'categories':category})
+
+def adminstart(request):
+    if 'sessionadmin' in request.session:
+        return redirect(to='home')
+    if request.method == 'POST':
+        username = request.POST['uname']
+        password = request.POST['password']
+        if len(username) == 0 or len(password) == 0:
+            messages.info(request, 'Please enter all fields')
+            return redirect(to='adminstart')
+        
+        user = auth.authenticate(username=username, password=password)
+        if user is not None and user.is_superuser:
+            auth.login(request, user)
+            request.session['sessionadmin'] = username
+            return redirect('dashboard')
+            
+        else:
+            messages.info(request, 'Invalid credentials')
+            return render(request, 'adminstart.html')
+    else:
+        
+       return render (request,"adminstart.html")
+
+def delete_product(request):
+    id=request.GET['id']
+    product=Product.objects.filter(id=id)
+    product.delete()
+    return redirect('products')
+
+def delete_category(request):
+    id=request.GET['id']
+    category=Category.objects.filter(id=id)
+    category.delete()
+    return redirect('category')

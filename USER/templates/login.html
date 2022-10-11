@@ -40,6 +40,9 @@
                                                     <input type="password" id="password"name="password" class="form-control" placeholder="Password">
                                                 </div>
                                             </div>
+                                            {%for message in messages%}
+                                            <h6 class="text-danger ">{{message}}</h6>
+                                            {% endfor %}       
                                             <div class="col-12 mt-30">
                                                 
                                                 <button type="submit" id="submit" class="btn btn-lg btn-custom btn-dark btn-block mt-2">Sign In

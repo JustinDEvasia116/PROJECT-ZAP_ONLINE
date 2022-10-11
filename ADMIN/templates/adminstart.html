@@ -1,15 +1,49 @@
 {% extends 'base.html' %}
+{% load static %}
 
 {% block css_files %}
+<link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+<script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
+<link rel="stylesheet" href="{% static 'adminlogin.css' %}">
 
 {% endblock css_files %}
 
-<title>{% block page_title  %}AdminStart{% endblock  %}</title>
-
 {% block content %}
-
-<h1>
-    This is AdminStart
-</h1>
+<section class="vh-100 gradient-custom">
+    <div class="container py-5 h-100">
+      <div class="row d-flex justify-content-center align-items-center h-100">
+        <div class="col-12 col-md-8 col-lg-6 col-xl-5">
+          <div class="card bg-dark text-white" style="border-radius: 1rem;">
+            <div class="card-body p-5 text-center">
+  
+              <div class="mb-md-5 mt-md-4 pb-5">
+  
+                <h2 class="fw-bold mb-2 text-uppercase">Admin Panel</h2>
+                <p class="text-white-50 mb-5">Please enter your username and password!</p>
+               <form id="login-form" class="form" action="" method="post">
+                {% csrf_token %}
+                  <div class="form-outline form-white mb-4">
+                    <input type="text" id="uname" name="uname"  class="form-control form-control-lg" />
+                    <label class="form-label" for="typeEmailX">username</label>
+                  </div>
+  
+                  <div class="form-outline form-white mb-4">
+                    <input type="password" id="typePasswordX" name="password"  class="form-control form-control-lg" />
+                    <label class="form-label" for="typePasswordX">Password</label>
+                  </div>
+                  {%for message in messages%}
+                  <h5 class="text-danger">{{message}}</h5>
+                  {% endfor %}
+                  <button class="btn btn-outline-light btn-lg px-5" type="submit">Login</button>
+                </form>
+             </div>
+              
+  
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
 
 {% endblock content %}
