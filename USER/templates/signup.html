@@ -1,0 +1,106 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block css_files %}
+<link href="//netdna.bootstrapcdn.com/bootstrap/3.1.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+<script src="//netdna.bootstrapcdn.com/bootstrap/3.1.0/js/bootstrap.min.js"></script>
+<script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+<link rel="stylesheet" href="{% static 'signup.css' %}">
+<link rel="stylesheet" href="{% static 'errorstyle.css' %}">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="{% static 'signup.js' %}"></script>
+
+<script src="https://kit.fontawesome.com/bdfb96850f.js" crossorigin="anonymous"></script>
+
+{% endblock css_files %}
+{% block page_title  %}
+ SignUp
+{% endblock  %}
+
+
+
+{% block content %}
+<div class="container">
+    <div class="row">
+        <h3 style="color: #17a2b8;" class="col-sm-offset-3 col-sm-6">REGISTER HERE</h3>
+
+    </div>
+    <br />
+
+    <div class="row">
+        <div class="col-sm-offset-1 col-sm-2">
+
+        </div>
+        <div class="col-sm-6">
+            <form id="submit-form" action="signup" method="POST" accept-charset="utf-8" class="form" role="form">
+               {% csrf_token %}
+                <div class="row">
+                    <div class="col-xs-6 col-md-6">
+                        <input id="fname"  style="color: black;" type="text" name="firstname" value=""
+                            class="form-control input-lg" placeholder="First Name" onkeyup="validatefname()" />
+                            <div id="fname-error" class="form-group "></div>
+                    </div>
+                    <div class="col-xs-6 col-md-6">
+                        <input id="lname" style="color: black;" type="text" name="lastname" value=""
+                            class="form-control input-lg" placeholder="Last Name" onkeyup="validatelname()"/>
+                            <div id="lname-error" class="form-group "></div>
+                    </div>
+                </div>
+                
+                <input id="email" style="color: black;" type="text" name="email" value="" class="form-control input-lg"
+                    placeholder="Your Email" onkeyup="validateEmail()" />
+                    <div id="email-error" class="form-group "></div>
+                <br>
+                <input id="mobnum" style="color: black;" type="text" name="mobnum" value="" class="form-control input-lg"
+                placeholder="Your Mobile Number" onkeyup="validateMob()" />
+                <div id="mobnum-error" class="form-group "></div>
+
+                <input id="uname" style="color: black;" type="text" name="username" value="" class="form-control input-lg"
+                    placeholder="Username"onkeyup="validateUname()" />
+                <div id="uname-error" class="form-group "></div>
+                {%for message in messages%}
+                <h5 class="text-danger">{{message}}</h5>
+                {% endfor %} 
+                       
+                <input id="password" style="color: black;" type="password" name="password" value="" class="form-control input-lg"
+                    placeholder="Password"  onkeyup="validatePassword()"/>
+                <div id="password-error" class="form-group "></div>
+
+              
+             
+                <span class="help-block">By clicking Create my account, you agree to our Terms and that you have
+                    read our Data Use Policy, including our Cookie Use.</span>
+                    <button class="btn btn-lg btn-primary btn-block signup-btn" type="submit" onclick="return validateform()">Create my account</button>
+                <div id="submit-error" class="form-group"></div>
+            </form>
+        </div>
+    </div>
+</div>
+</div>
+
+<script src="{% static 'signup.js' %}"></script>
+{% comment %} <script>
+    $("#submit-form").submit((e) => {
+        e.preventDefault()
+        $.ajax({
+
+            success: function (response) {
+                alert("Registration Successfull")
+                window.location.reload()
+                //window.location.href="https://google.com"
+                alert("Go To Login Page")
+                window.location.href="http://127.0.0.1:5500/home.html"
+            },
+            error: function (err) {
+                alert("Something Error")
+            }
+
+            
+
+        })
+    })
+
+</script> {% endcomment %}
+
+
+{% endblock content %}

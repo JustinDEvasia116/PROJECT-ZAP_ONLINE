@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block css_files %}
+<link href="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+<script src="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/material-design-iconic-font/2.2.0/css/material-design-iconic-font.min.css" integrity="sha256-3sPp8BkKUE7QyPSl6VfBByBroQbKxKG7tsusY2mhbVY=" crossorigin="anonymous" />
+
+
+<link rel="stylesheet" href="{% static 'login.css' %}">
+{% comment %} <script src="{% static 'login.js' %}"></script> {% endcomment %}
+{% endblock css_files %}
+
+<title>{% block page_title  %}OTPLOGIN{% endblock  %}</title>
+
+{% block content %}
+<div class="login-box ">
+<div class="row no-gutters align-items-center ">
+<div class="col-md-6 mx-auto mt-5">
+    <div class="form-wrap bg-white">
+        <h4 class="btm-sep pb-3 mb-5">Login</h4>
+        <form class="form" method="post" action="#">
+            <div class="row">
+                
+                <div class="col-12">
+                    
+                        
+                        <input type="text" id="otp" class="form-control " placeholder="Enter OTP">
+                    
+                </div>
+              <br></br>
+              <br></br>
+              <form class="form" method="post" action="#">
+                {% csrf_token %}
+                <div class="col-12 mt-30">
+                    <button type="submit" id="submit" class="btn btn-lg btn-custom btn-dark btn-block">Sign In
+                    </button>
+                </div>
+            </form>
+            </div>
+        </form>
+    </div>
+</div>
+</div>
+</div>
+{% endblock content %}

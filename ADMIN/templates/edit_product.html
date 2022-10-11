@@ -1,0 +1,110 @@
+{% extends 'base.html' %}{% block content %}
+
+  <div class="container">
+   
+        
+    <div class="col-md-8 my-4 mx-auto" style="width:60%;">
+        <div class="card">
+            <div class="card-header">
+                <h4>Edit Products</h4>
+            </div>
+            <div class="card-body">
+                <form action="editproduct?id={{product.id}}" method ="POST" enctype="multipart/form-data">
+                  {% csrf_token %}
+                  <div class="form-group" >
+                    <label for="pname">Brand</label>
+                    <input type="text" class="form-control" name="brand" value="{{product.brand}}" id="brand" aria-describedby="emailHelp" placeholder="Product Brand">
+                    <span id="errorbrand" class="text-danger"></span>
+                  </div>
+
+                    <div class="form-group" >
+                      <label for="pname">Name</label>
+                      <input type="text" class="form-control" name="name" value="{{product.name}}" id="name" aria-describedby="emailHelp" placeholder="Product Name">
+                      <span id="errorname" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                      <label for="pimage">Image</label>
+                      <input type="file" class="form-control" id="image" name="image"  placeholder="Product Image">
+                      <span id="errorimage" class="text-danger"></span>
+                    </div>
+                    
+                    <div class="form-group">
+                      <label for="pimage">Category</label>
+                      <select class="form-control" name="category" id="category">
+                        <option value="0">Select Category</option>
+                        {% for category in categories %}
+                        <option value="{{category.id}}">{{category.name}}</option>
+                        {% endfor %}
+                      </select>
+                      <span id="errorcategory" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                      <label for="price">Price</label>
+                      <input type="text" class="form-control" value="{{product.price}}" name="price" id="price" placeholder="Product Price">
+                      <span id="errorprice" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                      <label for="Stock">Stock</label>
+                      <input type="number" class="form-control" name="quantity" id="quantity" value="{{product.quantity}}" placeholder="Product Stock">
+                      
+                    </div>
+                    <div class="form-group my-4">
+                        <label for="exampleFormControlTextarea1">Description</label>
+                        <textarea class="form-control" name="description" value="{{product.description}}" id="description" rows="3"></textarea>
+                        <span id="errordescription" class="text-danger"></span>
+                    </div>
+                    <button type="submit" id="btn1" class="btn "style="background:#94D3AC;">Update Product</button>
+                    <span id="#error" class="text-danger"></span>
+                  </form>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+  $('#btn1').click(()=>{
+      var name = $('#name').val()
+      var image = $('#image').val()
+      var category = $('#category').val()
+      var price = $('#price').val()
+      var description = $('#description').val()
+      var brand = $('brand').val()
+      console.log(image)
+      
+
+      
+      if(name == '' ){
+          $('#errorname').html('Enter the name')
+          return false
+      }
+      else if(image == ''){
+          $('#errorimage').html('Choose a Image')
+          return false
+      } 
+      else if (category == 0){  
+          $('#errorcategory').html('Select a category')
+          return false;  
+      }
+      else if(price == ''){
+          $('#errorprice').html('Enter the price')
+          return false
+      }
+      else if(description == ''){
+          $('#errordescription').html('Enter the description')
+          return false
+      }
+      else if(brand == ''){
+          $('#errorbrand').html('Enter the brand')
+          return false
+      }
+      else{
+          $('#error').html('')
+          $('#error1').html('')
+          alert("Product Updated Successfully")
+          return true
+      }
+      
+  })
+
+</script>
+    
+{% endblock content %}
