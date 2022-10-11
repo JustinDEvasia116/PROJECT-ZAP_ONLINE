@@ -13,4 +13,6 @@ urlpatterns =[
     path('addproduct',views.addproduct,name='addproduct'),
     path('addcategory',views.addcategory,name='addcategory'),
     path('editproduct',views.editproduct,name='editproduct'),
+    path('block',views.block,name='block'),
+    path('unblock',views.unblock,name='unblock'),
 ]

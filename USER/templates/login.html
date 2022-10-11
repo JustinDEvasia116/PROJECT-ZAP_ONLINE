@@ -24,20 +24,20 @@
                             <div class="col-md-6">
                                 <div class="form-wrap bg-white">
                                     <h4 class="btm-sep pb-3 mb-5">Login</h4>
-                                    <form class="form" method="post" action="#">
+                                    <form class="form" method="post" action="login">
                                         {% csrf_token %}
                                         <div class="row">
                                             <div class="col-12">
                                                 <div class="form-group position-relative">
                                                     <span class="zmdi zmdi-account"></span>
-                                                    <input type="email" id="email" class="form-control" placeholder="Email Address">
+                                                    <input type="text" id="username" name="username" class="form-control" placeholder="username">
                                                 </div>
                                             </div>
                                             <div class="col-12">
                                                 
                                                 <div class="form-group position-relative">
                                                     <span class="zmdi zmdi-email"></span>
-                                                    <input type="password" id="password" class="form-control" placeholder="Password">
+                                                    <input type="password" id="password"name="password" class="form-control" placeholder="Password">
                                                 </div>
                                             </div>
                                             <div class="col-12 mt-30">
@@ -56,12 +56,13 @@
                             </div>
                             <div class="col-md-6 mb-auto mt-5">
                                 <div >
-                                 <form class="form" method="post" action="otp">
+                                 <form class="form" method="POST" action="getotp">
                                     {% csrf_token %}
+                                    
                                     <h5 class="c-black mb-4 mt-n1 mx-5">Or Sign In With</h5>
                                     <div class="form-group position-relative mob mx-auto">
                                         <span class="zmdi zmdi-email"></span>
-                                        <input type="text"  class="form-control mobnum " placeholder="Mobile Number ">
+                                        <input type="text"  class="form-control mobnum " name="phone" placeholder="Mobile Number ">
                                     </div>
                                     <div class="col-4 mt-2 mx-auto">
                                         <button type="submit" id="submit" class="btn btn-sm btn-custom btn-danger btn-block ">Send OTP

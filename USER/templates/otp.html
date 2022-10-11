@@ -20,25 +20,22 @@
 <div class="col-md-6 mx-auto mt-5">
     <div class="form-wrap bg-white">
         <h4 class="btm-sep pb-3 mb-5">Login</h4>
-        <form class="form" method="post" action="#">
+        <form class="form" method="post" action="otplogin">
+            {% csrf_token %}
             <div class="row">
                 
                 <div class="col-12">
-                    
-                        
-                        <input type="text" id="otp" class="form-control " placeholder="Enter OTP">
-                    
+                    <input type="hidden" name="username" value= "{{username}}" id="username">
+                    <input type="hidden" name="password" value="{{password}}" id="password">
+                    <input type="text" id="otp" name='otp' class="form-control " placeholder="Enter OTP">
                 </div>
               <br></br>
               <br></br>
-              <form class="form" method="post" action="#">
-                {% csrf_token %}
                 <div class="col-12 mt-30">
                     <button type="submit" id="submit" class="btn btn-lg btn-custom btn-dark btn-block">Sign In
                     </button>
                 </div>
-            </form>
-            </div>
+             </div>
         </form>
     </div>
 </div>

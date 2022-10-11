@@ -36,12 +36,12 @@
                {% csrf_token %}
                 <div class="row">
                     <div class="col-xs-6 col-md-6">
-                        <input id="fname"  style="color: black;" type="text" name="firstname" value=""
+                        <input id="fname"  style="color: black;" type="text" name="first_name" value=""
                             class="form-control input-lg" placeholder="First Name" onkeyup="validatefname()" />
                             <div id="fname-error" class="form-group "></div>
                     </div>
                     <div class="col-xs-6 col-md-6">
-                        <input id="lname" style="color: black;" type="text" name="lastname" value=""
+                        <input id="lname" style="color: black;" type="text" name="last_name" value=""
                             class="form-control input-lg" placeholder="Last Name" onkeyup="validatelname()"/>
                             <div id="lname-error" class="form-group "></div>
                     </div>
@@ -51,7 +51,7 @@
                     placeholder="Your Email" onkeyup="validateEmail()" />
                     <div id="email-error" class="form-group "></div>
                 <br>
-                <input id="mobnum" style="color: black;" type="text" name="mobnum" value="" class="form-control input-lg"
+                <input id="mobnum" style="color: black;" type="text" name="phone" value="" class="form-control input-lg"
                 placeholder="Your Mobile Number" onkeyup="validateMob()" />
                 <div id="mobnum-error" class="form-group "></div>
 

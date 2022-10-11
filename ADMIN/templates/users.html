@@ -63,12 +63,18 @@
         <td>{{details.first_name}} {{details.last_name}}</td>
         <td>{{details.email}}</td>
         <td>{{details.username}}</td>
-        <td>{{details.phone_number}}</td>
+        <td>{{details.accounts.phone}}</td>
         <td>
           
-          <a href="" style="background:#CCEDD2;" class="btn">Block</a>
-     
-          <a href="" style="background:#CCEDD2;" class="btn">Unblock</a>
+          {% if details.is_active %}
+                                    
+          <a style=" background:#CCEDD2; " class="btn" href= "block?id={{details.id}}"><i style=""onclick="return confirm('Are you sure to block '+' {{details.username}} ?')">Block</i>
+              </a>
+          {% else %}
+         
+          <a style="background:#CCEDD2;" class="btn" href= "unblock?id={{details.id}}"><i style="y"onclick="return confirm('Are you sure to unblock '+' {{details.username}} ?')"</i>
+          unblock</a>
+          {% endif %}
           
       </td>
       </tr>
@@ -79,6 +85,6 @@
   
 </div>
 
+<script src="{% static 'user.js' %}"></script>
 <script src="{% static 'main.js' %}"></script>
-
 {% endblock content %}

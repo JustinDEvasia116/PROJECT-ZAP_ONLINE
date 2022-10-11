@@ -20,7 +20,8 @@ from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
-
+TWILIO_ACCOUNT_SID='AC6167737a8a886026afeb10da8f33e195'
+TWILIO_AUTH_TOKEN='43246524c092487a9fb9df72b32f9632'
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.1/howto/deployment/checklist/
@@ -44,7 +45,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'USER',
-    'ADMIN'
+    'ADMIN',
+    'django_twilio',
 ]
 
 MIDDLEWARE = [
@@ -142,3 +144,6 @@ MEDIA_ROOT = os.path.join(BASE_DIR,'media')
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+ACCOUNT_SID = TWILIO_ACCOUNT_SID
+AUTH_TOKEN = TWILIO_AUTH_TOKEN
