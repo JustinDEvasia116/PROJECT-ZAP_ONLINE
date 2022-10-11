@@ -1,9 +1,11 @@
 
 
+import profile
 from django.shortcuts import render, redirect
 from django.http import JsonResponse, HttpResponse
 from django.contrib.auth.models import User, auth
 from django.contrib import messages
+from django.contrib.auth import login
 from django.contrib.auth.decorators import login_required
 from USER.models import Accounts
 from ADMIN.models import *
@@ -114,25 +116,30 @@ def getotp(request):
     else:
         number = Accounts.objects.get(phone=phone)
         num = Accounts.objects.filter(phone=phone)
+        
         print('1', number.phone)
         user = User.objects.get(id=number.user_id)
-        otp = random.randint(100000, 999999)
-        numb = Accounts.objects.filter(phone=phone).update(otp=otp)
-        print(otp)
+        num[0].otp = random.randint(100000, 999999)
+        num[0].save()
+        print(num[0].otp)
 
-        message_handler = MessageHandler(phone, otp).sent_otp_on_phone()
-        return render(request, 'otp.html', {'user': user})
+        message_handler = MessageHandler(phone,num[0].otp).sent_otp_on_phone()
+        return redirect(f'otp/{num[0].uid}')
 
-def otplogin(request):
-    
-    otp = request.POST['otp']
-    user = User.objects.get(id=id)
-    print(user.accounts.phone)
-    if Accounts.objects.filter(otp=otp).exists():
-        user = auth.authenticate(
-            request, username=user.username, password=user.password)
-        auth.login(request, user)
-        return redirect('home')
+def otplogin(request,uid):
+    if request.method == 'POST':
+        otp=request.POST.get('otp')
+        accounts = Accounts.objects.get(uid=uid)
+        if otp == accounts.otp:
+            login(request,accounts.user)
+            return redirect('home')
+        else:
+          return redirect(f'otp/{uid}')
     else:
-        messages.info(request, "Invalid OTP")
-        return redirect('login')
+     return render(request,"otp.html")
+
+
+
+
+
+            
