@@ -17,5 +17,6 @@ urlpatterns =[
     path('deleteproduct',views.delete_product,name='delete_product'),
     path('block',views.block,name='block'),
     path('unblock',views.unblock,name='unblock'),
+    path('adminlogout',views.logout, name='adminlogout'),
 
 ]

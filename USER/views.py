@@ -50,14 +50,14 @@ def loginpage(request):
         if len(username) == 0 or len(password) == 0:
             messages.info(request, 'Please enter all fields')
             return redirect(to='login')      
-        user = User.objects.get(username=username)
+        user = User.objects.filter(username=username)
         
         user = auth.authenticate(request, username=username, password=password)
-        if user is not None and user.is_superuser==False:
+        if user is not None and user.is_active and user.is_superuser == False:
             auth.login(request, user)
             return redirect(to='home')
         else:
-            messages.info(request, 'Invalid credentials')
+            messages.info(request, "Invalid credentials", extra_tags='user_login')
             return redirect(to='login')
                 
     # elif request.method == 'POST' and 'otp' in request.POST:
@@ -125,12 +125,18 @@ def startpage(request):
 
     return render(request, 'start.html', {'products': product, 'categories': categories})
 
+def productview(request):
+    return render(request, 'productview.html')
+
 def getotp(request):
     phone = request.POST['phone']
     otp = random.randint(100000, 999999)
+    
     num = Accounts.objects.filter(phone=phone).update(otp=otp)
-    if not Accounts.objects.filter(phone=phone).exists():
-        messages.info(request, "Phone Number Not Registered")
+    user=Accounts.objects.get(phone=phone)
+    print(user.user)
+    if not Accounts.objects.filter(phone=phone).exists() or user.user.is_active ==False and user.user.is_superuser == False:
+        messages.info(request, "Phone Number Not Registered", extra_tags='phone_login' )
         return redirect('home')
     else:
        num = Accounts.objects.filter(phone=phone)
@@ -142,6 +148,7 @@ def otplogin(request,uid):
     if request.method == 'POST':
         otp=request.POST.get('otp')
         accounts = Accounts.objects.get(uid=uid)
+     
         if otp == accounts.otp:
             login(request,accounts.user)
             return redirect('home')

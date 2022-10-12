@@ -41,7 +41,10 @@
                                                 </div>
                                             </div>
                                             {%for message in messages%}
-                                            <h6 class="text-danger ">{{message}}</h6>
+                                                {% if 'user_login' in message.tags %}
+                                                     <h6 class="text-danger ">{{message}}</h6>  
+                                                {% endif %}
+                                            
                                             {% endfor %}       
                                             <div class="col-12 mt-30">
                                                 
@@ -67,6 +70,12 @@
                                         <span class="zmdi zmdi-email"></span>
                                         <input type="text"  class="form-control mobnum " name="phone" placeholder="Mobile Number ">
                                     </div>
+                                    {%for message in messages%}
+                                       {% if 'phone_login' in message.tags %}
+                                         <h6 class="text-danger ">{{message}}</h6>
+                                       {% endif %}
+                                    
+                                    {% endfor %} 
                                     <div class="col-4 mt-2 mx-auto">
                                         <button type="submit" id="submit" class="btn btn-sm btn-custom btn-danger btn-block ">Send OTP
                                         </button>

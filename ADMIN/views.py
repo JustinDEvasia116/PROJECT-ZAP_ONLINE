@@ -9,24 +9,28 @@ import os
 from django.http import JsonResponse, HttpResponse
 from django.contrib.auth.models import User, auth
 from django.contrib.auth.decorators import login_required
+from django.views.decorators.cache import never_cache
 # Create your views here.
 def adminstart(request):
     return render(request,"adminstart.html")
 
+@login_required(login_url='adminstart')
+@never_cache
 def dashboard(request):
     return render(request,"dashboard.html")
 
 
- 
+@login_required(login_url='adminstart') 
 def orders(request):
     return render(request,"orders.html")
 
 
-
+@login_required(login_url='adminstart')
 def users(request):
-     user_details=User.objects.all()
+     user_details=User.objects.filter(is_superuser=False)
      return render(request, 'users.html',{'user_details':user_details})
 
+@login_required(login_url='adminstart')
 def addproduct(request):
     if request.method == 'POST':
         name = request.POST['name']
@@ -47,7 +51,7 @@ def addproduct(request):
         category=Category.objects.all()
         return render(request, 'addproduct.html',{'categories':category})
     
-
+@login_required(login_url='adminstart')
 def addcategory(request):
     if request.method == 'POST':
         name = request.POST['name']
@@ -58,7 +62,7 @@ def addcategory(request):
     else:
         return render(request, 'addcategory.html')
 
-
+@login_required(login_url='adminstart')
 def block(request):
     id=request.GET['id']
     user=User.objects.get(id=id)
@@ -72,14 +76,17 @@ def unblock(request):
     user.save()
     return redirect('users')
 
+@login_required(login_url='adminstart')
 def products(request):
     product=Product.objects.all()
     return render(request, 'products.html',{'products':product})
 
+@login_required(login_url='adminstart')
 def category(request):
     categories = Category.objects.all()
     return render(request, 'category.html', {'categories': categories})
 
+@login_required(login_url='adminstart')
 def editproduct(request):
     id=request.GET['id']
     product = Product.objects.get(id=id)
@@ -115,9 +122,10 @@ def editproduct(request):
         category=Category.objects.all()
         return render(request, 'edit_product.html',{'product':product,'categories':category})
 
+
 def adminstart(request):
     if 'sessionadmin' in request.session:
-        return redirect(to='home')
+        return redirect(to='dashboard')
     if request.method == 'POST':
         username = request.POST['uname']
         password = request.POST['password']
@@ -138,14 +146,23 @@ def adminstart(request):
         
        return render (request,"adminstart.html")
 
+@login_required(login_url='adminstart')
 def delete_product(request):
     id=request.GET['id']
     product=Product.objects.filter(id=id)
     product.delete()
     return redirect('products')
 
+@login_required(login_url='adminstart')
 def delete_category(request):
     id=request.GET['id']
     category=Category.objects.filter(id=id)
     category.delete()
     return redirect('category')
+
+@login_required(login_url='adminstart')
+@never_cache
+def logout(request):
+    # user=request.user
+    auth.logout(request)
+    return redirect('adminstart')
