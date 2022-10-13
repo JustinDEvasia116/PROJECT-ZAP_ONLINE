@@ -13,7 +13,7 @@ urlpatterns =[
     path("home",views.homepage,name="home"),
     path("",views.startpage,name="start"),
     path('logout',views.logout, name='logout'),
-    path('productview',views.productview, name='productview'),
+    path('view_product',views.view_product, name='view_product'),
 
 
     ]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

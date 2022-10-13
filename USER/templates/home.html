@@ -138,107 +138,14 @@
             </div>
         </div>
         <div class="row property_gallery">
-            <div class="col-lg-3 col-md-4 col-sm-6 ">
-                <div class="product_item ">
-                    <div class="product_item_pic  ">
-                        <img class="img-size" src="https://rukminim1.flixcart.com/image/416/416/k2jbyq80pkrrdj/mobile-refurbished/k/y/d/iphone-11-256-u-mwm82hn-a-apple-0-original-imafkg25mhaztxns.jpeg?q=70" alt="">
-                        <div class="label new">New</div>
-                        <ul class="product_hover">
-                            <li><a href="#"><i class="fa fa-arrows-alt"></i></a></li>
-                            <li><a href="#"><i class="fa fa-heart"></i></a></li>
-                            <li><a href="#"><i class="fa fa-shopping-bag"></i></a></li>
-                        </ul>
-                    </div>
-                    <div class="product_item_text">
-                        <h6><a href="#">Lorem Ipsum</a></h6>
-                        <div class="rating">
-                            <i class="fa fa-star"></i>
-                            <i class="fa fa-star"></i>
-                            <i class="fa fa-star"></i>
-                            <i class="fa fa-star"></i>
-                            <i class="fa fa-star"></i>
-                        </div>
-                        <div class="product_price">$ 59.0</div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-lg-3 col-md-4 col-sm-6">
-                <div class="product_item">
-                    <div class="product_item_pic">
-                        <img class="img-size center-block"src="https://rukminim1.flixcart.com/image/416/416/xif0q/computer/q/h/9/-original-imagg6t9zmscgfed.jpeg?q=70" alt="">
-                        <ul class="product_hover">
-                            <li><a href="#"><i class="fa fa-arrows-alt"></i></a></li>
-                            <li><a href="#"><i class="fa fa-heart"></i></a></li>
-                            <li><a href="#"><i class="fa fa-shopping-bag"></i></a></li>
-                        </ul>
-                    </div>
-                    <div class="product_item_text">
-                        <h6><a href="#">Lorem Ipsum</a></h6>
-                        <div class="rating">
-                            <i class="fa fa-star"></i>
-                            <i class="fa fa-star"></i>
-                            <i class="fa fa-star"></i>
-                            <i class="fa fa-star"></i>
-                            <i class="fa fa-star"></i>
-                        </div>
-                        <div class="product_price">$ 69.0</div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-lg-3 col-md-4 col-sm-6">
-                <div class="product_item">
-                    <div class="product_item_pic">
-                        <img class="img-size " src="https://rukminim1.flixcart.com/image/416/416/ky90scw0/mobile/m/r/u/-original-imagagnffruu7ptd.jpeg?q=70" alt="">
-                        <div class="label stockout">out of stock</div>
-                        <ul class="product_hover">
-                            <li><a href="#"><i class="fa fa-arrows-alt"></i></a></li>
-                            <li><a href="#"><i class="fa fa-heart"></i></a></li>
-                            <li><a href="#"><i class="fa fa-shopping-bag"></i></a></li>
-                        </ul>
-                    </div>
-                    <div class="product_item_text">
-                        <h6><a href="#">Lorem Ipsum</a></h6>
-                        <div class="rating">
-                            <i class="fa fa-star"></i>
-                            <i class="fa fa-star"></i>
-                            <i class="fa fa-star"></i>
-                            <i class="fa fa-star"></i>
-                            <i class="fa fa-star"></i>
-                        </div>
-                        <div class="product_price">$ 49.0</div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-lg-3 col-md-4 col-sm-6">
-                <div class="product_item">
-                    <div class="product_item_pic">
-                        <img class="img-size " src="https://rukminim1.flixcart.com/image/416/416/kqwobrk0/headphone/3/n/b/bassheads-100-boat-original-imag4tgdrpxfh3pk.jpeg?q=70" alt="">
-                        <ul class="product_hover">
-                            <li><a href="#"><i class="fa fa-arrows-alt"></i></a></li>
-                            <li><a href="#"><i class="fa fa-heart"></i></a></li>
-                            <li><a href="#"><i class="fa fa-shopping-bag"></i></a></li>
-                        </ul>
-                    </div>
-                    <div class="product_item_text">
-                        <h6><a href="#">Lorem Ipsum</a></h6>
-                        <div class="rating">
-                            <i class="fa fa-star"></i>
-                            <i class="fa fa-star"></i>
-                            <i class="fa fa-star"></i>
-                            <i class="fa fa-star"></i>
-                            <i class="fa fa-star"></i>
-                        </div>
-                        <div class="product_price">$ 89.0</div>
-                    </div>
-                </div>
-            </div>
+           
             {% for product in products %} 
             <div class="col-lg-3 col-md-4 col-sm-6">
                 <div class="product_item">
                     <div class="product_item_pic">
                         <img class="img-size " src="{{product.image.url}}" alt="">
                         <ul class="product_hover">
-                            <li><a href="#"><i class="fa fa-arrows-alt"></i></a></li>
+                            <li><a href="view_product?id={{product.id}}"><i class="fa fa-arrows-alt"></i></a></li>
                             <li><a href="#"><i class="fa fa-heart"></i></a></li>
                             <li><a href="#"><i class="fa fa-shopping-bag"></i></a></li>
                         </ul>

@@ -1,5 +1,6 @@
 
 
+from plistlib import UID
 import profile
 from django.shortcuts import render, redirect
 from django.http import JsonResponse, HttpResponse
@@ -42,13 +43,13 @@ import random
 #         return render(request, 'login.html')
 
 def loginpage(request):
-    # if request.user.is_authenticated and request.user.is_superuser == False:
-    #     return redirect('home')
+    if request.user.is_authenticated and request.user.is_superuser == False:
+        return redirect('home')
     if request.method == 'POST' and 'username' in request.POST and 'password' in request.POST and 'otp' not in request.POST:
         username = request.POST['username']
         password = request.POST['password']
         if len(username) == 0 or len(password) == 0:
-            messages.info(request, 'Please enter all fields')
+            messages.info(request, "Please enter all fields",extra_tags='user_login')
             return redirect(to='login')      
         user = User.objects.filter(username=username)
         
@@ -125,19 +126,26 @@ def startpage(request):
 
     return render(request, 'start.html', {'products': product, 'categories': categories})
 
-def productview(request):
-    return render(request, 'productview.html')
 
 def getotp(request):
     phone = request.POST['phone']
+    if len(phone) == 0 :
+            messages.info(request, "Please enter all fields",extra_tags='phone_login')
+            return redirect(to='login')
+
     otp = random.randint(100000, 999999)
-    
     num = Accounts.objects.filter(phone=phone).update(otp=otp)
-    user=Accounts.objects.get(phone=phone)
-    print(user.user)
-    if not Accounts.objects.filter(phone=phone).exists() or user.user.is_active ==False and user.user.is_superuser == False:
+    if not Accounts.objects.filter(phone=phone).exists():
         messages.info(request, "Phone Number Not Registered", extra_tags='phone_login' )
-        return redirect('home')
+        return redirect('login')
+    else:
+        user = Accounts.objects.get(phone=phone)
+
+    
+    print(user.user)
+    if user.user.is_active == False or user.user.is_superuser:
+        messages.info(request, "Phone Number Not Registered", extra_tags='phone_login' )
+        return redirect('login')
     else:
        num = Accounts.objects.filter(phone=phone)
        message_handler = MessageHandler(phone,num[0].otp).sent_otp_on_phone()
@@ -153,7 +161,7 @@ def otplogin(request,uid):
             login(request,accounts.user)
             return redirect('home')
         else:
-          return redirect(f'otp/{uid}')
+          return redirect(f'/otp/{uid}')
     else:
      return render(request,"otp.html")
 
@@ -164,7 +172,15 @@ def logout(request):
     auth.logout(request)
     return redirect('start')
 
-
+def view_product(request):
+    id = request.GET['id']
+    product = Product.objects.get(id=id)
+    print(product)
+    prdct = Product.objects.filter(id=id)
+    print(prdct)
+    images = Images.objects.filter(product=prdct[0].id)
+    print(images)
+    return render(request, 'view_product.html', {'product': product, 'images':images})
 
 
             

@@ -20,17 +20,20 @@ def dashboard(request):
     return render(request,"dashboard.html")
 
 
-@login_required(login_url='adminstart') 
+@login_required(login_url='adminstart')
+@never_cache
 def orders(request):
     return render(request,"orders.html")
 
 
 @login_required(login_url='adminstart')
+@never_cache
 def users(request):
      user_details=User.objects.filter(is_superuser=False)
      return render(request, 'users.html',{'user_details':user_details})
 
 @login_required(login_url='adminstart')
+@never_cache
 def addproduct(request):
     if request.method == 'POST':
         name = request.POST['name']
@@ -52,6 +55,7 @@ def addproduct(request):
         return render(request, 'addproduct.html',{'categories':category})
     
 @login_required(login_url='adminstart')
+@never_cache
 def addcategory(request):
     if request.method == 'POST':
         name = request.POST['name']
@@ -63,6 +67,7 @@ def addcategory(request):
         return render(request, 'addcategory.html')
 
 @login_required(login_url='adminstart')
+@never_cache
 def block(request):
     id=request.GET['id']
     user=User.objects.get(id=id)
@@ -77,16 +82,19 @@ def unblock(request):
     return redirect('users')
 
 @login_required(login_url='adminstart')
+@never_cache
 def products(request):
     product=Product.objects.all()
     return render(request, 'products.html',{'products':product})
 
 @login_required(login_url='adminstart')
+@never_cache
 def category(request):
     categories = Category.objects.all()
     return render(request, 'category.html', {'categories': categories})
 
 @login_required(login_url='adminstart')
+@never_cache
 def editproduct(request):
     id=request.GET['id']
     product = Product.objects.get(id=id)
@@ -147,6 +155,7 @@ def adminstart(request):
        return render (request,"adminstart.html")
 
 @login_required(login_url='adminstart')
+@never_cache
 def delete_product(request):
     id=request.GET['id']
     product=Product.objects.filter(id=id)
@@ -154,6 +163,7 @@ def delete_product(request):
     return redirect('products')
 
 @login_required(login_url='adminstart')
+@never_cache
 def delete_category(request):
     id=request.GET['id']
     category=Category.objects.filter(id=id)
