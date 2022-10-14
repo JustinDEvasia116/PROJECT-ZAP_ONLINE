@@ -1,0 +1,54 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block css_files %}
+<link href="//netdna.bootstrapcdn.com/bootstrap/3.1.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+<script src="//netdna.bootstrapcdn.com/bootstrap/3.1.0/js/bootstrap.min.js"></script>
+<script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+<link rel="stylesheet" href="{% static 'signup.css' %}">
+<link rel="stylesheet" href="{% static 'errorstyle.css' %}">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="{% static 'signup.js' %}"></script>
+
+<script src="https://kit.fontawesome.com/bdfb96850f.js" crossorigin="anonymous"></script>
+
+{% endblock css_files %}
+{% block page_title  %}
+ SignUp
+{% endblock  %}
+
+{% block content %}
+<div class="container">
+    <div class="row">
+        <h3 style="color: #17a2b8;" class="col-sm-offset-3 col-sm-6">MOBILE NUMBER VERIFICATION</h3>
+   </div>
+    <br />
+
+    <div class="row">
+        <div class="col-sm-offset-1 col-sm-2">
+        </div>
+        <div class="col-sm-6">
+            <form id="submit-form" action="mobile" method="POST" accept-charset="utf-8" class="form" role="form">
+               {% csrf_token %}
+                <div class="row">    
+                </div>             
+                <br>
+                <input id="mobnum" style="color: black;" type="text" name="phone" value="" class="form-control input-lg"
+                placeholder=" Enter your Mobile Number" onkeyup="validatemobnum()" />
+                <div id="mobnum-error" class="form-group "></div>
+
+              
+                {%for message in messages%}
+                <h5 class="text-danger">{{message}}</h5>
+                {% endfor %}           
+                    <button class="btn btn-lg btn-primary btn-block signup-btn" type="submit" onclick="return validateform()">Next</button>
+                <div id="submit-error" class="form-group"></div>
+            </form>
+        </div>
+    </div>
+</div>
+</div>
+
+<script src="{% static 'signup.js' %}"></script>
+
+{% endblock content %}

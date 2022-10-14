@@ -58,7 +58,7 @@ def addproduct(request):
 @never_cache
 def addcategory(request):
     if request.method == 'POST':
-        name = request.POST['name']
+        name = request.POST['catname']
         image = request.FILES['image']
         category = Category.objects.create(name=name,image=image)
         category.save()

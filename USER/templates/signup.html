@@ -8,9 +8,10 @@
 <link rel="stylesheet" href="{% static 'signup.css' %}">
 <link rel="stylesheet" href="{% static 'errorstyle.css' %}">
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://kit.fontawesome.com/bdfb96850f.js" crossorigin="anonymous"></script>
 <script src="{% static 'signup.js' %}"></script>
 
-<script src="https://kit.fontawesome.com/bdfb96850f.js" crossorigin="anonymous"></script>
+
 
 {% endblock css_files %}
 {% block page_title  %}
@@ -51,8 +52,7 @@
                     placeholder="Your Email" onkeyup="validateEmail()" />
                     <div id="email-error" class="form-group "></div>
                 <br>
-                <input id="mobnum" style="color: black;" type="text" name="phone" value="" class="form-control input-lg"
-                placeholder="Your Mobile Number"  />
+                <input id=""  type="hidden" name="phone" value="{{phone}}" class="form-control input-lg"/>
                 <div id="mobnum-error" class="form-group "></div>
 
                 <input id="uname" style="color: black;" type="text" name="username" value="" class="form-control input-lg"

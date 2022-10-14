@@ -4,7 +4,7 @@ var emailError = document.getElementById("email-error")
 var unameError = document.getElementById("uname-error")
 var submiterror = document.getElementById("submit-error")
 var passwordError = document.getElementById("password-error");
-var mobnumError = document.getElementById("mobnum-error")
+
 
 
 
@@ -67,7 +67,6 @@ function validateform(){
     validateEmail()
     validateUname()
     validatePassword()
-    validatemobnum()
 
     if(!validatefname() || !validatelname() || !validateEmail() ||  !validateUname()){
         
@@ -111,23 +110,4 @@ function validatePassword(){
 
  }
 
- function validatemobnum() {
-    var mobnum = document.getElementById("mobnum").value;
-    if (mobnum.length == 0) {
-        mobnumError.innerHTML = "mobile is required";
-        return false;
-    }
-    if((!mobnum.match(/^\d+/)) || (mobnum.length != 10)){
-        mobnumError.innerHTML = "Invalid mobile"
 
-
-    }
-
-    else {
-        mobnumError.innerHTML = '<i class="fa-solid fa-check"></i>';
-        return true;
-    }
-
-
-
-}
