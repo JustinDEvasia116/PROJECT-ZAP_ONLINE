@@ -187,21 +187,9 @@ def mobile_signup(request):
 
     return render(request,"enterphone.html")
 
-# def otp_signup(request):
+def cartpage(request):
 
-#     if request.method == 'POST':
-#         phone = request.POST['phone']
-#         otp=968542
-
-#         otp1 =int( request.POST['otp'])
-#         print(otp)
-#         print(otp1)
-#         if otp == otp1:
-#             return render(request, "signup.html",{ 'phone': phone})
-#         else:
-#           return redirect('login')
-#     else:
-#          return render(request,"enterotp.html")
+  return render(request,"mycart.html")
 
 
             
