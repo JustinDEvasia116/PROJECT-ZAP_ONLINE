@@ -188,8 +188,29 @@ def mobile_signup(request):
     return render(request,"enterphone.html")
 
 def cartpage(request):
+     if request.user.is_authenticated:
+        user = request.user
+        cart = UserCart.objects.filter(user=user)
+        
+        return render(request,'mycart.html',{'cart':cart})
 
-  return render(request,"mycart.html")
 
+
+
+def addtocart(request):
+    pid = request.GET['pid']
+    product = Product.objects.get(id=pid)
+    uid = request.user
+    print("pid =", pid)
+    print("uid =", uid)
+    if UserCart.objects.filter(product=pid, user=uid).exists():
+        cart = UserCart.objects.get(product=pid, user=uid)
+        cart.quantity = cart.quantity+1
+        cart.save()
+        return redirect('mycart')
+    else:
+        cart = UserCart.objects.create(product=product, user=uid)
+        cart = UserCart.objects.filter(user=uid)
+        return redirect('mycart')
 
             

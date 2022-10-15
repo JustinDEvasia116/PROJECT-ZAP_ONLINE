@@ -5,6 +5,7 @@ import uuid
 # Create your models here.
 from django.db import models
 from django.contrib.auth.models import User
+from ADMIN.models import *
 
 
 from django.shortcuts import redirect
@@ -19,3 +20,27 @@ class Accounts(models.Model):
     
     def __str__(self):
         return self.user.username
+
+
+class UserCart(models.Model):
+    quantity = models.IntegerField(default=1)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    
+    
+    
+    def __str__(self):
+        return self.product.name
+
+
+
+
+
+class AdminCart(models.Model):
+    quantity = models.IntegerField(default=1)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    
+    
+    def __str__(self):
+        return self.product.name
