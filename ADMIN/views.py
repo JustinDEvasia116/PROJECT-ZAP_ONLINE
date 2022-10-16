@@ -46,12 +46,19 @@ def addproduct(request):
         image = request.FILES['image']
         
         category=Category.objects.get(id=category)
-        product = Product.objects.create(name=name,description=description,price=price,category=category,image=image,brand=brand,quantity=quantity)
+        product = Product.objects.create(name=name,description=description,price=price,image=image,brand=brand,quantity=quantity)
+        product.category.add(category)
         product.save()
         return redirect('addproduct')
     else:
         
         category=Category.objects.all()
+        # subcategory =category.sub_categories.all()
+
+
+        
+        print(category)
+        
         return render(request, 'addproduct.html',{'categories':category})
     
 @login_required(login_url='adminstart')
@@ -59,11 +66,15 @@ def addproduct(request):
 def addcategory(request):
     if request.method == 'POST':
         name = request.POST['catname']
-        image = request.FILES['image']
-        category = Category.objects.create(name=name,image=image)
-        category.save()
+        id = 18
+        categories= Category.objects.get(id=id)
+        category = Category.objects.create(name=name)
+        category.sub_categories.add(categories)
+     
+       
         return redirect('category')
     else:
+        
         return render(request, 'addcategory.html')
 
 @login_required(login_url='adminstart')
@@ -91,7 +102,7 @@ def products(request):
 @never_cache
 def category(request):
     categories = Category.objects.all()
-    return render(request, 'category.html', {'categories': categories})
+    return render(request, 'category.html', {'categories': categories })
 
 @login_required(login_url='adminstart')
 @never_cache
@@ -169,6 +180,19 @@ def delete_category(request):
     category=Category.objects.filter(id=id)
     category.delete()
     return redirect('category')
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 @login_required(login_url='adminstart')
 @never_cache

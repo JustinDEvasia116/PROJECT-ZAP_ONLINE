@@ -27,8 +27,13 @@
         
         <div class="col-md-8 my-4 mx-auto" style="width:60%;">
             <div class="card">
-                <div class="card-header">
-                    <h4>Add Category</h4>
+                <div class="card-header d-flex">
+                  <div style="width:75%">
+                     <h4>Add Category</h4>
+                  </div>
+                    
+                    
+                    
                 </div>
                 <div class="card-body">
                     <form action="addcategory" method ="POST" enctype="multipart/form-data">
@@ -46,9 +51,18 @@
                             <input type="file" class="form-control" name="image" id="upload"  placeholder="Category Image"onchange="validateFile()">
                             <span id="image-error" class="form-group">
                           </div>
+                        
+            
+
                         <br></br>
+
+
                         <button type="submit" class="btn "style="background:#94D3AC;"onclick="return validateform()">Add Category</button>
                         <div id="submit-error" class="form-group"></div>
+
+
+
+
                       </form>
                 </div>
             </div>

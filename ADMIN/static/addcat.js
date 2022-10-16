@@ -35,9 +35,9 @@ function validateFile(){
 function validateform(){
     validateCatname()
     validateFile()
- 
     
-    if(!validateCatname() || !validateFile()  ){
+    
+    if(!validateCatname() || !validateFile() ){
         
         {
             return false;
