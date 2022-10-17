@@ -19,6 +19,11 @@ urlpatterns =[
     path("addtocart",views.addtocart,name="addtocart"),
     path("mycart",views.addtomycart,name="mycart"),
     path("updatecart",views.updatecartpage,name="updatecart"),
+    path('checkout',views.checkout,name='checkout'),
+    path('addaddress',views.addaddress,name='addaddress'),
+    path('payment',views.payment,name='payment'),
+    path('myorder',views.myorder,name='myorder'),
+    path('cancelorder',views.cancelorder,name='cancelorder'),
 
 
     ]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

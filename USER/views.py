@@ -215,8 +215,6 @@ def addtocart(request):
 
             
 def updatecartpage(request):
-
-    
     return render(request,'mycart.html')
 
 def addtomycart(request):
@@ -226,7 +224,7 @@ def addtomycart(request):
             
             uid = request.user
             prod_id = int(request.POST.get('product_id'))
-            print(prod_i)
+            print(prod_id)
             if UserCart.objects.filter(product=prod_id, user=uid).exists():
                 prod_qty = int(request.POST.get('product_qty')) 
                 print(prod_qty)
@@ -245,4 +243,126 @@ def addtomycart(request):
             user = request.user
             cart = UserCart.objects.filter(user=user).order_by('-id')
             print(user)
-            return render(request,'mycart.html',{'cart':cart})
+        for i in range(len(cart)):
+
+  
+            subtotal = 0
+            for i in range(len(cart)):
+                
+                x = cart[i].product.price*cart[i].quantity
+                subtotal = subtotal+x
+            shipping = 0
+            total = subtotal + shipping
+            print(total)
+            return render(request, 'mycart.html', {'cart': cart, 'subtotal': subtotal, 'total': total})
+
+@login_required(login_url='login')
+def checkout(request):
+    print('checkput')
+    if request.method == 'POST' and 'address_id' in request.POST :
+    
+        user = request.user
+        method = request.POST['payment']
+        amount = request.POST['amount']
+        cart = UserCart.objects.filter(user=user)
+        # razorpay_payment_id = request.POST['razorpay_payment_id']
+        # print(razorpay_payment_id)
+        address = request.POST['address_id']
+        print("address",address)
+        address = Address.objects.get(id=address)
+        prdct = Product.objects.all()
+        
+        # print(cart[0].quantity)
+        
+        
+        # crt = Cart.objects.get(user=user)
+        # print(cart)
+        subtotal = 0
+        for i in range(len(cart)):
+            x = cart[i].product.price*cart[i].quantity
+            # prdct.quantity=prdct.quantity-cart[i].quantity
+            subtotal = subtotal+x
+        shipping = 0
+        total = subtotal + shipping
+        crt = UserCart.objects.filter(user=user)
+       
+        print(method)
+        order = Order.objects.create(
+            user=user, address=address, amount=total, method=method)
+        order.save()
+
+        for i in range(len(cart)):
+            oldcart = AdminCart.objects.create(
+                user=user, quantity=crt[i].quantity, product=crt[i].product, order=order)
+            oldcart.save()
+
+        cart.delete()
+        success = True
+        product = Product.objects.all()
+        categories = Category.objects.all()
+        print("==",categories)
+        
+      
+        
+        return render(request, 'home.html', {'user': user, 'products': product, 'categories': categories, 'success': success})       
+
+    else:
+        print('else===')
+        user = request.user
+        cart = UserCart.objects.filter(user=user)
+        addresses = Address.objects.filter(user=user)
+        print(addresses)
+        print(cart)
+        subtotal = 0
+        for i in range(len(cart)):
+            x = cart[i].product.price*cart[i].quantity
+            subtotal = subtotal+x
+        shipping = 0
+        total = subtotal+shipping
+        # return HttpResponse('else')
+        return render(request, 'checkout.html', {'subtotal': subtotal, 'total': total, 'addresses': addresses})
+
+@login_required(login_url='login')
+def addaddress(request):
+
+    if request.method == 'POST':
+        user = request.user
+        name = request.POST['name']
+        phone = request.POST['phone']
+        address = request.POST['address']
+        city = request.POST['city']
+        state = request.POST['state']
+        pincode = request.POST['pincode']
+        address = Address.objects.create(
+            name=name, phone=phone, address=address, city=city, state=state, pincode=pincode, user=user)
+        address.save()
+        return redirect('payment')
+    else:
+        return render(request, 'addaddress.html')
+
+def payment(request):
+    return render(request, 'payment.html')
+
+@login_required(login_url='login')
+def myorder(request):
+    order = Order.objects.filter(user=request.user).order_by('-id')
+    cart = UserCart.objects.filter(user=request.user)
+    oldcart = AdminCart.objects.filter(user=request.user)
+    if len(order) == 0:
+        empty = "No Order Placed"
+        return render(request, 'user/orders.html', {'empty': empty})
+    subtotal = 0
+    for i in range(len(cart)):
+        x = cart[i].product.price*cart[i].quantity
+        subtotal = subtotal+x
+    shipping = 0
+    total = subtotal + shipping
+    return render(request, 'myorders.html', {'orders': order, 'cart': oldcart, 'total': total})
+
+
+def cancelorder(request):
+    user = request.user
+    id = request.GET['id']
+    Order.objects.filter(id=id).update(status='Cancelled', cancel=True)
+    return JsonResponse({'status': True})
+    # return redirect('myorder')

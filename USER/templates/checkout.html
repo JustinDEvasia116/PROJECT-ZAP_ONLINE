@@ -1,0 +1,94 @@
+{% extends 'base.html'%} {% block content%}
+
+
+<div class = "d -flex container">
+    <div class="row my-5 ">
+        
+        <div class="col-md-9">
+            <div class="card ">
+                <div class="card-header d-flex">
+                    <h4>Checkout</h4>
+                    <div style="margin-left:493px">
+                        <a href="addaddress" class="btn btn-outline-primary btn-sm ms-5 ">Add new address</a>
+                    </div>
+                </div>
+                
+                <div class="card-body">
+                    <h5>Select Shipping Address</h5>
+                    <form action = "checkout" method="POST">
+                        {% csrf_token %}
+                        {% for address in addresses %}
+                        <input type="hidden" name="amount" value="{{total}}" id="amount">
+                        <input type="hidden" name="payment" value="COD" id="payment">
+                        <input type="hidden" name="cart" value="{{cart}}" id ="cart">
+                        
+                        
+                        <input type="radio" class="m-3" name="address_id" value="{{address.id}}" checked> <label>
+                            <div class="card col-md-4 my-2" style="width: 13rem;">
+                            <div class="card-body">
+                              <h5 class="card-title">{{address.name}}</h5>
+                              <h6 class="card-subtitle mb-2 text-muted">{{address.phone}}</h6>
+                              <p class="card-text">{{address.address}}<br>
+                                {{address.city}}<br>
+                                {{address.pincode}}<br>
+                                {{address.state}}<br>
+                              </p>
+                            </div>
+                        </div></label>
+                    
+                        {% endfor %}
+                        <div class="d-flex">
+                        
+                        <button class="btn my-2 text-light" type="submit" style="width:50%; background:#1C3879;">Select Address</button> 
+                        
+                        </div>
+
+                    </form>
+                    <hr>
+                    <h5>Add New Address</h5>
+                    <hr>
+                    
+                    </div>
+                </div>
+            </div>
+            
+            <div class= "col-md-3">
+                <div class="card">
+                    <div class="card-header">
+                        <h4>Price details</h4>
+                    </div>
+                    <div class="card-body">
+                        <table class="table">
+                            <tr>
+                                <td>Subtotal</td>
+                                {% if subtotal %}
+                                <td>₹{{subtotal}}/-</td>
+                                {% else %}
+                                <td>₹{{price}}/-</td>
+                                {% endif %}
+                            </tr>
+                            <tr>
+                                <td>Shipping</td>
+                                <td>Free</td>
+                            </tr>
+                            <tr>
+                                <td>Total</td>
+                                {% if total %}
+                                <td>₹{{total}}/-</td>
+                                {% else %}
+                                <td>₹{{price}}/-</td>
+                                {% endif %}
+                            </tr>
+                        </table>
+                        <button type="submit " class="btn text-light m-1" style="width: 100%; background:#1C3879;">Cash On Delivery</button>
+                    </div>
+                    </div>
+                    
+        </div>
+        
+        
+    </div>
+    
+
+</div>
+{%endblock%}

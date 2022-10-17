@@ -1,0 +1,111 @@
+{% extends 'base.html'%} 
+
+{% block content%}
+
+
+<div class = "d -flex container">
+    <div class="row  my-5">
+        
+        <div class="col-md-12">
+            <div class="card ">
+                <div class="card-header">
+                    <h4>My Orders</h4>
+                </div>
+                {% if empty %}{% endif %}
+                {% for order in orders %}
+                
+                <div class="card-body">
+                    
+                    
+                    <div class="d-flex">
+                        <div class="col-md-4">
+                            <p>Order ID: {{order.id}} <p>           <p>Order Date: {{order.ordered_date}}</p>
+                             {% comment %} <h6><b>Order Items</b></h6>
+                            <ul > {% endcomment %}
+                                {% comment %} {% for cart in cart %}
+                                <li>{{cart.product.name}} - {{cart.quantity}} - {{cart.product.price}}</li>
+
+                                {% endfor %} {% endcomment %}
+                                <br>
+                                <h5>Total: {{order.amount}}</h5>
+                            </ul> 
+                        </div>
+                        <div class ="col-md-4">
+                            <h6><b>Shipping Address</b></h6>
+                            <ul type="None">
+                                <li>{{order.address.name}}</li>
+                                <li>{{order.address.address}}</li>
+                                <li>{{order.address.phone}}</li>
+                                <li>{{order.address.city}}</li>
+                                <li>{{order.address.state}}</li>
+                                <li>{{order.address.pincode}}</li>
+                                
+                            </ul>
+                    </div>
+                    <div>
+                        <h6><b>Payment Method</b></h6>
+                        <p>{{order.method}}</p> 
+                        <br>
+                        <h6><b>Order Status</b></h6>
+                        <p>{{order.status}}</p>
+                        {% if order.cancel %}
+                        {% comment %} <p>Order Cancelled</p> {% endcomment %}
+                        {% else %}
+                        <button class="btn btn-danger" onclick="cancelOrder({{order.id}})">Cancel Order</button>
+                        {% endif %}
+                        {% comment %} <a class="btn text-light" href= "cancelorder?id={{order.id}}" style="background: #1C3879; "><i style=""onclick="return confirm('Are you sure to cancel the order ?')">Cancel Order</i>
+                            </a> {% endcomment %}
+                        
+                        
+                    </div>
+                    
+                </div>
+                <hr>
+                   
+            </div>
+            {% endfor %}
+            
+        </div>
+        
+        
+    </div>
+    
+
+</div>
+<script>
+    function cancelOrder(id){
+        swal({
+            title: "Are you sure to cancel the order?",
+            text: "",
+            icon: "warning",
+            buttons: true,
+            dangerMode: true,
+          })
+          .then((willDelete) => {
+            if (willDelete) {
+                $.ajax({
+                    url: '/cancelorder',
+                    type: 'GET',
+                    data: {id: id},
+                    success: function(response){
+                        location.reload()
+                        
+                    }
+                })
+              swal("Your order is Cancelled!", {
+                icon: "success",
+              });
+            } else {
+              swal("Your order is safe!");
+            }
+          });
+    }
+
+</script><link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/dt/jszip-2.5.0/dt-1.11.3/af-2.3.7/b-2.0.1/b-colvis-2.0.1/b-html5-2.0.1/b-print-2.0.1/cr-1.5.4/date-1.1.1/fc-4.0.0/kt-2.6.4/r-2.2.9/rg-1.1.3/rr-1.2.8/sl-1.3.3/datatables.min.css"/>
+<script>
+    $(document).ready( function () {
+      $('#table_id').DataTable();
+    
+    });
+  </script>
+{%endblock%}

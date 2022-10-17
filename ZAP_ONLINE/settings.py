@@ -21,7 +21,7 @@ from pathlib import Path
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 TWILIO_ACCOUNT_SID='AC6167737a8a886026afeb10da8f33e195'
-TWILIO_AUTH_TOKEN='6b666ff0a18291fc48a60b6ad128d874'
+TWILIO_AUTH_TOKEN='98bde105cd9cadb63d0f60d5c4919d98'
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.1/howto/deployment/checklist/
