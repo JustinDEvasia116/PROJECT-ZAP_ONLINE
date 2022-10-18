@@ -19,5 +19,8 @@ urlpatterns =[
     path('block',views.block,name='block'),
     path('unblock',views.unblock,name='unblock'),
     path('adminlogout',views.logout, name='adminlogout'),
+    path('cancelorder',views.cancelorder, name='cancelorder'),
+    path('updatestatus',views.updatestatus, name='updatestatus'),
+    
 
 ]

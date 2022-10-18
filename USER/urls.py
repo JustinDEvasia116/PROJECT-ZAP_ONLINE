@@ -24,6 +24,9 @@ urlpatterns =[
     path('payment',views.payment,name='payment'),
     path('myorder',views.myorder,name='myorder'),
     path('cancelorder',views.cancelorder,name='cancelorder'),
+    path('profile',views.myprofile,name='profile'),
+    path('deleteaddress',views.deleteaddress,name='deleteaddress'),
+     path('editprofile',views.editprofile,name='editprofile'),
 
 
     ]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

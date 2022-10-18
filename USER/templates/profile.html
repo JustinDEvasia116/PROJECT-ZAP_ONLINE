@@ -1,0 +1,168 @@
+{% extends 'base.html'%} 
+{% load static %}
+{% block css_files %}
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap');
+</style>
+<link rel="stylesheet" href="{% static 'profile.css' %}">
+<link rel="stylesheet" href="{% static 'home.css' %}">
+
+<link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-ajaxy/1.6.1/scripts/jquery.ajaxy.min.js" integrity="sha512-bztGAvCE/3+a1Oh0gUro7BHukf6v7zpzrAb3ReWAVrt+bVNNphcl2tDTKCBr5zk7iEDmQ2Bv401fX3jeVXGIcA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+{% endblock css_files %}
+
+{% block content%}
+<header class="header">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-lg-3">
+                <div class="header_logo">
+                    <a href="home.html"><span>ZaP</span>online.</a>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <nav class="header_menu">
+                    <ul>
+                        <li ><a href="home">Home</a></li>
+                        <li><a href="#">Category</a></li>
+                        <li class="active"><a href="profile">My Account</a></li>
+                        <li><a href="myorder">My Orders</a></li>
+                        <li><a href="mycart">My Cart</a></li>
+                        
+                        
+                    </ul>
+                </nav>
+            </div>
+            <div class="col-lg-3">
+                <div class="header_right">
+                    <div class="header_right_auth">
+                       <a href="logout">Logout</a>
+                       {{user.username}}
+                        
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+<div class="container bootstrap snippets bootdey ">
+<div class="row ">
+  <div class="profile-nav col-md-3 ">
+      <div class="panel ">
+          <div class="user-heading round address">
+              <a href="#">
+                  <img src="https://bootdey.com/img/Content/avatar/avatar3.png" alt="">
+              </a>
+              <h1>Camila Smith</h1>
+              <p>deydey@theEmail.com</p>
+          </div>
+
+          <ul class="nav navm nav-pills nav-stacked">
+              <li class="active"><a href="#"> <i class="fa fa-user"></i> Profile</a></li>
+              
+              <li><a href="editprofile?id={{user.id}}"> <i class="fa fa-edit"></i> Edit profile</a></li>
+          </ul>
+      </div>
+  </div>
+  <div class="profile-info col-md-9">
+      <div class="panel">
+          <div class="bio-graph-heading">
+              <h3>Personal Information
+          </div>
+          <div class="panel-body bio-graph-info">
+              <h1></h1>
+              <div class="row">
+                  <div class="bio-row">
+                      <p><span>First Name </span>: Camila</p>
+                  </div>
+                  <div class="bio-row">
+                      <p><span>Last Name </span>: Smith</p>
+                  </div>
+                  
+             
+            
+                  <div class="bio-row">
+                      <p><span>Email </span>: jsmith@flatlab.com</p>
+                  </div>
+                  <div class="bio-row">
+                      <p><span>Mobile </span>: (12) 03 4567890</p>
+                  </div>
+                
+              </div>
+          </div>
+      </div>
+      <div class="graph-heading">
+        <br></br>
+        <br></br>
+              <h3>Adress Details
+          </div>
+      <div>
+        <div class=" m-3 col-md-12">
+            
+           
+            <div class="row ">
+                {% for address in address %}
+                <div class = "col-md-4 my-1 address">
+                    <div class="card address" style="width: 18rem;">
+                        <div class="card-body ">
+                          <h5 class="card-title">{{address.name}}</h5>
+                          <h6 class="card-subtitle mb-2 text-muted">{{address.phone}}</h6>
+                          <p class="card-text">{{address.address}}<br>
+                            {{address.city}}<br>
+                            {{address.pincode}}<br>
+                            {{address.state}}<br>
+                          </p>
+                          <button class="btn btn-danger"  onclick="deleteAddress({{address.id}})" class="card-link">Delete</button>
+                          {% comment %} <a href="#" class="card-link">Another link</a> {% endcomment %}
+                        </div>
+                      </div>
+                </div>
+                {% endfor %}
+            </div>
+    
+    
+    </div>
+     
+
+        
+          </div>
+      </div>
+  </div>
+</div>
+</div>
+<script>
+    function deleteAddress(id){
+        console.log(id)
+        swal({
+          title: "Are you sure?",
+          text: "Once deleted, your address will be deleted!",
+          icon: "warning",
+          buttons: true,
+          dangerMode: true,
+        })
+        .then((willDelete) => {
+          if (willDelete) {
+            $.ajax({
+              url: "deleteaddress",
+              type: "GET",
+              data: {
+                  'id': id,
+                  
+              },
+              success: function(response){
+                  
+                  location.reload()
+              }
+          })
+            swal("Poof! Your address has been deleted!", {
+              icon: "success",
+            });
+          } else {
+            swal("Your address is safe!");
+          }
+        });
+       // alert("Are you sure you want to delete this address?")
+        
+    }
+</script>
+{%endblock%}

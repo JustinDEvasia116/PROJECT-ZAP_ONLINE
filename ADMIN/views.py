@@ -23,8 +23,10 @@ def dashboard(request):
 @login_required(login_url='adminstart')
 @never_cache
 def orders(request):
-    return render(request,"orders.html")
-
+    order = Order.objects.all().order_by('-id')
+    cart = UserCart.objects.all()
+    status = ['Ordered','Shipped','Delivered','Cancelled']
+    return render(request, 'orders.html',{'orders':order,'carts':cart,'status':status})
 
 @login_required(login_url='adminstart')
 @never_cache
@@ -181,9 +183,22 @@ def delete_category(request):
     category.delete()
     return redirect('category')
 
+def cancelorder(request):
+    user=request.user
+    id=request.GET['id']
+    Order.objects.filter(id=id).update(status='Cancelled',cancel=True)
+    
+    
+    return redirect('orders')
 
 
-
+def updatestatus(request):
+    id=request.GET['id']
+    status=request.POST['status']
+    
+    print(id,status)
+    Order.objects.filter(id=id).update(status=status)
+    return redirect('orders')
 
 
 

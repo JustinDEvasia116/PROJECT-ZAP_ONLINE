@@ -1,6 +1,46 @@
 {% extends 'base.html'%} 
+{% load static %}
+{% block css_files %}
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap');
+</style>
+<link rel="stylesheet" href="{% static 'home.css' %}">
+{% endblock css_files %}
 
 {% block content%}
+<header class="header">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-lg-3">
+                <div class="header_logo">
+                    <a href="home.html"><span>ZaP</span>online.</a>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <nav class="header_menu">
+                    <ul>
+                        <li ><a href="home">Home</a></li>
+                        <li><a href="#">Category</a></li>
+                        <li><a href="profile">My Account</a></li>
+                        <li class="active"><a href="myorder">My Orders</a></li>
+                        <li><a href="mycart">My Cart</a></li>
+                        
+                        
+                        
+                    </ul>
+                </nav>
+            </div>
+            <div class="col-lg-3">
+                <div class="header_right">
+                    <div class="header_right_auth">
+                       <a href="logout">Logout</a>
+                       {{user.username}}
+                        
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
 
 
 <div class = "d -flex container">

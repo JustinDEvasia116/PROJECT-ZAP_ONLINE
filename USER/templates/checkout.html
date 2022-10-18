@@ -16,7 +16,7 @@
                 <div class="card-body">
                     <h5>Select Shipping Address</h5>
                     <form action = "checkout" method="POST">
-                        {% csrf_token %}
+                    {% csrf_token %}
                         {% for address in addresses %}
                         <input type="hidden" name="amount" value="{{total}}" id="amount">
                         <input type="hidden" name="payment" value="COD" id="payment">
@@ -39,13 +39,13 @@
                         {% endfor %}
                         <div class="d-flex">
                         
-                        <button class="btn my-2 text-light" type="submit" style="width:50%; background:#1C3879;">Select Address</button> 
+                        <button class="btn my-2 text-light" type="submit" style="width:50%; background:#1C3879;">Confirm Order</button> 
                         
                         </div>
 
                     </form>
                     <hr>
-                    <h5>Add New Address</h5>
+                    <h5>Payment Method:Cash On Delivery</h5>
                     <hr>
                     
                     </div>
@@ -57,7 +57,9 @@
                     <div class="card-header">
                         <h4>Price details</h4>
                     </div>
+                
                     <div class="card-body">
+                    
                         <table class="table">
                             <tr>
                                 <td>Subtotal</td>
@@ -80,8 +82,9 @@
                                 {% endif %}
                             </tr>
                         </table>
-                        <button type="submit " class="btn text-light m-1" style="width: 100%; background:#1C3879;">Cash On Delivery</button>
+                        
                     </div>
+                   
                     </div>
                     
         </div>

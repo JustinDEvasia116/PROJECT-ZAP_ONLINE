@@ -1,0 +1,78 @@
+{% extends 'base.html' %}
+{% load static %}
+
+
+{% block css_files %}
+
+<link rel="stylesheet" href="{% static 'editprofile.css' %}">
+
+{% endblock css_files %}
+
+{% block content%}
+<div class="container-xl px-4 mt-4">
+    <!-- Account page navigation-->
+    <nav class="nav nav-borders">
+        <h4> Edit Your Profile</h4>
+
+        
+        
+    </nav>
+    <hr class="mt-0 mb-4">
+    <div class="row">
+   
+        <div class="col-xl-8">
+            <!-- Account details card-->
+            <div class="card mb-4">
+                <div class="card-header">Account Details</div>
+                <div class="card-body">
+                {%for user in user%}
+                    <form action="editprofile?id={{user.id}}" method="POST">
+                        {% csrf_token %}
+                        <!-- Form Group (username)-->
+              
+                        <!-- Form Row-->
+
+                        <div class="row gx-3 mb-3">
+                            <!-- Form Group (first name)-->
+                            <div class="col-md-6">
+                                <label class="small mb-1" for="inputFirstName">First name</label>
+                                <input class="form-control" name="first_name" id="inputFirstName" type="text" placeholder="Enter your first name" value="{{user.first_name}}">
+                            </div>
+                            <!-- Form Group (last name)-->
+                            <div class="col-md-6">
+                                <label class="small mb-1" for="inputLastName">Last name</label>
+                                <input class="form-control"name="last_name" id="inputLastName" type="text" placeholder="Enter your last name" value="{{user.last_name}}">
+                            </div>
+                        </div>
+                        <!-- Form Row        -->
+                        <div class="row gx-3 mb-3">
+                      
+                         
+                        </div>
+                        <!-- Form Group (email address)-->
+                        <div class="mb-3">
+                            <label class="small mb-1" for="inputEmailAddress">Email address</label>
+                            <input class="form-control"name="email" id="inputEmailAddress" type="email" placeholder="Enter your email address" value="{{user.email}}">
+                        </div>
+                        <!-- Form Row-->
+                        <div class="row gx-3 mb-3">
+                            <!-- Form Group (phone number)-->
+                            <div class="col-md-6">
+                                <label class="small mb-1" for="inputPhone">Phone number</label>
+                                <input class="form-control"name="phone" id="inputPhone" type="tel" placeholder="Enter your phone number" value="{{user.accounts.phone}}">
+                            </div>
+
+                           
+                        </div>
+                        <!-- Save changes button-->
+                        <button class="btn btn-primary" type="submit">Save changes</button>
+                        
+                    </form>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{%endblock%}

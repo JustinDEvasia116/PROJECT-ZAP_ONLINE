@@ -1,7 +1,8 @@
 {% extends 'base.html' %}
 {% load static %}
-  
-  
+
+
+<title>{% block page_title  %}My cart{% endblock  %}</title>
 {% block css_files %}
 <script
   src="https://code.jquery.com/jquery-3.6.1.min.js"
@@ -10,15 +11,47 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 <link rel="stylesheet" href="https://mdbcdn.b-cdn.net/wp-content/themes/mdbootstrap4/docs-app/css/dist/mdb5/standard/core.min.css">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+<link rel="stylesheet" href="{% static 'home.css' %}">
 <link rel="stylesheet" href="{% static 'cartstyle.css' %}">
 <script src="{% static 'cart.js' %}"></script>
 {% endblock css_files %}
 
-<title>{% block page_title  %}My cart{% endblock  %}</title>
-
 
 
 {% block content %}
+<header class="header">
+  <div class="container-fluid">
+      <div class="row">
+          <div class="col-lg-3">
+              <div class="header_logo">
+                  <a href="home.html"><span>ZaP</span>online.</a>
+              </div>
+          </div>
+          <div class="col-lg-6">
+              <nav class="header_menu">
+                  <ul>
+                      <li ><a href="home">Home</a></li>
+                      <li><a href="#">Category</a></li>
+                      <li><a href="profile">My Account</a></li>
+                      <li><a href="myorder">My Orders</a></li>
+                      <li class="active"><a href="mycart">My Cart</a></li>
+                      
+                      
+                      
+                  </ul>
+              </nav>
+          </div>
+          <div class="col-lg-3">
+              <div class="header_right">
+                  <div class="header_right_auth">
+                     <a href="logout">Logout</a>
+                     {{user.username}}
+                      
+              </div>
+          </div>
+      </div>
+  </div>
+</header>
 
 <section class="h-100 gradient-custom">
     <div class="container py-5">

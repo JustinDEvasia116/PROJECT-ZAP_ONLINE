@@ -10,6 +10,7 @@
 <link rel="stylesheet" href="{% static 'dashboard.css' %}">
 {% endblock css_files %}
 
+
 <title>{% block page_title  %}dashboard{% endblock  %}</title>
 
 {% block content %}
@@ -40,6 +41,128 @@
         </ul>
     </div>
 </nav>
+
+<div class="m-5">
+   
+        
+    <div class="col-md-12 my-4" style="width:auto;">
+        <div class="card">
+            <div class="card-header">
+                <h4>Orders</h4>
+            </div>
+            <div class="card-body">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Order ID</th>
+                            <th>Customer</th>
+                            {% comment %} <th>Products</th> {% endcomment %}
+                            <th>Order Date</th>
+                            <th>Amount</th>
+                            <th>Payment Method</th>
+                            <th>Order Status</th>
+                            <th>Update</th>
+                            <th>Cancel Order</th>
+                            
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for order in orders %}
+                        
+                        <tr>
+                            <td>{{order.id}}</td>
+                            <td>{{order.user.username}}</td>
+                            {% comment %} <td>{%for cart in carts%}
+                                {{cart.product.name}}<br>
+                                {%endfor%}
+                            </td> {% endcomment %}
+                            <td>{{order.ordered_date}}</td>
+                            <td>{{order.amount}}</td>
+                            <td>{{order.method}}</td>
+                            <td>{{order.status}}</td>
+
+                            <td>{% if order.cancel %}
+                                Order Canceled
+                                {% else %}
+                                <form action="updatestatus?id={{order.id}}" method="POST">
+                                {% csrf_token %}
+                                    <select name="status" class="" id="status">
+                                        <option value="0">{{order.status}}</option>
+                                        
+                                        {% for i in status %}
+                                        <option value="{{i}}">{{i}}</option>
+                                       
+                                        {% endfor %}
+                                        
+                                    </select>
+                                    <button type="submit" id ="btn1"class="btn btn-primary">Update</button>
+                                </form>
+                                
+                                {% endif %}
+                            </td>
+                            {% if order.cancel %}
+                            <td>Order Canceled</td>
+                            {% else %}
+                            <td>
+                                <button type="button" class="btn btn-danger" data-toggle="modal" onclick = cancelOrder({{order.id}})>
+                                    Cancel Order</button
+                                {% comment %} <a class="btn btn-danger" href= "cancelorder?id={{order.id}}" ><i style=""onclick="return confirm('Are you sure to cancel the order ?')">Cancel Order</i>
+                                    </a> {% endcomment %}
+                                </td>
+                            {% endif %}
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+
 <script src="{% static 'main.js' %}"></script>
+
+<script>
+    $(document).ready(function(){
+        $('#btn1').click(function(){
+            var status = $('#status').val();
+            if(status == '0'){
+                alert('Please select a status');
+                return false;
+            }
+        });
+    });
+
+    function cancelOrder(id){
+        swal({
+            title: "Are you sure?",
+            text: "Once deleted, you will not be able to recover this imaginary file!",
+            icon: "warning",
+            buttons: true,
+            dangerMode: true,
+          })
+          .then((willDelete) => {
+            if (willDelete) {
+                window.location.href = "cancelorder?id="+id;
+              swal("Poof! Your imaginary file has been deleted!", {
+                icon: "success",
+              });
+            } else {
+              swal("Your imaginary file is safe!");
+            }
+          });
+    }
+</script>
+
+
+
+
+
+
+
+
+
+
+
 
 {% endblock content %}

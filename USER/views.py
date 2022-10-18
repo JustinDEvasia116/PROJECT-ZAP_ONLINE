@@ -217,6 +217,12 @@ def addtocart(request):
 def updatecartpage(request):
     return render(request,'mycart.html')
 
+
+def myprofile(request):
+    user = request.user
+    address = Address.objects.filter(user=user)
+    return render(request, 'profile.html', {'user': user, 'address': address})
+
 def addtomycart(request):
     print(request.method)
     if request.method == 'POST':
@@ -350,7 +356,7 @@ def myorder(request):
     oldcart = AdminCart.objects.filter(user=request.user)
     if len(order) == 0:
         empty = "No Order Placed"
-        return render(request, 'user/orders.html', {'empty': empty})
+        return render(request, 'myorders.html', {'empty': empty})
     subtotal = 0
     for i in range(len(cart)):
         x = cart[i].product.price*cart[i].quantity
@@ -366,3 +372,29 @@ def cancelorder(request):
     Order.objects.filter(id=id).update(status='Cancelled', cancel=True)
     return JsonResponse({'status': True})
     # return redirect('myorder')
+
+def deleteaddress(request):
+    id=request.GET['id']
+    address = Address.objects.get(id=id)
+    address.delete()
+    return redirect('profile')
+
+@login_required(login_url='adminstart')
+
+def editprofile(request):
+    id=request.GET['id']
+    if request.method == 'POST':
+        first_name = request.POST['first_name']
+        last_name = request.POST['last_name']
+        phone = request.POST['phone']
+        email = request.POST['email']
+        
+ 
+        user = User.objects.filter(id=id).update(first_name=first_name, last_name=last_name,email=email)
+        
+        Accounts.objects.filter(user_id=id).update(phone=phone)
+        print('user updated')
+        return render(request,'profile.html')
+    else:
+         user = User.objects.filter(id=id)
+         return render(request,"editprofile.html",{'user':user})
