@@ -167,7 +167,18 @@ def view_product(request):
     print(prdct)
     images = Images.objects.filter(product=prdct[0].id)
     print(images)
+    print("images",images)
     return render(request, 'view_product.html', {'product': product, 'images':images})
+
+def product_view(request):
+    id = request.GET['id']
+    product = Product.objects.get(id=id)
+    print(product)
+    prdct = Product.objects.filter(id=id)
+    print(prdct)
+    images = Images.objects.filter(product=prdct[0].id)
+    print("images",images)
+    return render(request, 'product_view.html', {'product': product, 'images':images})
 
 def mobile_signup(request):
     if request.method == 'POST':
@@ -407,3 +418,22 @@ def editprofile(request):
     else:
          user = User.objects.filter(id=id)
          return render(request,"editprofile.html",{'user':user})
+
+def changepassword(request):
+    id=request.GET['id']
+    if request.method == 'POST':
+        fname=request.POST['first_name']
+        lname=request.POST['last_name']
+        email=request.POST['email']
+        username=request.POST['username']
+        password=request.POST['password']
+ 
+        user = User.objects.create_user(id=id,username=username, password=password, first_name=fname, last_name=lname, email=email)
+        print(user.password)
+        user.save_base()
+        print('success')
+        success=True
+        return render(request,"login.html",{"success":success})
+    else:
+         user = User.objects.filter(id=id)
+         return render(request,"changepassword.html",{'user':user})

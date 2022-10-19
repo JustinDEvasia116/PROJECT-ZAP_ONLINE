@@ -26,7 +26,10 @@ urlpatterns =[
     path('cancelorder',views.cancelorder,name='cancelorder'),
     path('profile',views.myprofile,name='profile'),
     path('deleteaddress',views.deleteaddress,name='deleteaddress'),
-     path('editprofile',views.editprofile,name='editprofile'),
+    path('editprofile',views.editprofile,name='editprofile'),
+    path('changepassword',views.changepassword,name='changepassword'),
+
+    path('product',views.product_view, name='product_view'),
 
 
     ]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

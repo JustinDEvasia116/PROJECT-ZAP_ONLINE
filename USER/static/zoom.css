@@ -3,6 +3,8 @@
 
 .img-zoom-container {
   position: relative;
+  border-style: solid;
+  border-color: red;
 }
 
 .img-zoom-lens {
@@ -31,3 +33,4 @@
   margin-left: auto;
   margin-right: auto;
 }
+

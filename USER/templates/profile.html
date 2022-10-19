@@ -4,7 +4,7 @@
 <style>
     @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap');
 </style>
-<link rel="stylesheet" href="{% static 'profile.css' %}">
+<link rel="stylesheet" href="{% static 'profiles.css' %}">
 <link rel="stylesheet" href="{% static 'home.css' %}">
 
 <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">
@@ -58,9 +58,11 @@
           </div>
 
           <ul class="nav navm nav-pills nav-stacked">
-              <li class="active"><a href="#"> <i class="fa fa-user"></i> Profile</a></li>
+              <li class="active" style="padding-right: 50%;" > <a href="#"> <i class="fa fa-user"></i> Profile</a></li>
               
-              <li><a href="editprofile?id={{user.id}}"> <i class="fa fa-edit"></i> Edit profile</a></li>
+              <li class = "float-start" ><a href="editprofile?id={{user.id}}"> <i class="fa fa-edit"></i> Edit profile</a></li>
+              
+              <li><a href="changepassword?id={{user.id}}"> <i class="fa fa-edit"></i> Change Username/Password</a></li>
           </ul>
       </div>
   </div>

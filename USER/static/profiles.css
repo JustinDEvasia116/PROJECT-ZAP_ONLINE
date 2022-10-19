@@ -377,10 +377,6 @@ ul.summary-list > li:last-child  {
     margin-right: 0px;
 }
 
-.navm li{
-    display: flexbox;
-    padding-right: 50%;
-}
 
 .address{
     background-color:#f1f2f7;
@@ -396,4 +392,8 @@ ul.summary-list > li:last-child  {
 .bio-graph-heading{
     background: #ff7200;
     padding: 1px 110px;
+}
+.navm li{
+    display: flexbox;
+    padding-right: 13%;
 }
