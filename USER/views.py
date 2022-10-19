@@ -221,6 +221,7 @@ def updatecartpage(request):
 def myprofile(request):
     user = request.user
     address = Address.objects.filter(user=user)
+    # user_details = User.objects.filter(user=user)
     return render(request, 'profile.html', {'user': user, 'address': address})
 
 def addtomycart(request):
@@ -249,8 +250,16 @@ def addtomycart(request):
             user = request.user
             cart = UserCart.objects.filter(user=user).order_by('-id')
             print(user)
+            print(len(cart))
         for i in range(len(cart)):
-
+            if cart[i].quantity < 1:
+                cart[i].delete()
+        if len(cart) == 0:
+            print('working')
+            empty = "Cart is Empty"
+            cartlen=len(cart)
+            return render(request, 'mycart.html', {'empty': empty,'cartlen': cartlen})
+        else:
   
             subtotal = 0
             for i in range(len(cart)):

@@ -59,10 +59,10 @@
         <div class="col-md-8">
           <div class="card mb-4">
             <div class="card-header py-3">
-              <h5 class="mb-0">Cart - 2 items</h5>
+              <h5 class="mb-0">Cart -{{cartlen}} items</h5>
             </div>
             <div class="card-body ">
-              <!-- Single item -->
+              <h2>{{empty}}</h2>
               {% for cart in cart %}
               
               <div class="row product_data">
@@ -79,7 +79,8 @@
                 </div>
   
                 <div class="col-lg-5 col-md-6 mb-4 mb-lg-0">
-                  <!-- Data -->
+              
+              
                   {% csrf_token %} 
                   <input type="hidden" value="{{cart.product.id}}" class = "prod_id">
                   <p><strong>{{cart.product.name}}</strong></p>
@@ -94,7 +95,7 @@
                     <i class="fas fa-heart"></i>
                   </button>
 
-                  
+                
 
                   <!-- Data -->
                 </div>
@@ -129,6 +130,10 @@
               <!-- Single item -->
               {% endfor %} 
               <br></br>
+              {% if empty  %}
+
+
+              {% else %}
               <a type="button" href="mycart" class="btn btn-primary btn-lg btn-block">
                 Update Cart
               </a>
@@ -195,7 +200,7 @@
       </div>
     </div>
   </section>
-
+{% endif %}
 
   <script src="{% static 'cart.js' %}"></script>
 
