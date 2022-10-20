@@ -88,7 +88,7 @@ def signup(request):
 def homepage(request):
     product = Product.objects.all()
     categories = Category.objects.all()
-    if request.user.is_authenticated:
+    if request.user.is_authenticated and request.user.is_superuser == False:
         print(request.user.is_authenticated)
         user = request.user
         print('user=', user)

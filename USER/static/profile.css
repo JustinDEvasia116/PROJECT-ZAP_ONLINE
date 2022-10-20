@@ -382,7 +382,7 @@ ul.summary-list > li:last-child  {
     background-color:#f1f2f7;
 }
 .profile-nav .user-heading {
-    background: #ff7200;
+    background: #0000ff;
     color: #fff;
     border-radius: 4px 4px 0 0;
     -webkit-border-radius: 4px 4px 0 0;
@@ -390,7 +390,7 @@ ul.summary-list > li:last-child  {
     text-align: center;
 }
 .bio-graph-heading{
-    background: #ff7200;
+    background:#0000ff;
     padding: 1px 110px;
 }
 .navm li{

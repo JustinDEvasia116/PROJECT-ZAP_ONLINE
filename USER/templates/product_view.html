@@ -13,6 +13,8 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/js/bootstrap.min.js"></script>
 <link rel="stylesheet" href="{% static 'home.css' %}">
 <link rel="stylesheet" href="{% static 'product.css' %}">
+<link rel="stylesheet" href="{% static 'zooms.css' %}">
+<script src="{% static 'zooms.js' %}"></script>
 {% endblock css_files %}
 
 
@@ -57,8 +59,9 @@
     <div class="carousel slide" data-ride="carousel" id="carousel-1">
     <div class="carousel-inner" role="listbox">
     
-    <div class="carousel-item active">
-        <img class="img-thumbnail w-100 d-block" src=".{{product.image.url}}" alt="" loading="lazy">
+    <div class="carousel-item img-zoom-container active">
+        <img id="myimage" class="img-thumbnail w-100 d-block" src=".{{product.image.url}}" alt="" loading="lazy">
+        
     </div>
     
     
@@ -66,7 +69,7 @@
     
     
     {% for image in images %}
-    <div class="carousel-item"><img class="img-thumbnail w-100 d-block" src=".{{image.image.url}}" alt=""></div>
+    <div class="carousel-item"><img id="myimage" class="img-thumbnail w-100 d-block" src=".{{image.image.url}}" alt=""></div>
     {% endfor %}
     
     </div>
@@ -77,8 +80,11 @@
     <li data-target="#carousel-1" data-slide-to="2"></li>
     <li data-target="#carousel-1" data-slide-to="3"></li>
     </ol>
+    
     </div>
+    <div id="myresult" class="img-zoom-result"></div>
     </div>
+   
     <div class="col-md-7">
     <h4>{{product.brand}}  {{product.name}}</h4>
     <div class="price"><span class="mr-2"><i class="fa fa-rupee text-success"></i>&nbsp;{{product.price}}</span><span class="mr-2 cut">65,000</span><span class="text-success">OFFER PRICE</span></div>
@@ -131,5 +137,9 @@
 </div>
     </div>
     </div> 
+
+    <script>
+        imageZoom("myimage", "myresult");
+    </script>
 
 {%endblock%}
