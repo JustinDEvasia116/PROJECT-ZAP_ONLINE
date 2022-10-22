@@ -39,18 +39,30 @@
                     <form action="addcategory" method ="POST" enctype="multipart/form-data">
                     {% csrf_token %}
                         <div class="form-groups" >
-                          <label for="exampleInputEmail1">Category Name</label>
+                          <label for="exampleInputEmail1">Main Category</label>
+                          <select class="form-control" name="category" id="category">
+                            <option value="0">Select Category</option>
+                            {% for category in categories %} 
+                            <option value="{{category.id}}">{{category.name}}</option>
+                            {% endfor %} 
+
+                          </select>
+                          <div id="catname-error" class="form-group"></div>
+                        </div>
+                        <div class="form-groups" >
+                          <label for="exampleInputEmail1"> Sub Category</label>
                           <input type="text" class="form-control" name="catname" id="catname"  placeholder="Category Name" onkeyup="validateCatname()">
                           <div id="catname-error" class="form-group"></div>
                         </div>
                         
-                          
                         
+                          
+{% comment %}                         
                         <div class="form-groups">
                             <label for="pimage">Image</label>
                             <input type="file" class="form-control" name="image" id="upload"  placeholder="Category Image"onchange="validateFile()">
                             <span id="image-error" class="form-group">
-                          </div>
+                          </div> {% endcomment %}
                         
             
 

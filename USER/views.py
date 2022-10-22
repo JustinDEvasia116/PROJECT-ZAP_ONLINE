@@ -87,7 +87,7 @@ def signup(request):
 @never_cache
 def homepage(request):
     product = Product.objects.all()
-    categories = Category.objects.all()
+    categories = Category.objects.all()[1:]
     if request.user.is_authenticated and request.user.is_superuser == False:
         print(request.user.is_authenticated)
         user = request.user
@@ -96,9 +96,13 @@ def homepage(request):
     else:
         return render(request, 'start.html', {'products': product, 'categories': categories})
 
+@never_cache
 def startpage(request):
-    product = Product.objects.all()
-    categories = Category.objects.all()
+    if request.user.is_authenticated and request.user.is_superuser == False:
+        return redirect('home')
+    else:
+        product = Product.objects.all()
+        categories = Category.objects.all()
 
     return render(request, 'start.html', {'products': product, 'categories': categories})
 
@@ -209,20 +213,23 @@ def mobile_signup(request):
 
 
 def addtocart(request):
-    pid = request.GET['pid']
-    product = Product.objects.get(id=pid)
-    uid = request.user
-    print("pid =", pid)
-    print("uid =", uid)
-    if UserCart.objects.filter(product=pid, user=uid).exists():
-        cart = UserCart.objects.get(product=pid, user=uid)
-        cart.quantity = cart.quantity+1
-        cart.save()
-        return redirect('mycart')
+    if request.user.is_authenticated:
+        pid = request.GET['pid']
+        product = Product.objects.get(id=pid)
+        uid = request.user
+        print("pid =", pid)
+        print("uid =", uid)
+        if UserCart.objects.filter(product=pid, user=uid).exists():
+            cart = UserCart.objects.get(product=pid, user=uid)
+            cart.quantity = cart.quantity+1
+            cart.save()
+            return redirect('mycart')
+        else:
+            cart = UserCart.objects.create(product=product, user=uid)
+            cart = UserCart.objects.filter(user=uid)
+            return redirect('mycart')
     else:
-        cart = UserCart.objects.create(product=product, user=uid)
-        cart = UserCart.objects.filter(user=uid)
-        return redirect('mycart')
+        return redirect('login')
 
             
 def updatecartpage(request):
@@ -262,9 +269,12 @@ def addtomycart(request):
             cart = UserCart.objects.filter(user=user).order_by('-id')
             print(user)
             print(len(cart))
-        for i in range(len(cart)):
-            if cart[i].quantity < 1:
-                cart[i].delete()
+            for i in range(len(cart)):
+                 if cart[i].quantity < 1:
+                    cart[i].delete()
+        else:
+            return redirect('login')
+
         if len(cart) == 0:
             print('working')
             empty = "Cart is Empty"
@@ -362,7 +372,7 @@ def addaddress(request):
         address = Address.objects.create(
             name=name, phone=phone, address=address, city=city, state=state, pincode=pincode, user=user)
         address.save()
-        return redirect('payment')
+        return redirect('checkout')
     else:
         return render(request, 'addaddress.html')
 

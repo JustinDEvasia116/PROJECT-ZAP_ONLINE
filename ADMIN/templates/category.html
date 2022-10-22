@@ -54,30 +54,56 @@
                 <a class="btn btn-primary " href ="addcategory">Add Category</a>
                 </div>
             </div>
+            
             <div class="card-body">
+                <form action="category" method ="POST" enctype="multipart/form-data">
+                    {% csrf_token %}
+                <label for="exampleInputEmail1">Main Category</label>
+                          <select class="form-control" name="category" id="category">
+                            <option value="0">Select Category</option>
+                            {% for category in allcategory %} 
+                            <option value="{{category.id}}">{{category.name}}</option>
+                            {% endfor %} 
+
+                          </select>
+                          <br>
+                          
+                          <div >
+                            <button type="submit" class="btn btn-primary ">Check</button>
+                          </div>
+                </form>
+                          <br>
                 <table class="table table-striped">
                     <thead>
                         <tr>
                             <th>ID</th>
-                            <th>Name</th>
-                            <th>Image</th>
+                            
+                            <th>Sub Categories</th>
                             <th>Delete</th>
                             
                             
                         </tr>
                     </thead>
                     <tbody>
-                        {% for category in categories %}
+                        
+                      
+                        {% for subcategory in subcategories %}
+                            
                         <tr>
-                            <td>{{category.id}}</td>
-                            <td>{{category.name}}</td>
-                            <td><img src="{{category.image.url}}" alt="" class = "img-fluid" style="width:100px; height:100px;"></td>
+                            <td>{{subcategory.id}}</td>
+                            <td>{{subcategory}}</td>
                             <td>
-                                <a style="" class="btn btn-danger" href= "delete_category?id={{category.id}}"><i style=""onclick="return confirm('Are you sure to Delete '+' {{category.name}} ?')"</i>
+                                <a style="" class="btn btn-danger" href= "delete_category?id={{subcategory.id}}"><i style=""onclick="return confirm('Are you sure to Delete '+' {{category.name}} ?')"</i>
                                     Delete</a></td>
                             <td>
-                        {% endfor %}   
                        
+                       
+
+
+                        </tr>
+
+                        {% endfor %}   
+                          
                         
                     </tbody>
                 </table>

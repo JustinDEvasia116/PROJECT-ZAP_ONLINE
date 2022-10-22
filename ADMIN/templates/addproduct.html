@@ -54,12 +54,8 @@
                       <select class="form-control" name="category" id="category">
                         <option value="0">Select Category</option>
                     {% for category in categories %} 
-                           
-
-                      <option value="{{category.id}}">{{category.name}}</option>
-
-
-                        {% endfor %} 
+                           <option value="{{category.id}}">{{category.name}}</option>
+                    {% endfor %} 
                       </select>
                       <span id="errorcategory" class="text-danger">
                     </div>

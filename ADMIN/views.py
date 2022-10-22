@@ -1,3 +1,4 @@
+
 from django.shortcuts import render,redirect
 from .models import Category,Product
 
@@ -79,7 +80,7 @@ def addproduct(request):
 def addcategory(request):
     if request.method == 'POST':
         name = request.POST['catname']
-        id = 18
+        id = request.POST['category']
         categories= Category.objects.get(id=id)
         category = Category.objects.create(name=name)
         category.sub_categories.add(categories)
@@ -87,8 +88,8 @@ def addcategory(request):
        
         return redirect('category')
     else:
-        
-        return render(request, 'addcategory.html')
+        category=Category.objects.all()
+        return render(request, 'addcategory.html',{'categories':category})
 
 @login_required(login_url='adminstart')
 @never_cache
@@ -114,8 +115,31 @@ def products(request):
 @login_required(login_url='adminstart')
 @never_cache
 def category(request):
-    categories = Category.objects.all()
-    return render(request, 'category.html', {'categories': categories })
+    if request.method == 'POST':
+
+        id = request.POST['category']
+        print(id)
+        allcategory = Category.objects.all()
+        
+        categories = Category.objects.get(id=id)
+        print(categories)
+        subcategories=categories.sub_categories.all()[1:]
+       
+        print(subcategories)
+        return render(request, 'category.html', {'categories': categories,'subcategories': subcategories,'allcategory':allcategory})
+        
+    else:
+        allcategory = Category.objects.all()
+        return render(request,'category.html',{'allcategory': allcategory})
+        
+
+
+
+
+
+
+
+
 
 @login_required(login_url='adminstart')
 @never_cache

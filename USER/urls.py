@@ -30,6 +30,7 @@ urlpatterns =[
     path('changepassword',views.changepassword,name='changepassword'),
 
     path('product',views.product_view, name='product_view'),
+    # path('razorpay',views.razorpay,name='razorpay'),
 
 
     ]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
