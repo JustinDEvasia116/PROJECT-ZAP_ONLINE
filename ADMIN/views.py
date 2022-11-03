@@ -18,8 +18,13 @@ def adminstart(request):
 @login_required(login_url='adminstart')
 @never_cache
 def dashboard(request):
-    return render(request,"dashboard.html")
 
+  
+    products=Product.objects.all()
+    orders = Order.objects.all().order_by('-id')
+    cart = UserCart.objects.all()
+
+    return render(request, 'dashboard.html',{'orders':orders,'products':products,'carts':cart})
 
 @login_required(login_url='adminstart')
 @never_cache
@@ -117,13 +122,13 @@ def products(request):
 def category(request):
     if request.method == 'POST':
 
-        id = request.POST['category']
-        print(id)
+        ids = request.POST['category']
+        print(ids)
         allcategory = Category.objects.all()
         
-        categories = Category.objects.get(id=id)
+        categories = Category.objects.get(id=ids)
         print(categories)
-        subcategories=categories.sub_categories.all()[1:]
+        subcategories=categories.sub_categories.all().order_by('id')[1:]
        
         print(subcategories)
         return render(request, 'category.html', {'categories': categories,'subcategories': subcategories,'allcategory':allcategory})

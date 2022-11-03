@@ -62,10 +62,12 @@ class Order(models.Model):
     address = models.ForeignKey(Address, on_delete=models.CASCADE)
     # quantity = models.IntegerField(default=1)
     ordered_date = models.DateTimeField(auto_now_add=True)
-    status = models.CharField(max_length=100, default='pending')
+    status = models.CharField(max_length=100, default='Order Confirmed')
     amount = models.FloatField(default=1)
     method = models.CharField(max_length=100, default='Cash On Delivery')
     cancel = models.BooleanField(default=False)
+
+
 
 
 class AdminCart(models.Model):

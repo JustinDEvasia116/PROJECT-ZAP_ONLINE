@@ -1,107 +1,120 @@
 {% extends 'base.html'%} 
+{% load static %}
 
-<title>{% block page_title  %}Payment{% endblock  %}</title>
+{% block css_files %}
+
+{% endblock css_files %}
+
 
 {% block content%}
 
+<form action="payment" method = "POST">
+  {% csrf_token %}
+  <input type="hidden" name="amount" value="{{total}}" id="amount">
+  <input type="hidden" name="cart" value="{{cart}}" id ="cart">
+  <input type="hidden" name="payment" value="Cash on Delivery" id ="cart">
+  <input type="hidden" name="address" value="{{addresses.id}}" id ="address">
+  
+  
 
-<div class = "d -flex container">
-    <div class="row my-5 ">
-        
-        <div class="col-md-9">
-            <div class="card ">
-                <div class="card-header">
-                    <h4>Checkout</h4>
-                </div>
-                
-                <div class="card-body">
-                    <h6>Select payment methods</h6>
-                    <form action="payment" method = "POST">
-                        {% csrf_token %}
-                        <input type="hidden" name="amount" value="{{total}}" id="amount">
-                        <input type="hidden" name="payment" value="COD" id="payment">
-                        <input type="hidden" name="cart" value="{{cart}}" id ="cart">
-                        
-                        <input type="hidden" name="address" value="{{addresses.id}}" id ="address">
-                        
-                        <button type="submit " class="btn text-light m-1" style="width: 50%; background:#1C3879;">Cash On Delivery</button>
-                       <button type="button" class="btn btn-primary payWithRazorpay w-50 m-1"  data-toggle="modal" data-target="#exampleModal">
-                          Pay With Razorpay
-                        </button><br>
-                        <div id="paypal-button-container" class="mt-2 w-50 m-1" style="">
-
-                        </div><br>
-                        
-                        
-                          
-                        
-                    </div>
-                </div>
-            </div>
-            
-            <div class= "col-md-3">
-                <div class="card">
-                    <div class="card-header">
-                        <h4>Price details</h4>
-                    </div>
-                    <div class="card-body">
-                        <table class="table">
-                            <tr>
-                                <td>Subtotal</td>
-                                <td>₹{{subtotal}}/-</td>
-                            </tr>
-                            <tr>
-                                <td>Shipping</td>
-                                <td>Free</td>
-                            </tr>
-                            <tr>
-                                <td>Total</td>
-                                <td>₹{{total}}/-</td>
-                            </tr>
-                            
-                        </table>
-                        
-                    </div>
-                </div>
-        </div>
-        
-        
-    </div>
+  
+  
+  <button type="submit " class="btn text-light m-1" style="width: 50%; background:#1C3879;">Cash On Delivery</button>
+  <button type="button" class="btn btn-primary payWithRazorpay w-50 m-1"  data-toggle="modal" data-target="#exampleModal">
+    Pay With Razorpay
     
+  </button>
+  
+  <div class ="mt-2 w-50 btn"  id="paypal-button-container"></div>
+  
+</form>
 
-</div>
-{%endblock%}
+{% endblock content %}
 
 {% block scripts %}
+
 <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
-<script src="https://www.paypal.com/sdk/js?client-id=AUTKXFpKM267rqgrZueGx5ytYoyAExpV4Wd-QnJNlerMJ_ndj1R692BGcM7MsqwYfB1Mefiw02blkvLw&currency=USD"></script>
+<script src="https://www.paypal.com/sdk/js?client-id=AShn40Fb_4dIhXOVfYkbn6kDhmAI5iWBBVrXvzTNws_hwWxsgxZX_bbbSol6Dnd3P4f6EpCOjIf40Yaz&currency=USD"></script>
 <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+
+<script src="{% static "payment.js" %}"></script>
+
 <script>
-    paypal.Buttons({
-      // Sets up the transaction when a payment button is clicked
-      createOrder: (data, actions) => {
-        return actions.order.create({
-          purchase_units: [{
-            amount: {
-              value: '0.01'//'{{total}}' // Can also reference a variable or function
-            }
-          }]
-        });
-      },
-      // Finalize the transaction after payer approval
-      onApprove: (data, actions) => {
-        return actions.order.capture().then(function(orderData) {
-            console.log(orderData);
-          // Successful capture! For dev/demo purposes:
-          //console.log('Capture result', orderData, JSON.stringify(orderData, null, 2));
-          //const transaction = orderData.purchase_units[0].payments.captures[0];
-          //alert(`Transaction ${transaction.status}: ${transaction.id}\n\nSee console for all available details`);
-          // When ready to go live, remove the alert and show a success message within this page. For example:
-          // const element = document.getElementById('paypal-button-container');
-          // element.innerHTML = '<h3>Thank you for your payment!</h3>';
-          // Or go to another URL:  actions.redirect('thank_you.html');
-        });
-      }
-    }).render('#paypal-button-container');
+  paypal.Buttons({
+    //onclick: function(data, actions) {
+     // return actions.resolve();
+      
+    //},
+    // Sets up the transaction when a payment button is clicked
+    createOrder: (data, actions) => {
+      return actions.order.create({
+        purchase_units: [{
+          amount: {
+            value: '0.01' // Can also reference a variable or function
+          }
+        }]
+      });
+    },
+    // Finalize the transaction after payer approval
+    onApprove: (data, actions) => {
+      return actions.order.capture().then(function(orderData) {
+        console.log('Capture result', orderData, JSON.stringify(orderData, null, 2));
+        
+        var total = $('#amount').val()
+        var amount = $('#amount').val()
+        var cart = $('#cart').val()
+        var address = $('#address').val()
+        var payment = "PayPal"
+        var token = $("input[name='csrfmiddlewaretoken']").val()
+        
+        $.ajax({
+          url: "payment",
+          type: "POST",
+          data: {
+            'csrfmiddlewaretoken': token,
+            'amount': amount,
+            'cart': cart,
+            'address': address,
+            'payment': payment,
+          },
+          success: function(response) {
+            console.log(response)
+            
+              swal({
+                title: "Payment Successful",
+                text: "Your payment is successful",
+                icon: "success",
+                button: "OK",
+              }).then(function() {
+                window.location.href = "/";
+              });
+           
+          }
+        })
+
+        //data = {
+        //  'total': total,
+        //  'cart': cart,
+        //  'address': address,
+        //  'payment': payment,
+        //  'csrfmiddlewaretoken': token,
+        //}
+        // Successful capture! For dev/demo purposes:
+        //console.log('Capture result', orderData, JSON.stringify(orderData, null, 2));
+        //const transaction = orderData.purchase_units[0].payments.captures[0];
+        //alert(`Transaction ${transaction.status}: ${transaction.id}\n\nSee console for all available details`);
+        // When ready to go live, remove the alert and show a success message within this page. For example:
+        // const element = document.getElementById('paypal-button-container');
+        // element.innerHTML = '<h3>Thank you for your payment!</h3>';
+        // Or go to another URL:  actions.redirect('thank_you.html');
+      });
+    }
+  }).render('#paypal-button-container');
+    
+    function alreadyApplied(){
+        swal("Already Applied", "You have already applied the code", "error");
+    }
   </script>
 {% endblock scripts %}
+
+
