@@ -30,23 +30,39 @@
           <div class="col-lg-6">
               <nav class="header_menu">
                   <ul>
+                    {% if realuser %}
                       <li ><a href="home">Home</a></li>
                       <li><a href="#">Category</a></li>
                       <li><a href="profile">My Account</a></li>
                       <li><a href="myorder">My Orders</a></li>
                       <li class="active"><a href="mycart">My Cart</a></li>
-                      
-                      
+                    {% else %}
+                    <li ><a href="/">Home</a></li>
+                    <li><a href="#"></a></li>
+                    <li><a href="#"></a></li>
+                    <li class="active"><a href="mycart">My Cart</a></li>
+                    <li><a href="#">About us</a></li>
+                    {% endif %}
                       
                   </ul>
               </nav>
           </div>
           <div class="col-lg-3">
               <div class="header_right">
-                  <div class="header_right_auth">
-                     <a href="logout">Logout</a>
-                     {{user.username}}
-                      
+                {% if realuser %}
+                <div class="header_right_auth">
+                   <a href="logout">Logout</a>
+                   {{user.username}}
+                </div>
+                {% else %}
+                <div class="header_right_auth">
+                    
+                    Guest
+                <span class = "ms-5">
+                    <a href="login">Login</a>
+                </span>
+                 </div>
+                {% endif %}
               </div>
           </div>
       </div>

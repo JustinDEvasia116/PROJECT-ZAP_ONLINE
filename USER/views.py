@@ -17,11 +17,12 @@ from django.db.models import Sum
 from .mixins import MessageHandler
 import random
 from django.http import JsonResponse
+from guest_user.decorators import allow_guest_user
 
 
 @never_cache
 def loginpage(request):
-    if request.user.is_authenticated and request.user.is_superuser == False:
+    if request.user.is_authenticated and request.user.is_superuser == False and request.user.first_name !='':
         return redirect('home')
     if request.method == 'POST' and 'username' in request.POST and 'password' in request.POST :
         username = request.POST['username']
@@ -90,17 +91,21 @@ def signup(request):
 def homepage(request):
     product = Product.objects.all()
     categories = Category.objects.all()[1:]
+    
+    
     if request.user.is_authenticated and request.user.is_superuser == False:
         print(request.user.is_authenticated)
         user = request.user
         print('user=', user)
+ 
         return render(request, 'home.html', {'user': user, 'products': product, 'categories': categories})
     else:
         return render(request, 'start.html', {'products': product, 'categories': categories})
 
+@allow_guest_user()
 @never_cache
 def startpage(request):
-    if request.user.is_authenticated and request.user.is_superuser == False:
+    if request.user.is_authenticated and request.user.is_superuser == False and request.user.first_name !='':
         return redirect('home')
     else:
         product = Product.objects.all()
@@ -237,7 +242,7 @@ def addtocart(request):
 def updatecartpage(request):
     return render(request,'mycart.html')
 
-
+@login_required(login_url='login')
 def myprofile(request):
     user = request.user
     address = Address.objects.filter(user=user)
@@ -292,7 +297,11 @@ def addtomycart(request):
             shipping = 0
             total = subtotal + shipping
             print(total)
-            return render(request, 'mycart.html', {'cart': cart, 'subtotal': subtotal, 'total': total})
+            if request.user.first_name !='':
+               realuser=True
+               return render(request, 'mycart.html', {'cart': cart, 'subtotal': subtotal, 'total': total,'realuser':realuser})
+            else:
+                return render(request, 'mycart.html', {'cart': cart, 'subtotal': subtotal, 'total': total})
 
 @login_required(login_url='login')
 def checkout(request):

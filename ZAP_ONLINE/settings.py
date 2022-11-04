@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     'USER',
     'ADMIN',
     'django_twilio',
+    "guest_user"
 ]
 
 MIDDLEWARE = [
@@ -118,6 +119,11 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+AUTHENTICATION_BACKENDS = [
+   "django.contrib.auth.backends.ModelBackend",
+   # it should be the last entry to prevent unauthorized access
+   "guest_user.backends.GuestBackend",
+]
 
 # Internationalization
 # https://docs.djangoproject.com/en/4.1/topics/i18n/
