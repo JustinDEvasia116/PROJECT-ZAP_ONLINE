@@ -6,6 +6,7 @@ import profile
 from django.shortcuts import render, redirect
 from django.http import JsonResponse, HttpResponse
 from django.contrib.auth.models import User, auth
+from guest_user.models import Guest
 from django.contrib import messages
 from django.contrib.auth import login
 from django.contrib.auth.decorators import login_required
@@ -18,6 +19,7 @@ from .mixins import MessageHandler
 import random
 from django.http import JsonResponse
 from guest_user.decorators import allow_guest_user
+
 
 
 @never_cache
@@ -43,11 +45,10 @@ def loginpage(request):
         return render(request, 'login.html')
 
 
-
-def signup(request):
+def guestsignup(request):
+    print(request.user.id)
+    id = request.user.id
     
-
-
     if request.method == 'POST'  and 'otp' not in request.POST:
         first_name = request.POST['first_name']
         last_name = request.POST['last_name']
@@ -60,6 +61,47 @@ def signup(request):
         
        
        
+        user = User.objects.create_user(id=id,
+        first_name=first_name, last_name=last_name,  username=username, email=email, password=password)
+        user.save_base()
+        user_id = User.objects.get(username=username)
+        account = Accounts.objects.create(user=user_id, phone=phone)
+        account.save()
+        guest = Guest.objects.get(user_id=id)
+        guest.delete()
+        print('user created')
+        return render(request,'login.html')
+        
+    elif request.method == 'POST':
+        phone = request.POST['phone']
+        otp=968542
+
+        otp1 =int( request.POST['otp'])
+        print(otp)
+        print(otp1)
+        if otp == otp1:
+            return render(request, "signup.html",{ 'phone': phone})
+        else:
+          return redirect('mobile')
+  
+    else:
+        return render(request, 'guestsignup.html')
+
+
+
+def signup(request):
+    
+    if request.method == 'POST'  and 'otp' not in request.POST:
+        first_name = request.POST['first_name']
+        last_name = request.POST['last_name']
+        phone = request.POST['phone']
+        email = request.POST['email']
+        username = request.POST['username']
+        password = request.POST['password']
+        print("username=", username)
+        print(password)
+        
+              
         user = User.objects.create_user(
         first_name=first_name, last_name=last_name,  username=username, email=email, password=password)
         user.save()
@@ -299,6 +341,7 @@ def addtomycart(request):
             print(total)
             if request.user.first_name !='':
                realuser=True
+               
                return render(request, 'mycart.html', {'cart': cart, 'subtotal': subtotal, 'total': total,'realuser':realuser})
             else:
                 return render(request, 'mycart.html', {'cart': cart, 'subtotal': subtotal, 'total': total})

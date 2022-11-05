@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 {% load static %}
+{% load guest_user %} 
 
 
 <title>{% block page_title  %}My cart{% endblock  %}</title>
@@ -60,8 +61,10 @@
                     Guest
                 <span class = "ms-5">
                     <a href="login">Login</a>
+                    <a href="mobile">Register</a>
                 </span>
                  </div>
+ 
                 {% endif %}
               </div>
           </div>
@@ -150,9 +153,9 @@
 
 
               {% else %}
-              <a type="button" href="mycart" class="btn btn-primary btn-lg btn-block">
+              {% comment %} <a type="button" href="mycart" class="btn btn-primary btn-lg btn-block">
                 Update Cart
-              </a>
+              </a> {% endcomment %}
   
               <!-- Single item -->
               
@@ -203,10 +206,17 @@
                   <span class="total"><strong>{{total}}</strong></span>
                 </li>
               </ul>
-  
+              {% if  user|is_guest_user  %}
+              <a type="button" href="login" class="btn btn-primary btn-lg btn-block">
+                Go To Checkout
+              </a>
+              {% else %}
               <a type="button" href="checkout" class="btn btn-primary btn-lg btn-block">
                 Go To Checkout
               </a>
+              {% endif %}
+  
+             
   
             </div>
           </div>
@@ -216,7 +226,7 @@
   </section>
 {% endif %}
 
-  <script src="{% static 'cart.js' %}"></script>
+  <script src="{% static 'mycart.js' %}"></script>
 
 {% endblock content %}
 

@@ -8,6 +8,7 @@ urlpatterns =[
     
     path("login",views.loginpage,name="login"),
     path("signup",views.signup,name="signup"),
+    path("guestsignup",views.guestsignup,name="guestsignup"),
     path("mobile",views.mobile_signup,name="mobile"),
     # path("mobile_otp",views.otp_signup,name="signupotp"),
     path('otp/<uid>',views.otplogin, name='otplogin'),
