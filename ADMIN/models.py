@@ -57,3 +57,29 @@ class Images(models.Model):
 			url = ''
 		return url
 
+class Offers(models.Model):
+    product = models.ForeignKey(
+        Product, on_delete=models.CASCADE, null=True, blank=True)
+    name = models.CharField(max_length=200)
+    offer = models.IntegerField()
+    offer_type = models.CharField(max_length=200, null=True, blank=True, default='product')
+    start_date = models.DateField()
+    end_date = models.DateField()
+    max_value = models.IntegerField(default=0)
+    category = models.ForeignKey(
+        Category, on_delete=models.CASCADE, null=True, blank=True)
+    is_active = models.BooleanField(default=True)
+
+    def __str__(self):
+        return self.product.name
+    
+class Coupon(models.Model):
+    code = models.CharField(max_length=50)
+    discount = models.IntegerField()
+    start_date = models.DateField()
+    min_amount = models.IntegerField(default=0)
+    end_date = models.DateField()
+    is_active = models.BooleanField(default=True)
+
+    def __str__(self):
+        return self.code

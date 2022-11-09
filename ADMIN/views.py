@@ -15,6 +15,8 @@ from django.views.decorators.cache import never_cache
 def adminstart(request):
     return render(request,"adminstart.html")
 
+
+
 @login_required(login_url='adminstart')
 @never_cache
 def dashboard(request):
@@ -241,7 +243,84 @@ def updatestatus(request):
     return redirect('orders')
 
 
+@login_required(login_url='adminlogin')
+def coupons(request):
+    coupon=Coupon.objects.all()
+    return render(request, 'coupon_management.html',{'coupons':coupon})
 
+
+
+def addcoupon(request):
+    if request.method == 'POST':
+        code = request.POST['code']
+        discount = request.POST['discount']
+        min_amount = request.POST['discount']
+        start_date = request.POST['startdate']
+        end_date = request.POST['enddate']
+        coupon = Coupon.objects.create(code=code,discount=discount,min_amount=min_amount,start_date=start_date,end_date=end_date)
+        return redirect('addcoupon')
+    else:
+        return render(request, "add_coupon.html")
+
+@login_required(login_url='adminstart')
+@never_cache
+def offers(request):
+    if request.method == 'POST':
+
+        ids = request.POST['category']
+        print(ids)
+        allcategory = Category.objects.all()
+        
+        categories = Category.objects.get(id=ids)
+        print(categories)
+        subcategories=categories.sub_categories.all().order_by('id')[1:]
+       
+        print(subcategories)
+        return render(request, 'offer_management.html', {'categories': categories,'subcategories': subcategories,'allcategory':allcategory})
+        
+    else:
+        allcategory = Category.objects.all()
+        return render(request,'offer_management.html',{'allcategory': allcategory})
+
+
+
+@login_required(login_url='adminstart')
+def prod_addoffer(request):
+    if request.method == 'POST':
+        name = request.POST['name']
+        offer = request.POST['offer']
+        startdate = request.POST['startdate']
+        max_value = request.POST['max_value']
+        print(startdate)
+        enddate = request.POST['enddate']
+        print( "end",enddate)
+        product = request.POST['product']
+        print(product)
+        offer = Offers.objects.create(name=name,offer=offer,start_date=startdate,end_date=enddate,offer_type='product',product_id=product,max_value=max_value)
+        offer.save()
+        return redirect('offers')
+    else:
+        products=Product.objects.all()
+        return render(request, "prod_addoffer.html",{'products':products})
+
+@login_required(login_url='adminlogin')
+def cate_addoffer(request):
+    if request.method == 'POST':
+        name = request.POST['name']
+        offer = request.POST['offer']
+        startdate = request.POST['startdate']
+        max_value = request.POST['max_value']
+        print(startdate)
+        enddate = request.POST['enddate']
+        print( "end",enddate)
+        category = request.POST['category']
+         
+        offer = Offers.objects.create(name=name,offer=offer,start_date=startdate,end_date=enddate,offer_type='category',category_id=category,max_value=max_value)
+        offer.save()
+        return redirect('offers')
+    else:
+        category=Category.objects.all()
+        return render(request, "cate_add_offer.html",{'category':category})
 
 
 
@@ -255,3 +334,4 @@ def logout(request):
     # user=request.user
     auth.logout(request)
     return redirect('adminstart')
+

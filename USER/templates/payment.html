@@ -29,7 +29,9 @@
                     </div>
                 
                     <div class="card-body">
-                    
+                      <form action="checkout" method="POST">
+                        {% csrf_token %}
+                        {% if code %}
                         <table class="table">
                             <tr>
                                 <td>Subtotal</td>
@@ -43,6 +45,25 @@
                                 <td>Shipping</td>
                                 <td>Free</td>
                             </tr>
+                            <input type="hidden" name="amount" value="{{total}}" id="amount">
+                            <input type="hidden" name="cart" value="{{cart}}" id ="cart">
+                            <input type="hidden" name="payment" value="Cash on Delivery" id ="cart">
+                            <input type="hidden" name="address" value="{{addresses}}" id ="address">
+                            <input type="hidden" name="amount" value="{{total}}" id="amount">
+
+                            <tr style="background-color: rgba(0,0,0,.03)">
+                              <td><input readonly type="text" style="width:50%" name="code" id="code" placeholder="Enter Coupon code" class="form-control w-100"></td>
+                              <td><button type="button" disabled class="btn btn-primary mx-2 ">Apply</button></td>
+                          </tr>
+                         
+                          {% if message == 'Minimum Amount is not reached' %}
+                          <p class="text-danger">{{message}}</p>
+                          {% else %}
+                          <p class="text-success">You applied the coupon code {{code}} </p>
+                          {% endif %}
+                       
+
+
                             <tr>
                                 <td>Total</td>
                                 {% if total %}
@@ -52,8 +73,50 @@
                                 {% endif %}
                             </tr>
                         </table>
+                        {% else %}
+                        <table class="table">
+                          <tr>
+                              <td>Subtotal</td>
+                              {% if subtotal %}
+                              <td>₹{{subtotal}}/-</td>
+                              {% else %}
+                              <td>₹{{price}}/-</td>
+                              {% endif %}
+                          </tr>
+                          <tr>
+                              <td>Shipping</td>
+                              <td>Free</td>
+                          </tr>
+                          <input type="hidden" name="amount" value="{{total}}" id="amount">
+                          <input type="hidden" name="cart" value="{{cart}}" id ="cart">
+                          <input type="hidden" name="payment" value="Cash on Delivery" id ="cart">
+                          <input type="hidden" name="address" value="{{addresses}}" id ="address">
+                          <input type="hidden" name="amount" value="{{total}}" id="amount">
+
+                          <tr style="background-color: rgba(0,0,0,.03)">
+                            <td><input type="text" style="width:50%" name="code" id="code" placeholder="Enter Coupon code" class="form-control w-100"></td>
+                            <td><button type="submit" class="btn btn-primary mx-2 ">Apply</button></td>
+                        </tr>
+                          
+
+
+                          <tr>
+                              <td>Total</td>
+                              {% if total %}
+                              <td>₹{{total}}/-</td>
+                              {% else %}
+                              <td>₹{{price}}/-</td>
+                              {% endif %}
+                          </tr>
+                          {% endif %}
+                      </table>
+
+
+
+                      </form> 
                         
                     </div>
+                  
                    
                 </div>
             </div>
@@ -63,6 +126,7 @@
               <input type="hidden" name="cart" value="{{cart}}" id ="cart">
               <input type="hidden" name="payment" value="Cash on Delivery" id ="cart">
               <input type="hidden" name="address" value="{{addresses.id}}" id ="address">
+              
               
               
             <h4 class="mt-5">Payment Methods</h4>

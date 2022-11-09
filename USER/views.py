@@ -361,7 +361,37 @@ def checkout(request):
         shipping = 0
         total = subtotal+shipping
         return render(request, 'payment.html', {'subtotal': subtotal, 'total': total, 'addresses': address,'cart':cart})     
-
+    
+    
+    elif request.method == 'POST' and 'code' in request.POST:
+        user = request.user
+        method = request.POST['payment']
+        amount = request.POST['amount']
+        address = request.POST['address']
+        cart = UserCart.objects.filter(user=user)
+        print("address",address)
+        total = float(request.POST['amount'])
+        code = request.POST['code']
+        print(code)
+        subtotal = 0
+        for i in range(len(cart)):
+            if cart[i].cancel != True:
+                if cart[i].price_with_offer !=0:
+                    x = cart[i].price_with_offer*cart[i].quantity
+                    subtotal = subtotal+x
+                else:
+                    x = cart[i].product.price*cart[i].quantity
+                    subtotal = subtotal+x
+        shipping = 0
+        message=False
+        coupon = Coupon.objects.get(code=code)
+        if total>coupon.min_amount:
+            total = total-coupon.discount
+        else:
+            message = "Minimum Amount is not reached"    
+        print(message)
+        print(total)
+        return render(request, 'payment.html', { 'subtotal':subtotal,'total': total,'message':message, 'addresses': address,'cart':cart, 'code':code, 'offer':coupon})
     else:
         print('else===')
         user = request.user
@@ -426,7 +456,7 @@ def payment(request):
             subtotal = subtotal+x
         shipping = 0
         total = subtotal + shipping
-        crt = AdminCart.objects.filter(user=user)
+        crt = UserCart.objects.filter(user=user)
         print(method)
         order = Order.objects.create(
             user=user, address=address, amount=amount, method=method)

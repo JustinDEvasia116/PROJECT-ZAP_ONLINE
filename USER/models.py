@@ -27,6 +27,8 @@ class UserCart(models.Model):
     quantity = models.IntegerField(default=1)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    cancel = models.BooleanField(default=False)
+    price_with_offer = models.FloatField(default=0)
     
     
     

@@ -21,6 +21,12 @@ urlpatterns =[
     path('adminlogout',views.logout, name='adminlogout'),
     path('cancelorder',views.cancelorder, name='cancelorder'),
     path('updatestatus',views.updatestatus, name='updatestatus'),
+    path('coupons',views.coupons, name='coupons'),
+    path('addcoupon',views.addcoupon, name='addcoupon'),
+    path("offers",views.offers,name="offers"),
+    path('prod_addoffer',views.prod_addoffer, name='prodoffer'),
+    path('cate_addoffer',views.cate_addoffer, name='cateoffer'),
+
     
 
 ]

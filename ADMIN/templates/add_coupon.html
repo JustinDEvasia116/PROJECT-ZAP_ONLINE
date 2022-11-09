@@ -1,0 +1,90 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container">
+    <div id="alert-box"></div>
+    <div id="image-box" class="mb-3"></div>
+        
+    <div class="col-md-8 my-4 mx-auto" style="width:60%;">
+        <div class="card">
+            <div class="card-header">
+                <h4>Add Coupon</h4>
+            </div>
+            <div class="card-body">
+                <form action="addcoupon" id="image-form" method ="POST" enctype="multipart/form-data">
+                  {% csrf_token %}
+                  <div class="form-group my-1" >
+                    <label for="pname">Coupon Code</label>
+                    <input type="text" class="form-control" name="code"  id="name"  placeholder="Coupon Code">
+                    <span id="errorbrand" class="text-danger"></span>
+                  </div>
+
+                    <div class="form-group my-1" >
+                      <label for="pname">Discount</label>
+                      <input type="number" class="form-control" name="discount" id="discount" aria-describedby="emailHelp" placeholder="Discount">
+                      <span id="errorname" class="text-danger">
+                    </div>
+                    <div class="form-group my-1">
+                        <label for="pdesc">Start date</label>
+                        <input type="date" class="form-control" name="startdate" id="startdate" aria-describedby="emailHelp" >
+                        <span id="errorname" class="text-danger">
+                    </div>
+                    <div class="form-group my-1">
+                        <label for="pdesc">End date</label>
+                        <input type="date" class="form-control" name="enddate" id="enddate" aria-describedby="emailHelp" >
+                        <span id="errorname" class="text-danger">
+                    </div>
+                    
+                    <button type="submit" class="btn my-1 ht " id="btn1"style="background:#94D3AC;">Add Coupon</button>
+                  </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+  $('#btn1').click(()=>{
+      var name = $('#name').val()
+      var image = $('#image').val()
+      var category = $('#category').val()
+      var price = $('#price').val()
+      var description = $('#description').val()
+      var brand = $('#brand').val()
+      console.log(image)
+      
+
+      if(brand == ''){
+        $('#errorbrand').html('Enter the brand')
+        return false
+    }
+    else if(name == '' ){
+          $('#errorname').html('Enter the name')
+          return false
+      }
+      else if(image1 == ''){
+          $('#errorimage').html('Choose a Image')
+          return false
+      } 
+      else if (category == 0){  
+          $('#errorcategory').html('Select a category')
+          return false;  
+      }
+      else if(price == ''){
+          $('#errorprice').html('Enter the price')
+          return false
+      }
+      else if(description == ''){
+          $('#errordescription').html('Enter the description')
+          return false
+      }
+      
+      else{
+          $('#error').html('')
+          $('#error1').html('')
+          alert("Product Added Successfully")
+          return true
+      }
+      
+  })
+
+</script>
+{% endblock content %}
