@@ -1,6 +1,7 @@
 {% extends 'base.html' %}
 {% load static %}
-{% load guest_user %} 
+{% load guest_user %}
+{% load mathfilters %} 
 
 
 <title>{% block page_title  %}My cart{% endblock  %}</title>
@@ -72,6 +73,9 @@
   </div>
 </header>
 
+
+
+
 <section class="h-100 gradient-custom">
     <div class="container py-5">
       <div class="row d-flex justify-content-center my-4 ">
@@ -83,7 +87,14 @@
             <div class="card-body ">
               <h2>{{empty}}</h2>
               {% for cart in cart %}
+              {{ cart.product.name}}
+              {% for category in categories %}
+                
+                
+                
+
               
+
               <div class="row product_data">
                 <div class="col-lg-3 col-md-12 mb-4 mb-lg-0">
                   <!-- Image -->
@@ -105,7 +116,11 @@
                   <p><strong>{{cart.product.name}}</strong></p>
                   <p>BRAND:{{cart.product.brand}}</p>
                   <p>Price: {{cart.product.price}}</p>
-                  <button type="button" class="btn btn-primary btn-sm me-1 mb-2" data-mdb-toggle="tooltip"
+          
+
+
+
+                  <button type="button" class="btn btn-primary btn-sm me-1 mb-2 "onclick=removeCart({{cart.id}}) id="removecart" data-mdb-toggle="tooltip"
                     title="Remove item">
                     <i class="fas fa-trash"></i>
                   </button>
@@ -113,8 +128,29 @@
                     title="Move to the wish list">
                     <i class="fas fa-heart"></i>
                   </button>
+                  
+               
 
+                  {% for offer in offers %}
+                 
+                  {% if  offer.product.id == cart.product.id  or offer.category.id == category.id %} 
+                     <p class="fw-bold text-success">Offer: {{offer.offer}}% off upto ₹{{offer.max_value}}/-
+                  {% with offer1=cart.product.price|div:100|mul:offer.offer|floatformat:2 %}
+                  {% with offer2=cart.product.price|sub:offer1|floatformat:2 %}
+                  {% if offer2 < offer.max_value %}
+                      <br><p class="fw-bold">Offer Price = ₹{{offer2}}/-</p></p>
+                  {% else %}
+                      <br>Offer Price = ₹{{cart.product.price|sub:offer.max_value}}/-</p>
+                  {% endif %}
+                  {% endwith %}
+                  {% endwith %}
+                  
+                  {% endif %}
+                  {% endfor %}
                 
+                  
+                
+
 
                   <!-- Data -->
                 </div>
@@ -148,6 +184,7 @@
               </div>
               <!-- Single item -->
               {% endfor %} 
+              {% endfor %}
               <br></br>
               {% if empty  %}
 
@@ -228,5 +265,41 @@
 
   <script src="{% static 'mycart.js' %}"></script>
 
+<script>
+  function removeCart(id){
+    console.log(id)
+    var id = id
+    swal({
+        title: "Are you sure?",
+        text: "Once you delete, product will remove from cart?",
+        icon: "warning",
+        buttons: true,
+        dangerMode: true,
+      })
+      .then((willDelete) => {
+        if (willDelete) {
+            $.ajax({
+            url: 'removecart',
+            method: 'GET',
+            data: {id:id},
+            success: function(data){
+                swal("Poof! Your imaginary file has been deleted!", {
+                    icon: "success",
+                  });
+                location.reload();
+                
+           }
+         })
+        //swal("Poof! Your imaginary file has been deleted!", {
+            //icon: "success",
+        //});
+          
+        } else {
+          swal("Your imaginary file is safe!");
+        }
+      });
+    
+}
+</script>
 {% endblock content %}
 

@@ -11,6 +11,12 @@ from django.http import JsonResponse, HttpResponse
 from django.contrib.auth.models import User, auth
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.cache import never_cache
+from django.template.loader import get_template
+from xhtml2pdf import pisa
+import pandas as pd
+from django import template
+
+from django.http import FileResponse
 # Create your views here.
 def adminstart(request):
     return render(request,"adminstart.html")
@@ -39,7 +45,7 @@ def orders(request):
 @login_required(login_url='adminstart')
 @never_cache
 def users(request):
-     user_details=User.objects.filter(is_superuser=False)
+     user_details=User.objects.filter(is_superuser=False).exclude(email = str)
      return render(request, 'users.html',{'user_details':user_details})
 
 @login_required(login_url='adminstart')
@@ -265,23 +271,9 @@ def addcoupon(request):
 @login_required(login_url='adminstart')
 @never_cache
 def offers(request):
-    if request.method == 'POST':
-
-        ids = request.POST['category']
-        print(ids)
-        allcategory = Category.objects.all()
-        
-        categories = Category.objects.get(id=ids)
-        print(categories)
-        subcategories=categories.sub_categories.all().order_by('id')[1:]
-       
-        print(subcategories)
-        return render(request, 'offer_management.html', {'categories': categories,'subcategories': subcategories,'allcategory':allcategory})
-        
-    else:
-        allcategory = Category.objects.all()
-        return render(request,'offer_management.html',{'allcategory': allcategory})
-
+    prod_offer = Offers.objects.filter(offer_type='product')
+    category_offer = Offers.objects.filter(offer_type='category')
+    return render(request, 'offer_management.html',{'prod_offers':prod_offer,'category_offers':category_offer})
 
 
 @login_required(login_url='adminstart')
@@ -321,6 +313,204 @@ def cate_addoffer(request):
     else:
         category=Category.objects.all()
         return render(request, "cate_add_offer.html",{'category':category})
+
+
+@login_required(login_url='adminlogin')
+def sales(request):
+    if request.method == 'POST' and 'start_date' in request.POST and 'end_date' in request.POST:
+        start_date = request.POST['start_date']
+        end_date = request.POST['end_date']
+        orders=Order.objects.filter(ordered_date__range=[start_date,end_date])
+        return render(request, 'sales.html',{'orders':orders})
+    orders=Order.objects.all().order_by('-id')
+    return render(request, 'sales.html',{'orders':orders})
+
+@login_required(login_url='adminlogin')
+def report(request):
+    print(request.method)
+    start = request.POST['start_date']
+    end = request.POST['end_date']
+    print("end=",end)
+    order = Order.objects.filter(ordered_date__range=[start,end])
+    print(order)
+    n=len(order)
+    print(n)
+    if n==0:
+        messages.error(request, 'No Order Found')
+        return redirect('sales')
+    print(order)
+    type = request.POST['type']
+    # order = Order.objects.all()
+    print(type)
+    if type == 'PDF':
+        
+        template_path = 'report.html'
+
+        context = {'order': order}
+
+        response = HttpResponse(content_type='application/pdf')
+
+        response['Content-Disposition'] = 'filename="invoice.pdf"'
+
+        template = get_template(template_path)
+
+        html = template.render(context)
+
+        # create a pdf
+        pisa_status = pisa.CreatePDF(
+        html, dest=response)
+        # if error then show some funy view
+        if pisa_status.err:
+            return HttpResponse('We had some errors <pre>' + html + '</pre>')
+        return response
+    else:
+        data =[]
+        for order in order:
+            data.append({
+                "id":order.id,
+                "Customer":order.user.username,
+                "Ordered date":str(order.ordered_date),
+                "Amount":order.amount,
+                "Payment Method":order.method,
+                "Order Status":order.status,
+            })
+        pd.DataFrame(data).to_excel("report.xlsx")
+        # response['Content-Disposition'] = 'filename="report.xlsx"'
+        return FileResponse(open('report.xlsx', 'rb'), as_attachment=True, filename="report.xlsx")
+
+@login_required(login_url='adminlogin')
+def monthly_sales(request):
+    month = request.POST['month']
+    print(month)
+    orders = Order.objects.filter(ordered_date__month=month)
+    if len(orders) ==0:
+        # messages.info(request, 'No Orders Found')
+        return render(request, 'sales.html')
+    return render(request, 'sales.html',{'orders':orders})
+
+@login_required(login_url='adminlogin')
+def yearly_sales(request):
+    year = request.POST['year']
+    orders = Order.objects.filter(ordered_date__year=year)
+    if len(orders) ==0:
+        # messages.info(request, 'No Orders Found')
+        return render(request, 'sales.html')
+    return render(request, 'sales.html',{'orders':orders})
+   
+def date_select(request):
+    start = request.POST['start_date']
+    end = request.POST['end_date']
+    print("end=",end)
+    order = Order.objects.filter(ordered_date__range=[start,end])
+    if len(order) ==0:
+        # messages.info(request, 'No Orders Found')
+        return render(request, 'sales.html')
+    else:
+        return render(request, 'sales.html',{'orders':order})
+
+@login_required(login_url='adminlogin')
+def yearly(request):
+    year = request.POST['year']
+    type = request.POST['type']
+    order = Order.objects.filter(ordered_date__year=year)
+    n=len(order)
+    if n==0:
+        messages.error(request, 'No Order Found')
+        return redirect('sales')
+    if type == 'PDF':
+        
+        template_path = 'report.html'
+
+        context = {'order': order}
+
+        response = HttpResponse(content_type='application/pdf')
+
+        response['Content-Disposition'] = 'filename="report.pdf"'
+
+        template = get_template(template_path)
+
+        html = template.render(context)
+
+        # create a pdf
+        pisa_status = pisa.CreatePDF(
+        html, dest=response)
+        # if error then show some funy view
+        if pisa_status.err:
+            return HttpResponse('We had some errors <pre>' + html + '</pre>')
+        return response
+    else:
+        data =[]
+        for order in order:
+            data.append({
+                "id":order.id,
+                "Customer":order.user.username,
+                "Ordered date":str(order.ordered_date),
+                "Amount":order.amount,
+                "Payment Method":order.method,
+                "Order Status":order.status,
+            })
+        pd.DataFrame(data).to_excel("report.xlsx")
+        # response['Content-Disposition'] = 'filename="report.xlsx"'
+
+        return FileResponse(open('report.xlsx', 'rb'), as_attachment=True, filename="report.xlsx")
+@login_required(login_url='adminlogin')
+def monthly(request):
+    month = request.POST['month']
+    type = request.POST['type']
+    order = Order.objects.filter(ordered_date__month=month)
+    n=len(order)
+    if n==0:
+        messages.error(request, 'No Order Found')
+        return redirect('sales')
+    if type == 'PDF':
+        
+        template_path = 'report.html'
+
+        context = {'order': order}
+
+        response = HttpResponse(content_type='application/pdf')
+
+        response['Content-Disposition'] = 'filename="invoice.pdf"'
+
+        template = get_template(template_path)
+
+        html = template.render(context)
+
+        # create a pdf
+        pisa_status = pisa.CreatePDF(
+        html, dest=response)
+        # if error then show some funy view
+        if pisa_status.err:
+            return HttpResponse('We had some errors <pre>' + html + '</pre>')
+        return response
+    else:
+        data =[]
+        for order in order:
+            data.append({
+                "id":order.id,
+                "Customer":order.user.username,
+                "Ordered date":str(order.ordered_date),
+                "Amount":order.amount,
+                "Payment Method":order.method,
+                "Order Status":order.status,
+            })
+        pd.DataFrame(data).to_excel("report.xlsx")
+        # response['Content-Disposition'] = 'filename="report.xlsx"
+        return FileResponse(open('report.xlsx', 'rb'), as_attachment=True, filename="report.xlsx")
+
+@login_required(login_url='adminstart')
+def blockcoupon(request):
+    id=request.GET['id']
+    offer=Offers.objects.filter(id=id).update(is_active=False)
+    
+    return redirect('offers')
+
+@login_required(login_url='adminstart')
+def unblockcoupon(request):
+    id=request.GET['id']
+    offer=Offers.objects.filter(id=id).update(is_active=True)
+    
+    return redirect('offers')
 
 
 

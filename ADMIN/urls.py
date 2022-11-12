@@ -26,7 +26,15 @@ urlpatterns =[
     path("offers",views.offers,name="offers"),
     path('prod_addoffer',views.prod_addoffer, name='prodoffer'),
     path('cate_addoffer',views.cate_addoffer, name='cateoffer'),
-
+    path('sales',views.sales, name='sales'),
+    path('monthly',views.monthly, name='monthly'),
+    path('monthly_sales',views.monthly_sales, name='monthly_sales'),
+    path('yearly_sales',views.yearly_sales, name='yearly_sales'),
+    path('yearly',views.yearly, name='yearly'),
+    # path('date_select',views.date_select, name='date_select'),
+    path('report',views.report, name='report'),
+     path('blockcoupon',views.blockcoupon, name='blockcoupon'),
+    path('unblockcoupon',views.unblockcoupon, name='unblockcoupon'),
     
 
 ]

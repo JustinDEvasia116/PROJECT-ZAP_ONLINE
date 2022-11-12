@@ -47,7 +47,8 @@ INSTALLED_APPS = [
     'USER',
     'ADMIN',
     'django_twilio',
-    "guest_user"
+    "guest_user",
+    'mathfilters',
 ]
 
 MIDDLEWARE = [

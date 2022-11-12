@@ -20,6 +20,8 @@ import random
 from django.http import JsonResponse
 from guest_user.decorators import allow_guest_user
 
+from twilio.base.exceptions import TwilioRestException
+
 
 
 @never_cache
@@ -185,13 +187,18 @@ def getotp(request):
         messages.info(request, "Phone Number Not Registered", extra_tags='phone_login' )
         return redirect('login')
     else:
-       num = Accounts.objects.filter(phone=phone)
-       message_handler = MessageHandler(phone,num[0].otp).sent_otp_on_phone()
-       return redirect(f'otp/{num[0].uid}')
-
+        try:
+            num = Accounts.objects.filter(phone=phone)
+            message_handler = MessageHandler(phone,num[0].otp).sent_otp_on_phone()
+            return redirect(f'otp/{num[0].uid}')
+            print(message.sid)
+        except TwilioRestException as e:
+                print(e)
+        return redirect('error')
+     
 @never_cache
 def otplogin(request,uid):
-    if request.user.is_authenticated and request.user.is_superuser == False:
+    if request.user.is_authenticated and request.user.is_superuser == False and request.user.first_name !='':
         return redirect('home')
     if request.method == 'POST':
         otp=request.POST.get('otp')
@@ -212,26 +219,72 @@ def logout(request):
     auth.logout(request)
     return redirect('start')
 
-def view_product(request):
-    id = request.GET['id']
-    product = Product.objects.get(id=id)
-    print(product)
-    prdct = Product.objects.filter(id=id)
-    print(prdct)
-    images = Images.objects.filter(product=prdct[0].id)
-    print(images)
-    print("images",images)
-    return render(request, 'view_product.html', {'product': product, 'images':images})
-
 def product_view(request):
     id = request.GET['id']
     product = Product.objects.get(id=id)
+    
     print(product)
+    print(id)
+    
     prdct = Product.objects.filter(id=id)
     print(prdct)
+    off=''
+    offc=''
+    categories=Category.objects.get(product=id)
+    print(categories.id)
+    if Offers.objects.filter(product_id=id).exists():
+        off=Offers.objects.get(product_id=id)
+        print("off",off.offer)
+    if Offers.objects.filter(category=categories.id).exists():
+        offc = Offers.objects.get(category=categories.id)
+        print("offc",offc.offer)
+        
     images = Images.objects.filter(product=prdct[0].id)
-    print("images",images)
-    return render(request, 'product_view.html', {'product': product, 'images':images})
+
+    offers = Offers.objects.all()
+    for offer in offers:
+        print(offer.product)
+        print(prdct[0])
+        if offer.product == prdct[0]:
+            for ofr in offers:
+              
+                if ofr.category == product.category:
+                    print("ofr=",ofr.name)
+                    if ofr.offer<offer.offer:
+                        print("offer",offer.offer)
+                            
+                        return render(request, 'product_view.html',{'product': product, 'images': images, 'offer': offer, 'offc':offc, 'off': off})
+                    else:
+                        return render(request, 'product_view.html',{'product': product, 'images': images, 'offer':ofr,  'offc':offc, 'off': off})
+                    
+        else: 
+            for ofr in offers:
+                if ofr.category == product.category:
+                    print("elseofr=",ofr.name)
+                    return render(request, 'product_view.html',{'product': product, 'images': images, 'offer':ofr, 'offc':offc, 'off': off})
+        return render(request, 'product_view.html', {'product': product, 'images': images, 'offer':ofr, 'offc':offc, 'off': off})
+    else:
+        return redirect('home')
+    
+
+
+
+
+
+
+
+
+
+
+# def product_view(request):
+#     id = request.GET['id']
+#     product = Product.objects.get(id=id)
+#     print(product)
+#     prdct = Product.objects.filter(id=id)
+#     print(prdct)
+#     images = Images.objects.filter(product=prdct[0].id)
+#     print("images",images)
+#     return render(request, 'product_view.html', {'product': product, 'images':images})
 
 def mobile_signup(request):
     if request.method == 'POST':
@@ -261,24 +314,90 @@ def mobile_signup(request):
 
 
 
+# def addtocart(request):
+#     if request.user.is_authenticated:
+#         pid = request.GET['pid']
+#         product = Product.objects.get(id=pid)
+#         uid = request.user
+#         print("pid =", pid)
+#         print("uid =", uid)
+#         if UserCart.objects.filter(product=pid, user=uid).exists():
+#             cart = UserCart.objects.get(product=pid, user=uid)
+#             cart.quantity = cart.quantity+1
+#             cart.save()
+#             return redirect('mycart')
+#         else:
+#             cart = UserCart.objects.create(product=product, user=uid)
+#             cart = UserCart.objects.filter(user=uid)
+#             return redirect('mycart')
+#     else:
+#         return redirect('login')
+
+
 def addtocart(request):
-    if request.user.is_authenticated:
-        pid = request.GET['pid']
-        product = Product.objects.get(id=pid)
-        uid = request.user
-        print("pid =", pid)
-        print("uid =", uid)
-        if UserCart.objects.filter(product=pid, user=uid).exists():
-            cart = UserCart.objects.get(product=pid, user=uid)
-            cart.quantity = cart.quantity+1
-            cart.save()
-            return redirect('mycart')
-        else:
-            cart = UserCart.objects.create(product=product, user=uid)
-            cart = UserCart.objects.filter(user=uid)
-            return redirect('mycart')
+    pid = request.GET['pid']
+
+    product = Product.objects.get(id=pid)
+    offers = Offers.objects.all()
+    
+    uid = request.user
+    print("pid =", pid)
+    print("uid =", uid)
+    if UserCart.objects.filter(product=pid, user=uid).exists():
+        cart = UserCart.objects.get(product=pid, user=uid)
+        cart.quantity = cart.quantity+1
+        cart.save()
+        return redirect('mycart')
     else:
-        return redirect('login')
+        for offer in offers:
+            print(offer.product)
+            category=Category.objects.get(product=pid)
+            
+            if offer.product == product:
+                price = 0
+                offamount = product.price * offer.offer / 100
+                if offamount > offer.max_value:
+                    price = product.price - offer.max_value
+                else:
+                    price = product.price - offamount
+                print(price)
+                cart = UserCart.objects.create(
+                    user=uid, product=product, quantity=1, price_with_offer=price)
+                cart.save()
+                return redirect('mycart')
+            elif offer.category == category:
+                print(category)
+                print(offer.category)
+                price = 0
+                offamount = product.price * offer.offer / 100
+                if offamount > offer.max_value:
+                    price = product.price - offer.max_value
+                else:
+                    price=product.price-offamount
+                print(price)
+                cart = UserCart.objects.create(user=uid, product=product, quantity=1, price_with_offer=price)
+                cart.save()
+                return redirect('mycart')
+                
+        
+        cart = UserCart.objects.create(product=product, user=uid)
+        cart = UserCart.objects.filter(user=uid)
+        return redirect('mycart')
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
             
 def updatecartpage(request):
@@ -316,7 +435,17 @@ def addtomycart(request):
         if request.user.is_authenticated:
             user = request.user
             cart = UserCart.objects.filter(user=user).order_by('-id')
-            print(user)
+            offers = Offers.objects.all()
+            
+            categories = Category.objects.filter(product=17)
+           
+            for category in categories:
+                print(category.id)
+            
+                  
+         
+
+            
             print(len(cart))
             for i in range(len(cart)):
                  if cart[i].quantity < 1:
@@ -328,23 +457,29 @@ def addtomycart(request):
             print('working')
             empty = "Cart is Empty"
             cartlen=len(cart)
-            return render(request, 'mycart.html', {'empty': empty,'cartlen': cartlen})
+            return render(request, 'mycart.html', {'empty': empty,'cartlen': cartlen,'offers': offers,})
         else:
   
             subtotal = 0
             for i in range(len(cart)):
-                
-                x = cart[i].product.price*cart[i].quantity
-                subtotal = subtotal+x
+                if cart[i].price_with_offer !=0:
+                        x = cart[i].price_with_offer*cart[i].quantity
+                        subtotal = subtotal+x
+                    
+                else:
+                        x = cart[i].product.price*cart[i].quantity
+                        subtotal = subtotal+x
+                    
+ 
             shipping = 0
             total = subtotal + shipping
             print(total)
             if request.user.first_name !='':
                realuser=True
                
-               return render(request, 'mycart.html', {'cart': cart, 'subtotal': subtotal, 'total': total,'realuser':realuser})
+               return render(request, 'mycart.html', {'cart': cart, 'subtotal': subtotal, 'total': total,'realuser':realuser,'offers': offers,'categories':categories})
             else:
-                return render(request, 'mycart.html', {'cart': cart, 'subtotal': subtotal, 'total': total})
+                return render(request, 'mycart.html', {'cart': cart, 'subtotal': subtotal, 'total': total,'offers': offers,'categories':categories})
 
 @login_required(login_url='login')
 def checkout(request):
@@ -356,8 +491,12 @@ def checkout(request):
         cart = UserCart.objects.filter(user=request.user)
         subtotal = 0
         for i in range(len(cart)):
-            x = cart[i].product.price*cart[i].quantity
-            subtotal = subtotal+x
+                if cart[i].price_with_offer !=0:
+                    x = cart[i].price_with_offer*cart[i].quantity
+                    subtotal = subtotal+x
+                else:
+                    x = cart[i].product.price*cart[i].quantity
+                    subtotal = subtotal+x
         shipping = 0
         total = subtotal+shipping
         return render(request, 'payment.html', {'subtotal': subtotal, 'total': total, 'addresses': address,'cart':cart})     
@@ -401,8 +540,12 @@ def checkout(request):
         print(cart)
         subtotal = 0
         for i in range(len(cart)):
-            x = cart[i].product.price*cart[i].quantity
-            subtotal = subtotal+x
+                if cart[i].price_with_offer !=0:
+                    x = cart[i].price_with_offer*cart[i].quantity
+                    subtotal = subtotal+x
+                else:
+                    x = cart[i].product.price*cart[i].quantity
+                    subtotal = subtotal+x
         shipping = 0
         total = subtotal+shipping
         # return HttpResponse('else')
@@ -518,6 +661,14 @@ def cancelorder(request):
     return JsonResponse({'status': True})
     # return redirect('myorder')
 
+def removecart(request):
+    id=request.GET['id']
+    print(id)
+    cart = UserCart.objects.get(id=id)
+    cart.delete()
+    return redirect('mycart')
+
+
 def deleteaddress(request):
     id=request.GET['id']
     address = Address.objects.get(id=id)
@@ -562,3 +713,6 @@ def changepassword(request):
     else:
          user = User.objects.filter(id=id)
          return render(request,"changepassword.html",{'user':user})
+
+def error(request):
+  return render(request,"404.html")

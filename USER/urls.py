@@ -16,7 +16,7 @@ urlpatterns =[
     path("home",views.homepage,name="home"),
     path("",views.startpage,name="start"),
     path('logout',views.logout, name='logout'),
-    path('view_product',views.view_product, name='view_product'),
+    # path('view_product',views.view_product, name='view_product'),
     path("addtocart",views.addtocart,name="addtocart"),
     path("mycart",views.addtomycart,name="mycart"),
     path("updatecart",views.updatecartpage,name="updatecart"),
@@ -29,9 +29,11 @@ urlpatterns =[
     path('deleteaddress',views.deleteaddress,name='deleteaddress'),
     path('editprofile',views.editprofile,name='editprofile'),
     path('changepassword',views.changepassword,name='changepassword'),
-
     path('product',views.product_view, name='product_view'),
     path('razorpay',views.razorpay,name='razorpay'),
+    path('removecart',views.removecart,name='removecart'),
+
+    path('error',views.error,name='error'),
 
 
     ]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
