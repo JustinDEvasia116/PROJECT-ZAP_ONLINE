@@ -268,24 +268,6 @@ def product_view(request):
     
 
 
-
-
-
-
-
-
-
-
-# def product_view(request):
-#     id = request.GET['id']
-#     product = Product.objects.get(id=id)
-#     print(product)
-#     prdct = Product.objects.filter(id=id)
-#     print(prdct)
-#     images = Images.objects.filter(product=prdct[0].id)
-#     print("images",images)
-#     return render(request, 'product_view.html', {'product': product, 'images':images})
-
 def mobile_signup(request):
     if request.method == 'POST':
         phone = request.POST['phone']
@@ -299,39 +281,15 @@ def mobile_signup(request):
         else:
             otp = 968542
             print(otp)
-            message_handler = MessageHandler(phone, otp).sent_otp_on_phone()
-            return render(request, "enterotp.html",{ 'phone': phone})
+            try:
+                message_handler = MessageHandler(phone, otp).sent_otp_on_phone()
+                return render(request, "enterotp.html",{ 'phone': phone})
+            except TwilioRestException:
+                return redirect('error')
+     
 
     return render(request,"enterphone.html")
 
-# def cartpage(request):
-#      if request.user.is_authenticated:
-#         user = request.user
-#         cart = UserCart.objects.filter(user=user)
-        
-#         return render(request,'mycart.html',{'cart':cart})
-
-
-
-
-# def addtocart(request):
-#     if request.user.is_authenticated:
-#         pid = request.GET['pid']
-#         product = Product.objects.get(id=pid)
-#         uid = request.user
-#         print("pid =", pid)
-#         print("uid =", uid)
-#         if UserCart.objects.filter(product=pid, user=uid).exists():
-#             cart = UserCart.objects.get(product=pid, user=uid)
-#             cart.quantity = cart.quantity+1
-#             cart.save()
-#             return redirect('mycart')
-#         else:
-#             cart = UserCart.objects.create(product=product, user=uid)
-#             cart = UserCart.objects.filter(user=uid)
-#             return redirect('mycart')
-#     else:
-#         return redirect('login')
 
 
 def addtocart(request):
@@ -436,11 +394,14 @@ def addtomycart(request):
             user = request.user
             cart = UserCart.objects.filter(user=user).order_by('-id')
             offers = Offers.objects.all()
-            
-            categories = Category.objects.filter(product=17)
-           
-            for category in categories:
-                print(category.id)
+
+            for carts in cart[0].product.category.all():
+                print("catid =", carts.id)
+
+            # for products in cart:
+
+            #     categories = Category.objects.get(product=products.product.id)
+            #     print(categories.id)
             
                   
          
@@ -477,9 +438,9 @@ def addtomycart(request):
             if request.user.first_name !='':
                realuser=True
                
-               return render(request, 'mycart.html', {'cart': cart, 'subtotal': subtotal, 'total': total,'realuser':realuser,'offers': offers,'categories':categories})
+               return render(request, 'mycart.html', {'cart': cart, 'subtotal': subtotal, 'total': total,'realuser':realuser,'offers': offers,})
             else:
-                return render(request, 'mycart.html', {'cart': cart, 'subtotal': subtotal, 'total': total,'offers': offers,'categories':categories})
+                return render(request, 'mycart.html', {'cart': cart, 'subtotal': subtotal, 'total': total,'offers': offers,})
 
 @login_required(login_url='login')
 def checkout(request):

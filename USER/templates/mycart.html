@@ -87,13 +87,7 @@
             <div class="card-body ">
               <h2>{{empty}}</h2>
               {% for cart in cart %}
-              {{ cart.product.name}}
-              {% for category in categories %}
-                
-                
-                
-
-              
+            
 
               <div class="row product_data">
                 <div class="col-lg-3 col-md-12 mb-4 mb-lg-0">
@@ -130,10 +124,12 @@
                   </button>
                   
                
-
+                  {% for b in cart.product.category.all %}
                   {% for offer in offers %}
-                 
-                  {% if  offer.product.id == cart.product.id  or offer.category.id == category.id %} 
+                  
+                   
+                  
+                  {% if  offer.product.id == cart.product.id  or offer.category.id == b.id%} 
                      <p class="fw-bold text-success">Offer: {{offer.offer}}% off upto ₹{{offer.max_value}}/-
                   {% with offer1=cart.product.price|div:100|mul:offer.offer|floatformat:2 %}
                   {% with offer2=cart.product.price|sub:offer1|floatformat:2 %}
@@ -147,7 +143,7 @@
                   
                   {% endif %}
                   {% endfor %}
-                
+                  {% endfor %}
                   
                 
 
@@ -184,7 +180,7 @@
               </div>
               <!-- Single item -->
               {% endfor %} 
-              {% endfor %}
+              {% comment %} {% endfor %} {% endcomment %}
               <br></br>
               {% if empty  %}
 
@@ -199,7 +195,7 @@
               <!-- Single item -->
             </div>
           </div>
-   >
+   
           <div class="card mb-4 mb-lg-0">
             <div class="card-body">
               <p><strong>We accept</strong></p>

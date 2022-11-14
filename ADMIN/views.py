@@ -249,7 +249,7 @@ def updatestatus(request):
     return redirect('orders')
 
 
-@login_required(login_url='adminlogin')
+@login_required(login_url='adminstart')
 def coupons(request):
     coupon=Coupon.objects.all()
     return render(request, 'coupon_management.html',{'coupons':coupon})
@@ -295,7 +295,7 @@ def prod_addoffer(request):
         products=Product.objects.all()
         return render(request, "prod_addoffer.html",{'products':products})
 
-@login_required(login_url='adminlogin')
+@login_required(login_url='adminstart')
 def cate_addoffer(request):
     if request.method == 'POST':
         name = request.POST['name']
@@ -315,7 +315,7 @@ def cate_addoffer(request):
         return render(request, "cate_add_offer.html",{'category':category})
 
 
-@login_required(login_url='adminlogin')
+@login_required(login_url='adminstart')
 def sales(request):
     if request.method == 'POST' and 'start_date' in request.POST and 'end_date' in request.POST:
         start_date = request.POST['start_date']
@@ -325,7 +325,7 @@ def sales(request):
     orders=Order.objects.all().order_by('-id')
     return render(request, 'sales.html',{'orders':orders})
 
-@login_required(login_url='adminlogin')
+@login_required(login_url='adminstart')
 def report(request):
     print(request.method)
     start = request.POST['start_date']
@@ -378,7 +378,7 @@ def report(request):
         # response['Content-Disposition'] = 'filename="report.xlsx"'
         return FileResponse(open('report.xlsx', 'rb'), as_attachment=True, filename="report.xlsx")
 
-@login_required(login_url='adminlogin')
+@login_required(login_url='adminstart')
 def monthly_sales(request):
     month = request.POST['month']
     print(month)
@@ -388,7 +388,7 @@ def monthly_sales(request):
         return render(request, 'sales.html')
     return render(request, 'sales.html',{'orders':orders})
 
-@login_required(login_url='adminlogin')
+@login_required(login_url='adminstart')
 def yearly_sales(request):
     year = request.POST['year']
     orders = Order.objects.filter(ordered_date__year=year)
@@ -408,7 +408,7 @@ def date_select(request):
     else:
         return render(request, 'sales.html',{'orders':order})
 
-@login_required(login_url='adminlogin')
+@login_required(login_url='adminstart')
 def yearly(request):
     year = request.POST['year']
     type = request.POST['type']
@@ -453,7 +453,7 @@ def yearly(request):
         # response['Content-Disposition'] = 'filename="report.xlsx"'
 
         return FileResponse(open('report.xlsx', 'rb'), as_attachment=True, filename="report.xlsx")
-@login_required(login_url='adminlogin')
+@login_required(login_url='adminstart')
 def monthly(request):
     month = request.POST['month']
     type = request.POST['type']
