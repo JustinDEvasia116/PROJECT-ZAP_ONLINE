@@ -468,6 +468,7 @@ def checkout(request):
         method = request.POST['payment']
         amount = request.POST['amount']
         address = request.POST['address']
+        addresses = Address.objects.get(id=address)
         cart = UserCart.objects.filter(user=user)
         print("address",address)
         total = float(request.POST['amount'])
@@ -491,7 +492,7 @@ def checkout(request):
             message = "Minimum Amount is not reached"    
         print(message)
         print(total)
-        return render(request, 'payment.html', { 'subtotal':subtotal,'total': total,'message':message, 'addresses': address,'cart':cart, 'code':code, 'offer':coupon})
+        return render(request, 'payment.html', { 'subtotal':subtotal,'total': total,'message':message, 'addresses': addresses,'cart':cart, 'code':code, 'offer':coupon})
     else:
         print('else===')
         user = request.user

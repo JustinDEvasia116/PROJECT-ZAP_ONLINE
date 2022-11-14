@@ -48,7 +48,7 @@
                             <input type="hidden" name="amount" value="{{total}}" id="amount">
                             <input type="hidden" name="cart" value="{{cart}}" id ="cart">
                             <input type="hidden" name="payment" value="Cash on Delivery" id ="cart">
-                            <input type="hidden" name="address" value="{{addresses}}" id ="address">
+                            <input type="hidden" name="address_id" value="{{addresses.id}}" id ="address">
                             <input type="hidden" name="amount" value="{{total}}" id="amount">
 
                             <tr style="background-color: rgba(0,0,0,.03)">
@@ -90,7 +90,7 @@
                           <input type="hidden" name="amount" value="{{total}}" id="amount">
                           <input type="hidden" name="cart" value="{{cart}}" id ="cart">
                           <input type="hidden" name="payment" value="Cash on Delivery" id ="cart">
-                          <input type="hidden" name="address" value="{{addresses}}" id ="address">
+                          <input type="hidden" name="address" value="{{addresses.id}}" id ="address">
                           <input type="hidden" name="amount" value="{{total}}" id="amount">
 
                           <tr style="background-color: rgba(0,0,0,.03)">
@@ -98,8 +98,6 @@
                             <td><button type="submit" class="btn btn-primary mx-2 ">Apply</button></td>
                         </tr>
                           
-
-
                           <tr>
                               <td>Total</td>
                               {% if total %}
