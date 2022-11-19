@@ -17,13 +17,18 @@ class Category(models.Model):
 	def __str__(self):
 		return self.name
 
+class Brand(models.Model):
+    name = models.CharField(max_length=100)
+    is_active = models.BooleanField(default=True)
 
+    def __str__(self):
+        return self.name
 	
 	
     
 class Product(models.Model):
 	name = models.CharField(max_length=200)
-	brand = models.CharField(max_length=200)
+	brand = models.ForeignKey(Brand, on_delete=models.CASCADE)
 	price = models.FloatField()
 	description = models.TextField(null=True, blank=True)
 	image = models.ImageField(null=True, blank=True,upload_to='assets/images')
@@ -66,6 +71,10 @@ class Offers(models.Model):
     start_date = models.DateField()
     end_date = models.DateField()
     max_value = models.IntegerField(default=0)
+    brand = models.ForeignKey(
+        Brand, on_delete=models.CASCADE, null=True, blank=True)
+    is_active = models.BooleanField(default=True)
+
     category = models.ForeignKey(
         Category, on_delete=models.CASCADE, null=True, blank=True)
     is_active = models.BooleanField(default=True)
@@ -80,6 +89,7 @@ class Coupon(models.Model):
     min_amount = models.IntegerField(default=0)
     end_date = models.DateField()
     is_active = models.BooleanField(default=True)
+	
 
     def __str__(self):
         return self.code

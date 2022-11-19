@@ -12,7 +12,7 @@ urlpatterns =[
     path("category",views.category,name="category"),
     path('addproduct',views.addproduct,name='addproduct'),
     path('addcategory',views.addcategory,name='addcategory'),
-
+    path('addbrand',views.addbrand ,name='addbrand'),
     path('delete_category',views.delete_category,name='delete_category'),
     path('editproduct',views.editproduct,name='editproduct'),
     path('deleteproduct',views.delete_product,name='delete_product'),
@@ -26,6 +26,7 @@ urlpatterns =[
     path("offers",views.offers,name="offers"),
     path('prod_addoffer',views.prod_addoffer, name='prodoffer'),
     path('cate_addoffer',views.cate_addoffer, name='cateoffer'),
+    path('brand_addoffer',views.brand_addoffer, name='brandoffer'),
     path('sales',views.sales, name='sales'),
     path('monthly',views.monthly, name='monthly'),
     path('monthly_sales',views.monthly_sales, name='monthly_sales'),
@@ -33,8 +34,10 @@ urlpatterns =[
     path('yearly',views.yearly, name='yearly'),
     # path('date_select',views.date_select, name='date_select'),
     path('report',views.report, name='report'),
-     path('blockcoupon',views.blockcoupon, name='blockcoupon'),
+    path('blockcoupon',views.blockcoupon, name='blockcoupon'),
     path('unblockcoupon',views.unblockcoupon, name='unblockcoupon'),
+    path('blockoffer',views.blockoffer, name='blockoffer'),
+    path('unblockoffer',views.unblockoffer, name='unblockoffer'),
     
 
 ]

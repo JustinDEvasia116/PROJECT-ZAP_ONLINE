@@ -230,6 +230,7 @@ def product_view(request):
     print(prdct)
     off=''
     offc=''
+    offb=''
     categories=Category.objects.get(product=id)
     print(categories.id)
     if Offers.objects.filter(product_id=id).exists():
@@ -238,6 +239,9 @@ def product_view(request):
     if Offers.objects.filter(category=categories.id).exists():
         offc = Offers.objects.get(category=categories.id)
         print("offc",offc.offer)
+    if Offers.objects.filter(brand=product.brand).exists():
+        offb = Offers.objects.get(brand=product.brand)
+        print("offb",offb.offer)        
         
     images = Images.objects.filter(product=prdct[0].id)
 
@@ -253,16 +257,16 @@ def product_view(request):
                     if ofr.offer<offer.offer:
                         print("offer",offer.offer)
                             
-                        return render(request, 'product_view.html',{'product': product, 'images': images, 'offer': offer, 'offc':offc, 'off': off})
+                        return render(request, 'product_view.html',{'product': product, 'images': images, 'offer': offer, 'offc':offc, 'off': off,'offb': offb})
                     else:
-                        return render(request, 'product_view.html',{'product': product, 'images': images, 'offer':ofr,  'offc':offc, 'off': off})
+                        return render(request, 'product_view.html',{'product': product, 'images': images, 'offer':ofr,  'offc':offc, 'off': off,'offb': offb})
                     
         else: 
             for ofr in offers:
                 if ofr.category == product.category:
                     print("elseofr=",ofr.name)
-                    return render(request, 'product_view.html',{'product': product, 'images': images, 'offer':ofr, 'offc':offc, 'off': off})
-        return render(request, 'product_view.html', {'product': product, 'images': images, 'offer':ofr, 'offc':offc, 'off': off})
+                    return render(request, 'product_view.html',{'product': product, 'images': images, 'offer':ofr, 'offc':offc, 'off': off,'offb': offb})
+        return render(request, 'product_view.html', {'product': product, 'images': images, 'offer':ofr, 'offc':offc, 'off': off,'offb': offb})
     else:
         return redirect('home')
     
@@ -333,6 +337,16 @@ def addtocart(request):
                 else:
                     price=product.price-offamount
                 print(price)
+            elif offer.brand == product.brand:
+                print(product.brand)
+                print(offer.brand)
+                price = 0
+                offamount = product.price * offer.offer / 100
+                if offamount > offer.max_value:
+                    price = product.price - offer.max_value
+                else:
+                    price=product.price-offamount
+                print(price)
                 cart = UserCart.objects.create(user=uid, product=product, quantity=1, price_with_offer=price)
                 cart.save()
                 return redirect('mycart')
@@ -394,9 +408,14 @@ def addtomycart(request):
             user = request.user
             cart = UserCart.objects.filter(user=user).order_by('-id')
             offers = Offers.objects.all()
-
-            for carts in cart[0].product.category.all():
-                print("catid =", carts.id)
+            if len(cart) == 0:
+                print('working')
+                empty = "Cart is Empty"
+                cartlen=len(cart)
+                return render(request, 'mycart.html', {'empty': empty,'cartlen': cartlen,'offers': offers,})
+            else:
+                for carts in cart[0].product.category.all():
+                    print("catid =", carts.id)
 
             # for products in cart:
 
@@ -486,7 +505,9 @@ def checkout(request):
         shipping = 0
         message=False
         coupon = Coupon.objects.get(code=code)
-        if total>coupon.min_amount:
+        min_amount = coupon.min_amount*2
+        print(min_amount)
+        if total>min_amount:
             total = total-coupon.discount
         else:
             message = "Minimum Amount is not reached"    

@@ -82,6 +82,13 @@
                                             <option value="PDF">PDF</option>
                                             <option value="Excel">Excel</option>
                                         </select>
+                                        <label class="mt-3"><p> Select Year </p></label>
+                                        <select name="year" class="" id ="months">
+                                            <option value="2021">2021</option>
+                                            <option value="2022">2022</option>
+                                            <option value="2023">2023</option>
+                                            <option value="2024">2024</option>
+                                        </select>
                                                                                
                                         <button type="submit" class="my-1 btn btn-primary">Generate</button>
                                     </form>
@@ -127,10 +134,15 @@
                         <option value="Excel">Excel</option>
                     </select>
                     
-                    {% for message in messages  %}
+                  
+                    {%for message in messages%}
+                    {% if 'dates' in message.tags %}
                     <span class="text-danger">{{message}}</span>
-                    {% endfor %}            
-                    <button type="submit" id="generate" class="btn btn-primary mt-2 mb-1 w-100 ">Generate</button>
+                    {%else%}
+                    <span class="text-danger">{{message}}</span>
+                    {% endif %}
+                    {% endfor %}           
+                    <button type="submit" id="generate" class="btn btn-primary mt-2 mb-1 w-10 ">Generate</button>
                     </form>
                         
                     </div>
@@ -174,29 +186,7 @@
                             </form>
                     </div>
                 
-                    <div>
-                        <form action="monthly_sales" method ="POST">
-                            {% csrf_token %}
-                            <label class="mt-3"><p> Select Month</p></label>
-                                <select name="month" class="" id ="months">
-                                    <option value="01">January</option>
-                                    <option value="02">February</option>
-                                    <option value="03">March</option>
-                                    <option value="04">April</option>
-                                    <option value="05">May</option>
-                                    <option value="06">June</option>
-                                    <option value="07">July</option>
-                                    <option value="08">August</option>
-                                    <option value="09">September</option>
-                                    <option value="10">October</option>
-                                    <option value="11">November</option>
-                                    <option value="12">December</option>
-        
-                                </select>
-                                <button type="submit" class="btn btn-primary mt-2 mb-1 btn-sm">Filter</button>
-                            </form>
-
-                    </div>
+                
                     
 
                 </div>
@@ -210,6 +200,8 @@
                             <th>Date</th>
                             <th>Amount</th>
                             <th>Payment Method</th>
+                            <th>Status</th>
+
                         </tr>
                     </thead>
                     <tbody>
@@ -225,6 +217,7 @@
                             <td>{{order.ordered_date}}</td>
                             <td>{{order.amount}}</td>
                             <td>{{order.method}}</td>
+                            <td>{{order.status}}</td>
                             </tr>
                         {% endfor %}
                     </tbody>
@@ -274,6 +267,8 @@
         $('#myTable').DataTable();
         $('#order_table').DataTable();
     });
+
+    
 
     
 

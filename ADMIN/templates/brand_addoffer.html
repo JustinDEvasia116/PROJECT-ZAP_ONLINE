@@ -1,0 +1,81 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container">
+    <div id="alert-box"></div>
+    <div id="image-box" class="mb-3"></div>
+        
+    <div class="col-md-8 my-4 mx-auto" style="width:60%;">
+        <div class="card">
+            <div class="card-header">
+                <h4>Add Offer</h4>
+            </div>
+            <div class="card-body">
+                <form action="brand_addoffer" id="image-form" method ="POST" enctype="multipart/form-data">
+                  {% csrf_token %}
+                  <div class="form-group my-1" >
+                    <label for="pname">Name</label>
+                    <input type="text" class="form-control" name="name"  id="name"  placeholder="Offer Name">
+                    <span id="errorname" class="text-danger"></span>
+                  </div>
+                  
+
+                    <div class="form-group my-1" >
+                      <label for="pname">Offer in %</label>
+                      <input type="number" class="form-control" name="offer" id="offer" aria-describedby="emailHelp" placeholder="Offer in %">
+                      <span id="errorname" class="text-danger">
+                    </div>
+                    <div class="form-group my-1" >
+                      <label for="pname">Maximun amount of off</label>
+                      <input type="number" class="form-control" name="max_value" id="max_value" aria-describedby="emailHelp" placeholder="Maximun amount of off">
+                      <span id="errorname" class="text-danger">
+                    </div>
+                    <div class="form-group my-1">
+                        <label for="pdesc">Start date</label>
+                        <input type="date" class="form-control" name="startdate" id="startdate" aria-describedby="emailHelp" >
+                        <span id="errorname" class="text-danger">
+                    </div>
+                    <div class="form-group my-1">
+                        <label for="pdesc">End date</label>
+                        <input type="date" class="form-control" name="enddate" id="enddate" aria-describedby="emailHelp" >
+                        <span id="errorname" class="text-danger">
+                    </div>
+                    <div class= "form-group my-1">
+                        <label >Select Brand</label>
+                        <select class="form-control" name="brand" id="product">
+                            <option value="">Select Brand</option>
+                            {% for brand in brand %}
+                            <option value="{{brand.id}}">{{brand.name}}</option>
+                            {% endfor %}
+                        </select>
+                        </div>
+                        <div id="#alert-box"></div>
+                    <button type="submit" class="btn my-1 " id="btn1" style="background:#94D3AC;">Add Offer</button>
+                  </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+  $('#btn1').click(()=>{
+    
+    var name = $('#name').val();
+    var code = $('#code').val();
+    var offer = $('#offer').val();
+    var startdate = $('#startdate').val();
+    var enddate = $('#enddate').val();
+    var product = $('#product').val();
+    var category = $('#category').val();
+    
+    if (name == '' || code == '' || offer == '' || startdate == '' || enddate == '') {
+      alert("Please fill all the fields");
+    }
+    else{
+      return true;
+    }
+  })
+      
+  
+
+</script>
+{% endblock content %}

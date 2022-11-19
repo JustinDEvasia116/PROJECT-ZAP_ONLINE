@@ -1,4 +1,16 @@
-{% extends 'base.html' %}{% block content %}
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+
+<style>
+  .addimg {
+    margin-top:2px;
+    max-width: 6%;
+    height: auto;
+  }
+    
+</style>
 
   <div class="container">
     <div id="alert-box"></div>
@@ -12,12 +24,21 @@
             <div class="card-body">
                 <form action="addproduct" id="image-form" method ="POST" enctype="multipart/form-data">
                   {% csrf_token %}
-                  <div class="form-group" >
-                    <label for="pname">Brand</label>
-                    <input type="text" class="form-control" name="brand"  id="brand" aria-describedby="emailHelp" placeholder="Product Brand">
-                    <span id="errorbrand" class="text-danger"></span>
+                  <div class="form-group " >
+                    <label for="pname d-flex">Brand</label>
+                    <select class="form-control" name="brand" id="brand">
+                      <option value="0">Select Brand</option>
+                      
+                  {% for brand in brands %} 
+                         <option value="{{brand.id}}">{{brand.name}}</option>
+                  {% endfor %} 
+                    </select>
+                     <span id="errorbrand" class="text-danger"></span>
                   </div>
-
+                  <span>
+                  <a  href ="addbrand"><img class="addimg" src="{% static 'images\619553_add_create_new_plus_icon.png' %}" alt=""></a>
+                  <span >Add Brand</span>
+                  </span>
                     <div class="form-group" >
                       <label for="pname">Name</label>
                       <input type="text" class="form-control" name="name" id="name" aria-describedby="emailHelp" placeholder="Product Name">

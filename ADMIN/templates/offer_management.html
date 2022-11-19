@@ -25,13 +25,13 @@
             <li class="nav-item  ">
                 <a class="nav-link" href="users">Users</a>
             </li>
+            <li class="nav-item ">
+                <a class="nav-link" href="products">Products</a>
+            </li>
+            <li class="nav-item ">
+                <a class="nav-link" href="#">Catogory</a>
+            </li>
             <li class="nav-item active">
-                <a class="nav-link" href="#">Products</a>
-            </li>
-            <li class="nav-item ">
-                <a class="nav-link" href="category">Catogory</a>
-            </li>
-            <li class="nav-item ">
                 <a class="nav-link" href="offers">Offers</a>
             </li>
             <li class="nav-item ">
@@ -46,11 +46,6 @@
         </ul>
     </div>
 </nav>
-
-
-
-
-
 
 
 
@@ -143,8 +138,52 @@
                 </table>
             </div>
         </div>
+        <div class="card col-md-6">
+            <div class="card-header d-flex">
+                <div style="width:95%;">
+                <h4>Brand Offer Management</h4>
+                </div>
+                <div >
+                <a class="btn-outline-success btn btn-sm" href ="brand_addoffer">Add</a>
+                </div>
+            </div>
+            <div class="card-body">
+                <table id="brand_table" class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            
+                            <th>Start Date</th>
+                            <th>End Date</th>
+                            <th>Brand</th>
+                            
+                            <th>Block</th>
+                           
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for offer in brand_offers %}
+                        <tr>
+                            <td>{{offer.name}}</td>
+                            <td>{{offer.start_date}}</td>
+                            <td>{{offer.end_date}}</td>
+                            <td>{{offer.brand.name}}</td>
+                            <td>
+                                {% if offer.is_active %}
+                                <a class="btn btn-primary" onclick="blockOffer({{offer.id}})" >Block</i></a>
+                                {% else %}
+                                <a class="btn btn-primary" onclick="UnblockOffer({{offer.id}})" >Unblock</i></a>
+                                {% endif %}
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
     </div>
 </div>
+<script src="{% static 'main.js' %}"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
 <script type="text/javascript" src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
 <script type="text/javascript" src="https://cdn.datatables.net/1.10.16/js/dataTables.bootstrap4.min.js"></script>
@@ -154,6 +193,7 @@
         console.log("hello");
         $('#myTable').DataTable();
         $('#order_table').DataTable();
+        $('#brand_table').DataTable();
     });
     {% comment %} function deleteOffer(id){
         var id=id;
@@ -200,7 +240,7 @@
             if (willDelete) {
                     
                 $.ajax({
-                    url: 'blockcoupon',
+                    url: 'blockoffer',
                     type: 'GET',
                     data: {id:id},
                     success: function(response){
@@ -221,7 +261,7 @@
         var id=id;
         
         $.ajax({
-            url: 'unblockcoupon',
+            url: 'unblockoffer',
             type: 'GET',
             data: {id:id},
             success: function(response){

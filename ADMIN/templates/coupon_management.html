@@ -1,7 +1,6 @@
 {% extends 'base.html' %}
 {% load static %}
 
-
 {% block css_files %}
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
 <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
@@ -26,16 +25,16 @@
             <li class="nav-item  ">
                 <a class="nav-link" href="users">Users</a>
             </li>
-            <li class="nav-item active">
-                <a class="nav-link" href="#">Products</a>
+            <li class="nav-item ">
+                <a class="nav-link" href="products">Products</a>
             </li>
             <li class="nav-item ">
-                <a class="nav-link" href="category">Catogory</a>
+                <a class="nav-link" href="#">Catogory</a>
             </li>
-            <li class="nav-item ">
+            <li class="nav-item  ">
                 <a class="nav-link" href="offers">Offers</a>
             </li>
-            <li class="nav-item ">
+            <li class="nav-item active">
                 <a class="nav-link" href="coupons">Coupons</a>
             </li>
             <li class="nav-item">
@@ -47,7 +46,6 @@
         </ul>
     </div>
 </nav>
-
 
 <div class="container">
     <div class="col-md-12 my-4" style="width:auto;">
@@ -82,11 +80,11 @@
                             <td>{{coupon.discount}}</td>
                             <td>{{coupon.start_date}}</td>
                             <td>{{coupon.end_date}}</td>
-                            <td> {% if user.is_active %}
-                                <a style=" background:#CCEDD2; " class="btn" href= "block?id={{user.id}}"><i style=""onclick="return confirm('Are you sure to block '+' {{user.username}} ?')">Block</i>
+                            <td> {% if coupon.is_active %}
+                                <a style=" background:#CCEDD2; " class="btn" href= "blockcoupon?id={{coupon.id}}"><i style=""onclick="return confirm('Are you sure to block '+' {{coupon.code}} ?')">Block</i>
                                     </a>
                                 {% else %}
-                                <a style="background:#CCEDD2;" class="btn" href= "unblock?id={{user.id}}"><i style="y"onclick="return confirm('Are you sure to unblock '+' {{user.username}} ?')"</i>
+                                <a style="background:#CCEDD2;" class="btn" href= "unblockcoupon?id={{coupon.id}}"><i style="y"onclick="return confirm('Are you sure to unblock '+' {{coupon.code}} ?')"</i>
                                 unblock</a>
                                 {% endif %}
                             </td>
@@ -106,6 +104,7 @@
         </div>
     </div>
 </div>
+<script src="{% static 'main.js' %}"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
 <script type="text/javascript" src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
 <script>

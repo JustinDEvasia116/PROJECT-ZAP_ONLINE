@@ -90,7 +90,10 @@
     <div class="price"><span class="text-danger">{{off.offer}}% off  upto <i class="fa fa-rupee text-success"></i class ="text-danger">&nbsp;{{off.max_value}}/-</span></div>
     {% endif %}
     {% if offc %}
-    <div class="price"><span class="mr-2"><i class="fa fa-rupee text-success"></i>&nbsp;{{product.price}}</span><span class="mr-2 cut">{{product.price}}</span><span class="text-success">{{off.offer}}% off  upto <i class="fa fa-rupee text-success"></i>&nbsp;{{off.max_value}}/-</span></div>
+    <div class="price"><span class="text-success">{{offc.offer}}% off  upto <i class="fa fa-rupee text-success"></i class ="text-success">&nbsp;{{offc.max_value}}/-</span></div>
+    {% endif %}
+    {% if offb %}
+    <div class="price"><span class="text-success">{{offb.offer}}% off  upto <i class="fa fa-rupee text-success"></i class ="text-success">&nbsp;{{offb.max_value}}/-</span></div>
     {% endif %}
     <div class="d-flex flex-row">
     <div class="icons mr-2"><i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star-half-o"></i><i class="fa fa-star-o"></i></div><span>1200 ratings &amp; 564 reviews</span>

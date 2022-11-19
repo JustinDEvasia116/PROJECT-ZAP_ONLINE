@@ -126,10 +126,10 @@
                
                   {% for b in cart.product.category.all %}
                   {% for offer in offers %}
-                  
+                
                    
                   
-                  {% if  offer.product.id == cart.product.id  or offer.category.id == b.id%} 
+                  {% if  offer.product.id == cart.product.id  or offer.category.id == b.id or offer.brand.id == cart.product.brand.id %} 
                      <p class="fw-bold text-success">Offer: {{offer.offer}}% off upto ₹{{offer.max_value}}/-
                   {% with offer1=cart.product.price|div:100|mul:offer.offer|floatformat:2 %}
                   {% with offer2=cart.product.price|sub:offer1|floatformat:2 %}

@@ -29,29 +29,19 @@
             <div class="card">
                 <div class="card-header d-flex">
                   <div style="width:75%">
-                     <h4>Add Category</h4>
+                     <h4>Add New Brand</h4>
                   </div>
                     
                     
                     
                 </div>
-                <div class="card-body">
-                    <form action="addcategory" method ="POST" enctype="multipart/form-data">
+                <div class="card-body"> 
+                    <form action="addbrand" method ="POST" enctype="multipart/form-data">
                     {% csrf_token %}
-                        <div class="form-groups" >
-                          <label for="exampleInputEmail1">Main Category</label>
-                          <select class="form-control" name="category" id="category">
-                            <option value="0">Select Category</option>
-                            {% for category in categories %} 
-                            <option value="{{category.id}}">{{category.name}}</option>
-                            {% endfor %} 
 
-                          </select>
-                          
-                        </div>
                         <div class="form-groups" >
-                          <label for="exampleInputEmail1"> Sub Category</label>
-                          <input type="text" class="form-control" name="catname" id="catname"  placeholder="Category Name" onkeyup="validateCatname()">
+                          <label for="exampleInputEmail1"> Brand</label>
+                          <input type="text" class="form-control" name="catname" id="catname"  placeholder="Brand Name" onkeyup="validateCatname()">
                           <div id="catname-error" class="form-group"></div>
                         </div>
                         
@@ -69,7 +59,7 @@
                         <br></br>
 
 
-                        <button type="submit" class="btn "style="background:#94D3AC;"onclick="return validateform()">Add Category</button>
+                        <button type="submit" class="btn "style="background:#94D3AC;"onclick="return validateform()">Add Brand</button>
                         <div id="submit-error" class="form-group"></div>
 
 
@@ -81,7 +71,5 @@
         </div>
     </div>
 
- {% comment %} <script src="{% static 'addcats.js' %}"></script> {% endcomment %}
- 
  <script src="{% static 'addcatt.js' %}"></script>
 {% endblock content %}

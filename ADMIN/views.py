@@ -66,6 +66,7 @@ def addproduct(request):
         print(image1,"  2222")
         
         category=Category.objects.get(id=category)
+        brand=Brand.objects.get(id=brand)
         product = Product.objects.create(name=name,description=description,price=price,image=image,brand=brand,quantity=quantity)
         product.category.add(category)
         product.save()
@@ -80,13 +81,12 @@ def addproduct(request):
     else:
         
         category=Category.objects.all()
+        brands = Brand.objects.all()
         # subcategory =category.sub_categories.all()
-
-
-        
         print(category)
+        print(brands)
         
-        return render(request, 'addproduct.html',{'categories':category})
+        return render(request, 'addproduct.html',{'categories':category,'brands':brands})
     
 @login_required(login_url='adminstart')
 @never_cache
@@ -103,6 +103,15 @@ def addcategory(request):
     else:
         category=Category.objects.all()
         return render(request, 'addcategory.html',{'categories':category})
+
+def addbrand(request):
+    if request.method == 'POST':
+        name = request.POST['catname']
+        brand = Brand.objects.create(name=name)
+        brand.save()
+        return redirect('addproduct')
+    else:
+        return render(request, 'add_brand.html')
 
 @login_required(login_url='adminstart')
 @never_cache
@@ -145,14 +154,6 @@ def category(request):
         allcategory = Category.objects.all()
         return render(request,'category.html',{'allcategory': allcategory})
         
-
-
-
-
-
-
-
-
 
 @login_required(login_url='adminstart')
 @never_cache
@@ -273,7 +274,8 @@ def addcoupon(request):
 def offers(request):
     prod_offer = Offers.objects.filter(offer_type='product')
     category_offer = Offers.objects.filter(offer_type='category')
-    return render(request, 'offer_management.html',{'prod_offers':prod_offer,'category_offers':category_offer})
+    brand_offer = Offers.objects.filter(offer_type='brand')
+    return render(request, 'offer_management.html',{'prod_offers':prod_offer,'category_offers':category_offer,'brand_offers':brand_offer})
 
 
 @login_required(login_url='adminstart')
@@ -314,6 +316,25 @@ def cate_addoffer(request):
         category=Category.objects.all()
         return render(request, "cate_add_offer.html",{'category':category})
 
+@login_required(login_url='adminstart')
+def brand_addoffer(request):
+    if request.method == 'POST':
+        name = request.POST['name']
+        offer = request.POST['offer']
+        startdate = request.POST['startdate']
+        max_value = request.POST['max_value']
+        print(startdate)
+        enddate = request.POST['enddate']
+        print( "end",enddate)
+        brand = request.POST['brand']
+         
+        offer = Offers.objects.create(name=name,offer=offer,start_date=startdate,end_date=enddate,offer_type='brand',brand_id=brand,max_value=max_value)
+        offer.save()
+        return redirect('offers')
+    else:
+        brand=Brand.objects.all()
+        return render(request, "brand_addoffer.html",{'brand':brand})
+
 
 @login_required(login_url='adminstart')
 def sales(request):
@@ -330,6 +351,10 @@ def report(request):
     print(request.method)
     start = request.POST['start_date']
     end = request.POST['end_date']
+    if len(start) == 0 or len(end) == 0:
+            messages.info(request, 'Please select the dates',extra_tags='dates')
+            return redirect(to='sales')
+            
     print("end=",end)
     order = Order.objects.filter(ordered_date__range=[start,end])
     print(order)
@@ -456,8 +481,9 @@ def yearly(request):
 @login_required(login_url='adminstart')
 def monthly(request):
     month = request.POST['month']
+    year = request.POST['year']
     type = request.POST['type']
-    order = Order.objects.filter(ordered_date__month=month)
+    order = Order.objects.filter(ordered_date__month=month,ordered_date__year=year)
     n=len(order)
     if n==0:
         messages.error(request, 'No Order Found')
@@ -501,18 +527,31 @@ def monthly(request):
 @login_required(login_url='adminstart')
 def blockcoupon(request):
     id=request.GET['id']
-    offer=Offers.objects.filter(id=id).update(is_active=False)
+    print(id)
+    coupon=Coupon.objects.filter(id=id).update(is_active=False)
     
-    return redirect('offers')
+    return redirect('coupons')
 
 @login_required(login_url='adminstart')
 def unblockcoupon(request):
     id=request.GET['id']
-    offer=Offers.objects.filter(id=id).update(is_active=True)
+    coupon=Coupon.objects.filter(id=id).update(is_active=True)
+    
+    return redirect('coupons')
+
+@login_required(login_url='adminlogin')
+def blockoffer(request):
+    id=request.GET['id']
+    offer=Offers.objects.filter(id=id).update(is_active=False)
     
     return redirect('offers')
 
+@login_required(login_url='adminlogin')
+def unblockoffer(request):
+    id=request.GET['id']
+    offer=Offers.objects.filter(id=id).update(is_active=True)
 
+    return redirect('offers')
 
 
 
