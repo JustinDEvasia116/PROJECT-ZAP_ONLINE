@@ -1,8 +1,11 @@
 {% extends 'base.html' %}
 {% load static %}
+
+
 <title>{% block page_title  %}Home{% endblock  %}</title>
 {% block css_files %}
 <style>
+    
     @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap');
 </style>
 <link rel="stylesheet" href="{% static 'home.css' %}">
@@ -20,10 +23,19 @@
                 </div>
             </div>
             <div class="col-lg-6">
-                <nav class="header_menu">
+                <nav class="header_menu nav_area">
                     <ul>
                         <li class="active"><a href="home.html">Home</a></li>
-                        <li><a href="#">Category</a></li>
+                        <li ><a href="#">Category</a></li>
+                            <ul>
+                              
+                                <li><a href="">cat_1</a></li>
+                                <li><a href="">cat_2</a></li>
+                               
+                            </ul>
+
+
+
                         <li><a href="profile">My Account</a></li>
                         <li><a href="myorder">My Orders</a></li>
                         <li><a href="mycart">My Cart</a></li>
@@ -40,6 +52,7 @@
         </div>
     </div>
 </header>
+
 {% if success %}
 <div class="alert alert-success d-flex align-items-center" role="alert">
   <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Success:"><use xlink:href="#check-circle-fill"/></svg>
@@ -106,16 +119,19 @@
          
                 </div>
             </div>
+            
             <div class="col-lg-12">
                 <div class="row">
-                {% for category in categories %}
+
+                {% for brand in brands %}
+                
                     <div class="col-lg-3 col-md-4 col-6 p-0">
                         <div class="categories_item">
-                            <img src="{{category.image.url}}" alt="" class="img-fluid himg-size">
+                            <img src="{{brand.image.url}}" alt="" class="img-fluid himg-size">
                             <div class="categories_text">
-                                <h4>{{category.name}}</h4>
+                                {% comment %} <h4>{{brand.name}}</h4> {% endcomment %}
                                 
-                                <a href=#>Buy now</a>
+                                {% comment %} <a href=#>Buy now</a> {% endcomment %}
                             </div>
                         </div>
                     </div>

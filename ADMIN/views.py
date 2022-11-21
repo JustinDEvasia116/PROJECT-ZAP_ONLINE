@@ -107,7 +107,8 @@ def addcategory(request):
 def addbrand(request):
     if request.method == 'POST':
         name = request.POST['catname']
-        brand = Brand.objects.create(name=name)
+        image = request.FILES['image']
+        brand = Brand.objects.create(name=name,image=image)
         brand.save()
         return redirect('addproduct')
     else:

@@ -69,6 +69,7 @@ li{
     transition: all 0.5s;
     transform: scale(0);
 }
+
 .header_menu ul li:hover a::after{
     transform: scale(1);
 }
@@ -310,4 +311,30 @@ margin-bottom: 15px;
 .product_item:hover .product_hover li{
     opacity: 1;
     top: 0;
+}
+.nav_area::after
+{
+  content: '';
+  clear: both;
+  display: block;
+}
+.nav_area > ul > li{
+    float: left;
+    position: relative;
+}
+
+
+
+
+.nav_area ul ul{
+    position: absolute;
+    padding: 0%;
+    min-width: 160px;
+    display: none;
+    top: 100%;
+    left: 0;
+
+}
+.nav_area  ul li:hover > ul{
+    display: block;
 }

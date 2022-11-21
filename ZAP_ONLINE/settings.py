@@ -13,7 +13,7 @@ https://docs.djangoproject.com/en/4.1/ref/settings/
 
 
 import os
-
+from twilio.rest import Client
 
 
 from pathlib import Path
@@ -21,7 +21,8 @@ from pathlib import Path
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 TWILIO_ACCOUNT_SID='AC6167737a8a886026afeb10da8f33e195'
-TWILIO_AUTH_TOKEN='3ccfacb60027610ffad99035b13f33d9'
+TWILIO_AUTH_TOKEN='01b4f26b7966591238a4345124ad1bdf'
+client = Client(TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN)
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.1/howto/deployment/checklist/
@@ -49,6 +50,7 @@ INSTALLED_APPS = [
     'django_twilio',
     "guest_user",
     'mathfilters',
+    
 ]
 
 MIDDLEWARE = [

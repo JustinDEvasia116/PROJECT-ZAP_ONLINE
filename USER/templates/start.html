@@ -113,14 +113,15 @@
             </div>
             <div class="col-lg-12">
                 <div class="row">
-                {% for category in categories %}
+                    {% for brand in brands %}
+                
                     <div class="col-lg-3 col-md-4 col-6 p-0">
                         <div class="categories_item">
-                            <img src="{{category.image.url}}" alt="" class="img-fluid himg-size">
+                            <img src="{{brand.image.url}}" alt="" class="img-fluid himg-size">
                             <div class="categories_text">
-                                <h4>{{category.name}}</h4>
+                                {% comment %} <h4>{{brand.name}}</h4> {% endcomment %}
                                 
-                                <a href=#>Buy now</a>
+                                {% comment %} <a href=#>Buy now</a> {% endcomment %}
                             </div>
                         </div>
                     </div>
