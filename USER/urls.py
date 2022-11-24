@@ -32,6 +32,7 @@ urlpatterns =[
     path('product',views.product_view, name='product_view'),
     path('razorpay',views.razorpay,name='razorpay'),
     path('removecart',views.removecart,name='removecart'),
+     
 
     path('error',views.error,name='error'),
 

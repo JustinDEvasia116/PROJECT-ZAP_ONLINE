@@ -29,7 +29,7 @@
                 <a class="nav-link" href="products">Products</a>
             </li>
             <li class="nav-item ">
-                <a class="nav-link" href="#">Catogory</a>
+                <a class="nav-link" href="category">Catogory</a>
             </li>
             <li class="nav-item  ">
                 <a class="nav-link" href="offers">Offers</a>
@@ -69,7 +69,7 @@
                             <th>Start Date</th>
                             <th>End Date</th>
                             <th>Block</th>
-                            <th>Edit</th>
+                            
                             <th>Delete</th>
                         </tr>
                     </thead>
@@ -88,9 +88,9 @@
                                 unblock</a>
                                 {% endif %}
                             </td>
-                            <td><a class="btn btn-primary" href="editproduct?id={{product.id}}"><i class="fa-solid fa-pen-to-square text-light"></i></a></td>
+                           
                             <td>
-                                <botton class="btn btn-danger" onclick="deleteProduct({{product.id}})"><i class="fa-solid fa-trash text-light"></i></botton>
+                                <botton class="btn btn-danger" onclick="deleteCoupon({{coupon.id}})"><i class="fa-solid fa-trash text-light"></i></botton>
                                 {% comment %} <a class="btn btn-danger" href="deleteproduct?id={{product.id}}">Delete</a> {% endcomment %}
                                 {% comment %} <a class="btn btn-danger" href= "deleteproduct?id={{product.id}}"><i style=""onclick="return confirm('Are you sure to block '+' {{product.name}} ?')"</i>
                                 Delete</a> {% endcomment %}
@@ -113,12 +113,12 @@
     } );
 </script>
 <script>
-    function deleteProduct(id){
+    function deleteCoupon(id){
         {% comment %} alert(id); {% endcomment %}
         var id=id;
         
         swal({
-            title: "Are you sure to delete the product?",
+            title: "Are you sure to delete the Coupon?",
             text: "",
             icon: "warning",
             buttons: true,
@@ -127,11 +127,11 @@
           .then((willDelete) => {
             if (willDelete) {
                 $.ajax({
-                    url: 'deleteproduct',
+                    url: 'deletecoupon',
                     type: 'GET',
                     data: {id:id},
                     success: function(response){
-                        swal("Poof! Product has been deleted!", {
+                        swal("Poof! Coupon has been deleted!", {
                             icon: "success",
                         });
                         location.reload();
@@ -139,7 +139,7 @@
                 });
               
             } else {
-              swal("Your product is safe!");
+              swal("Your Coupon is safe!");
             }
           });
     }

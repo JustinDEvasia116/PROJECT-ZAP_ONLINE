@@ -110,6 +110,11 @@
                   <p><strong>{{cart.product.name}}</strong></p>
                   <p>BRAND:{{cart.product.brand}}</p>
                   <p>Price: {{cart.product.price}}</p>
+                  {% if cart.price_with_offer == 0  %}
+                  {% else %}
+                  <p>Price: {{cart.price_with_offer}}</p>
+                  {% endif %}
+                  
           
 
 
@@ -130,14 +135,24 @@
                    
                   
                   {% if  offer.product.id == cart.product.id  or offer.category.id == b.id or offer.brand.id == cart.product.brand.id %} 
-                     <p class="fw-bold text-success">Offer: {{offer.offer}}% off upto ₹{{offer.max_value}}/-
+                     
                   {% with offer1=cart.product.price|div:100|mul:offer.offer|floatformat:2 %}
                   {% with offer2=cart.product.price|sub:offer1|floatformat:2 %}
+                  {% with offerprice1=cart.product.price|sub:offer.max_value %}
+                  {% with offerprice2=cart.price_with_offer %}
+                  {% if offerprice1 == offerprice2 %}
+                      <p class="fw-bold text-success">Offer: {{offer.offer}}% off upto ₹{{offer.max_value}}/-
+                  
                   {% if offer2 < offer.max_value %}
                       <br><p class="fw-bold">Offer Price = ₹{{offer2}}/-</p></p>
                   {% else %}
+                  
                       <br>Offer Price = ₹{{cart.product.price|sub:offer.max_value}}/-</p>
                   {% endif %}
+                      
+                  {% endif %}
+                  {% endwith %}
+                  {% endwith %}
                   {% endwith %}
                   {% endwith %}
                   

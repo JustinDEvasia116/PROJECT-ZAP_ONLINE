@@ -24,6 +24,9 @@
                       <input type="number" class="form-control" name="offer" id="offer" aria-describedby="emailHelp" placeholder="Offer in %">
                       <span id="errorname" class="text-danger">
                     </div>
+                    {% for message in messages  %}
+                    <span class="text-danger">{{message}}</span>
+                    {% endfor %}  
                     <div class="form-group my-1" >
                       <label for="pname">Maximun amount of off</label>
                       <input type="number" class="form-control" name="max_value" id="max_value" aria-describedby="emailHelp" placeholder="Maximun amount of off">

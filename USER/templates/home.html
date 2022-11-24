@@ -9,6 +9,7 @@
     @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap');
 </style>
 <link rel="stylesheet" href="{% static 'home.css' %}">
+{% comment %} <link rel="stylesheet" href="{% static 'dropdown.css' %}">  {% endcomment %}
 {% endblock css_files %}
 
 
@@ -26,14 +27,18 @@
                 <nav class="header_menu nav_area">
                     <ul>
                         <li class="active"><a href="home.html">Home</a></li>
-                        <li ><a href="#">Category</a></li>
-                            <ul>
-                              
-                                <li><a href="">cat_1</a></li>
-                                <li><a href="">cat_2</a></li>
-                               
-                            </ul>
+                        <li>
+                            <a class=" " href="#" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false">
+                              Category
+                            </a>
+                          
+                            <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                            {% for category in categories %}
+                              <li><a class="dropdown-item" href="#">{{category.name}}</a></li>
+                            {% endfor %}
 
+                            </ul>
+                        </li>
 
 
                         <li><a href="profile">My Account</a></li>

@@ -16,6 +16,7 @@ urlpatterns =[
     path('delete_category',views.delete_category,name='delete_category'),
     path('editproduct',views.editproduct,name='editproduct'),
     path('deleteproduct',views.delete_product,name='delete_product'),
+    path('deletecoupon',views.delete_coupon,name='delete_coupon'),
     path('block',views.block,name='block'),
     path('unblock',views.unblock,name='unblock'),
     path('adminlogout',views.logout, name='adminlogout'),
@@ -38,6 +39,7 @@ urlpatterns =[
     path('unblockcoupon',views.unblockcoupon, name='unblockcoupon'),
     path('blockoffer',views.blockoffer, name='blockoffer'),
     path('unblockoffer',views.unblockoffer, name='unblockoffer'),
+    path('date_select',views.date_select, name='date_select'),
     
 
 ]

@@ -44,13 +44,13 @@
     </style>
     <div class="container">
         <div class ="row">
-            <div class="col-md-12 bg-light rounded mt-4">
-                <h2 class = "mt-2 fw-bold">  Sales</h2>
+            <div class="col-md-12 bg-info rounded mt-4" hidden>
+                <h2 class = "mt-2 fw-bold">  Sales Report</h2>
                 <hr>
                 <div class="card-header d-flex">
                     <h4>Generate Sales Report</h4>
                     <div class="" style="margin-left:500px">
-                        <button type="button" id="myBtn" class="btn btn-outline-primary "> Month / Year Wise Report </button>
+                        <button type="button" id="myBtn" class="btn btn-outline-light "> Month / Year Wise Report </button>
                     </div>
                 </div>
                 
@@ -82,15 +82,8 @@
                                             <option value="PDF">PDF</option>
                                             <option value="Excel">Excel</option>
                                         </select>
-                                        <label class="mt-3"><p> Select Year </p></label>
-                                        <select name="year" class="" id ="months">
-                                            <option value="2021">2021</option>
-                                            <option value="2022">2022</option>
-                                            <option value="2023">2023</option>
-                                            <option value="2024">2024</option>
-                                        </select>
                                                                                
-                                        <button type="submit" class="my-1 btn btn-primary">Generate</button>
+                                        <button type="submit" class="my-1 btn btn-info">Generate</button>
                                     </form>
                                     <hr class="m-3">
                                     <form action="yearly" method="POST">
@@ -108,7 +101,7 @@
                                             <option value="Excel">Excel</option>
                                         </select>
                                         
-                                        <button type="submit" class="my-1 btn btn-primary">Generate</button>
+                                        <button type="submit" class="my-1 btn btn-light">Generate</button>
                                     </form>
                                     </div>
                                     
@@ -134,34 +127,32 @@
                         <option value="Excel">Excel</option>
                     </select>
                     
-                  
-                    {%for message in messages%}
-                    {% if 'dates' in message.tags %}
+                    {% for message in messages  %}
                     <span class="text-danger">{{message}}</span>
-                    {%else%}
-                    <span class="text-danger">{{message}}</span>
-                    {% endif %}
-                    {% endfor %}           
-                    <button type="submit" id="generate" class="btn btn-primary mt-2 mb-1 w-10 ">Generate</button>
+                    {% endfor %}            
+                    <button type="submit" id="generate" class="btn btn-light text-info mt-2 mb-1 w-100 ">Generate</button>
                     </form>
                         
                     </div>
             </div>
+            
+            {% comment %} AJAX Excel {% endcomment %}
             <div class="col-md-12 bg-light rounded mt-2 pt-3">
-                <h4> Filter</h4><hr>
+                <h2> SALES REPORT</h2>
+                {% comment %} <h4> Filter</h4><hr> {% endcomment %}
                 <form action="date_select" method="POST">
                     {% csrf_token %}
                     <div class="form-group">
                         <div class="d-flex w-100">
                             <div class="w-50">
-                            <label for="start_date">Start Date</label>
+                            <label for="start_date"><b>Start Date</b></label>
                             <input type="date" class="form-control " style="width:70%;" id="start_date1" name="start_date" >
                             </div>
                             <div class="w-50">
-                            <label for ="end_date">End Date</label>
+                            <label for ="end_date"><b>End Date</b></label>
                             <input type="date" class="form-control  " style="width:70%;" id="end_date1" name="end_date" >
                             </div>
-                            <button type="submit" id="filter" class="btn btn-primary btn-sm w-25 ">Filter</button>
+                            <button type="submit" id="filter" class="btn btn-info " style="width:100px; height:60px;">FILTER</button>
                         
                     </div >
                    
@@ -175,18 +166,40 @@
                     <div class = "" style="width:75%;">
                         <form action="yearly_sales" method ="POST">
                             {% csrf_token %}
-                            <label class="mt-3"><p> Select Year </p></label>
+                            <label class="mt-3"><h6> Select Year </h6></label>
                                         <select name="year" class="" id ="months">
                                             <option value="2021">2021</option>
                                             <option value="2022">2022</option>
                                             <option value="2023">2023</option>
                                             <option value="2024">2024</option>
                                         </select>
-                                <button type="submit" class="btn btn-primary mt-2 mb-1 btn-sm">Filter</button>
+                                <button type="submit" class="btn btn-info mt-2 mb-1 btn-sm">Filter</button>
                             </form>
                     </div>
                 
-                
+                    <div>
+                        <form action="monthly_sales" method ="POST">
+                            {% csrf_token %}
+                            <label class="mt-3"><h6> Select Month</h6></label>
+                                <select name="month" class="" id ="months">
+                                    <option value="01">January</option>
+                                    <option value="02">February</option>
+                                    <option value="03">March</option>
+                                    <option value="04">April</option>
+                                    <option value="05">May</option>
+                                    <option value="06">June</option>
+                                    <option value="07">July</option>
+                                    <option value="08">August</option>
+                                    <option value="09">September</option>
+                                    <option value="10">October</option>
+                                    <option value="11">November</option>
+                                    <option value="12">December</option>
+        
+                                </select>
+                                <button type="submit" class="btn btn-info mt-2 mb-1 btn-sm">Filter</button>
+                            </form>
+
+                    </div>
                     
 
                 </div>
@@ -200,8 +213,6 @@
                             <th>Date</th>
                             <th>Amount</th>
                             <th>Payment Method</th>
-                            <th>Status</th>
-
                         </tr>
                     </thead>
                     <tbody>
@@ -217,7 +228,6 @@
                             <td>{{order.ordered_date}}</td>
                             <td>{{order.amount}}</td>
                             <td>{{order.method}}</td>
-                            <td>{{order.status}}</td>
                             </tr>
                         {% endfor %}
                     </tbody>
@@ -231,6 +241,22 @@
     </div>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
     <script type="text/javascript" src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
+     {% comment %} javascript cdns {% endcomment %}
+ 
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.1.3/js/bootstrap.bundle.min.js"></script>
+  <script src="https://cdn.datatables.net/1.12.1/js/jquery.dataTables.min.js"></script>
+  <script src="https://cdn.datatables.net/1.12.1/js/dataTables.bootstrap5.min.js"></script>
+  <script src="https://cdn.datatables.net/responsive/2.3.0/js/dataTables.responsive.min.js"></script>
+  <script src="https://cdn.datatables.net/responsive/2.3.0/js/responsive.bootstrap5.min.js"></script>
+  <script src="//cdn.datatables.net/plug-ins/1.10.11/sorting/date-eu.js" type="text/javascript"></script>
+  
+  <script src="https://cdn.datatables.net/buttons/2.2.3/js/dataTables.buttons.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
+  <script src="https://cdn.datatables.net/buttons/2.2.3/js/buttons.html5.min.js"></script>
+  <script src="https://cdn.datatables.net/buttons/2.2.3/js/buttons.print.min.js"></script>
+    {% comment %} end javascript cdns {% endcomment %}
 <script>
 
     
@@ -264,13 +290,16 @@
     $(document).ready(function () {
         console.log("hello");
         $('#myTable tr:last').remove();
-        $('#myTable').DataTable();
+        $('#myTable').DataTable({
+            dom: 'Bfrtip',
+            buttons: [
+                'copy', 'excel', 'pdf'
+            ]
+
+        });
         $('#order_table').DataTable();
     });
 
-    
-
-    
 
 
     

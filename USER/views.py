@@ -24,6 +24,9 @@ from twilio.base.exceptions import TwilioRestException,TwilioException
 
 
 generatedotp=0
+offerprice=0
+print(offerprice)
+
 
 @never_cache
 def loginpage(request):
@@ -205,8 +208,8 @@ def getotp(request):
             return redirect(f'otp/{num[0].uid}')
             print(message.sid)
         except (TwilioRestException,TwilioException):
-                return redirect('error')
-     
+            messages.info(request, "Something Error occured, please try again later",extra_tags='phone_login')
+            return redirect(to='login')
 @never_cache
 def otplogin(request,uid):
     if request.user.is_authenticated and request.user.is_superuser == False and request.user.first_name !='':
@@ -303,7 +306,8 @@ def mobile_signup(request):
                 message_handler = MessageHandler(phone, otp).sent_otp_on_phone()
                 return render(request, "enterotp.html",{ 'phone': phone})
             except (TwilioRestException,TwilioException):
-                return redirect('error')
+                messages.info(request, "Something Error occured, please try again later")
+                return redirect(to='mobile')
      
 
     return render(request,"enterphone.html")
@@ -314,6 +318,7 @@ def addtocart(request):
     pid = request.GET['pid']
 
     product = Product.objects.get(id=pid)
+    print(product.brand)
     offers = Offers.objects.all()
     
     uid = request.user
@@ -325,63 +330,72 @@ def addtocart(request):
         cart.save()
         return redirect('mycart')
     else:
+        global offerprice
+        price = 0
+        offerprice=product.price
         for offer in offers:
-            print(offer.product)
+            
+            print(offerprice)
+            
             category=Category.objects.get(product=pid)
             
-            if offer.product == product:
-                price = 0
+            
+            if offer.product == product or offer.category == category or offer.brand == product.brand :
+                
+                
                 offamount = product.price * offer.offer / 100
+         
+               
                 if offamount > offer.max_value:
+                    
                     price = product.price - offer.max_value
+                    if price < offerprice:
+                        
+                        offerprice=price
                 else:
+                    
                     price = product.price - offamount
-                print(price)
-                cart = UserCart.objects.create(
-                    user=uid, product=product, quantity=1, price_with_offer=price)
-                cart.save()
-                return redirect('mycart')
-            elif offer.category == category:
-                print(category)
-                print(offer.category)
-                price = 0
-                offamount = product.price * offer.offer / 100
-                if offamount > offer.max_value:
-                    price = product.price - offer.max_value
-                else:
-                    price=product.price-offamount
-                print(price)
-            elif offer.brand == product.brand:
-                print(product.brand)
-                print(offer.brand)
-                price = 0
-                offamount = product.price * offer.offer / 100
-                if offamount > offer.max_value:
-                    price = product.price - offer.max_value
-                else:
-                    price=product.price-offamount
-                print(price)
-                cart = UserCart.objects.create(user=uid, product=product, quantity=1, price_with_offer=price)
-                cart.save()
-                return redirect('mycart')
+                    
+                    if price < offerprice:
+                        offerprice=price
+                        
+        cart = UserCart.objects.create(
+        user=uid, product=product, quantity=1, price_with_offer=offerprice)
+        cart.save_base()
+        return redirect('mycart')
+            
+            
+            # elif offer.category == category:
+            #     print(category)
+            #     print(offer.category)
+            #     price = 0
+            #     offamount = product.price * offer.offer / 100
+            #     if offamount > offer.max_value:
+            #         price = product.price - offer.max_value
+            #     else:
+            #         price=product.price-offamount
+            #     print(price)
+            #     cart = UserCart.objects.create(user=uid, product=product, quantity=1, price_with_offer=price)
+            #     cart.save()
+            #     return redirect('mycart')
+            # elif offer.brand == product.brand:
+            #     print("brand",product.brand)
+            #     print(offer.category)
+            #     price = 0
+            #     offamount = product.price * offer.offer / 100
+            #     if offamount > offer.max_value:
+            #         price = product.price - offer.max_value
+            #     else:
+            #         price=product.price-offamount
+            #     print(price)
+            #     cart = UserCart.objects.create(user=uid, product=product, quantity=1, price_with_offer=price)
+            #     cart.save()
+            #     return redirect('mycart')
                 
         
-        cart = UserCart.objects.create(product=product, user=uid)
-        cart = UserCart.objects.filter(user=uid)
-        return redirect('mycart')
-
-
-
-
-
-
-
-
-
-
-
-
-
+    cart = UserCart.objects.create(product=product, user=uid)
+    cart = UserCart.objects.filter(user=uid)
+    return redirect('mycart')
 
 
 
@@ -435,11 +449,7 @@ def addtomycart(request):
 
             #     categories = Category.objects.get(product=products.product.id)
             #     print(categories.id)
-            
-                  
-         
-
-            
+                       
             print(len(cart))
             for i in range(len(cart)):
                  if cart[i].quantity < 1:
@@ -451,7 +461,11 @@ def addtomycart(request):
             print('working')
             empty = "Cart is Empty"
             cartlen=len(cart)
-            return render(request, 'mycart.html', {'empty': empty,'cartlen': cartlen,'offers': offers,})
+            if request.user.first_name !='':
+                realuser=True
+                return render(request, 'mycart.html', {'empty': empty,'cartlen': cartlen,'offers': offers,'realuser':realuser})
+            else:
+                return render(request, 'mycart.html', {'empty': empty,'cartlen': cartlen,'offers': offers,})
         else:
   
             subtotal = 0
@@ -691,6 +705,17 @@ def editprofile(request):
     else:
          user = User.objects.filter(id=id)
          return render(request,"editprofile.html",{'user':user})
+
+def date_select(request):
+    start = request.POST['start_date']
+    end = request.POST['end_date']
+    print("end=",end)
+    order = Order.objects.filter(ordered_date__range=[start,end])
+    if len(order) ==0:
+        # messages.info(request, 'No Orders Found')
+        return render(request, 'sales.html')
+    else:
+        return render(request, 'sales.html',{'orders':order})
 
 def changepassword(request):
     id=request.GET['id']

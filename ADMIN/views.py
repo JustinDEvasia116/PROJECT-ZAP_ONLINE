@@ -45,13 +45,14 @@ def orders(request):
 @login_required(login_url='adminstart')
 @never_cache
 def users(request):
+     str=''
      user_details=User.objects.filter(is_superuser=False).exclude(email = str)
      return render(request, 'users.html',{'user_details':user_details})
 
 @login_required(login_url='adminstart')
 @never_cache
 def addproduct(request):
-    if request.method == 'POST':
+    if request.method == 'POST': 
         name = request.POST['name']
         description = request.POST['description']
         price = request.POST['price']
@@ -138,7 +139,7 @@ def products(request):
 @login_required(login_url='adminstart')
 @never_cache
 def category(request):
-    if request.method == 'POST':
+    if request.method == 'POST':                                                                               
 
         ids = request.POST['category']
         print(ids)
@@ -227,6 +228,18 @@ def delete_product(request):
 
 @login_required(login_url='adminstart')
 @never_cache
+def delete_coupon(request):
+    id=request.GET['id']
+    coupon=Coupon.objects.filter(id=id)
+    coupon.delete()
+    return redirect('coupons')
+
+
+
+
+
+@login_required(login_url='adminstart')
+@never_cache
 def delete_category(request):
     id=request.GET['id']
     category=Category.objects.filter(id=id)
@@ -291,6 +304,9 @@ def prod_addoffer(request):
         print( "end",enddate)
         product = request.POST['product']
         print(product)
+        if offer>"60":
+            messages.info(request, 'offer limit exeeded (max-60%)')
+            return redirect(to='prodoffer')
         offer = Offers.objects.create(name=name,offer=offer,start_date=startdate,end_date=enddate,offer_type='product',product_id=product,max_value=max_value)
         offer.save()
         return redirect('offers')
@@ -299,7 +315,7 @@ def prod_addoffer(request):
         return render(request, "prod_addoffer.html",{'products':products})
 
 @login_required(login_url='adminstart')
-def cate_addoffer(request):
+def   cate_addoffer(request):
     if request.method == 'POST':
         name = request.POST['name']
         offer = request.POST['offer']
@@ -426,6 +442,9 @@ def yearly_sales(request):
 def date_select(request):
     start = request.POST['start_date']
     end = request.POST['end_date']
+    if len(start) == 0 or len(end) == 0:
+        messages.info(request, 'Please select the dates',extra_tags='dates')
+        return redirect(to='sales')
     print("end=",end)
     order = Order.objects.filter(ordered_date__range=[start,end])
     if len(order) ==0:
