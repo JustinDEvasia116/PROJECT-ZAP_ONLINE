@@ -25,7 +25,7 @@ from twilio.base.exceptions import TwilioRestException,TwilioException
 
 generatedotp=0
 offerprice=0
-print(offerprice)
+
 
 
 @never_cache
@@ -363,39 +363,7 @@ def addtocart(request):
         user=uid, product=product, quantity=1, price_with_offer=offerprice)
         cart.save_base()
         return redirect('mycart')
-            
-            
-            # elif offer.category == category:
-            #     print(category)
-            #     print(offer.category)
-            #     price = 0
-            #     offamount = product.price * offer.offer / 100
-            #     if offamount > offer.max_value:
-            #         price = product.price - offer.max_value
-            #     else:
-            #         price=product.price-offamount
-            #     print(price)
-            #     cart = UserCart.objects.create(user=uid, product=product, quantity=1, price_with_offer=price)
-            #     cart.save()
-            #     return redirect('mycart')
-            # elif offer.brand == product.brand:
-            #     print("brand",product.brand)
-            #     print(offer.category)
-            #     price = 0
-            #     offamount = product.price * offer.offer / 100
-            #     if offamount > offer.max_value:
-            #         price = product.price - offer.max_value
-            #     else:
-            #         price=product.price-offamount
-            #     print(price)
-            #     cart = UserCart.objects.create(user=uid, product=product, quantity=1, price_with_offer=price)
-            #     cart.save()
-            #     return redirect('mycart')
-                
-        
-    cart = UserCart.objects.create(product=product, user=uid)
-    cart = UserCart.objects.filter(user=uid)
-    return redirect('mycart')
+                   
 
 
 
