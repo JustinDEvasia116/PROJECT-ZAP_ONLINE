@@ -33,7 +33,7 @@ SECRET_KEY = 'django-insecure-xv(5#qufq6a=8!%=y5_$&-s(a^6alo4tadnpo&jr8q+gac9fx^
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['198.211.99.20', 'localhost', '127.0.0.1']
 
 
 # Application definition
@@ -95,10 +95,10 @@ WSGI_APPLICATION = 'ZAP_ONLINE.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'ZAP_DB',
+        'NAME': 'postgres',
         'USER': 'postgres',
         'PASSWORD' : 'password',
-        'HOST' : 'localhost',
+        'HOST' : 'zaponlinedb.c8z8dgj66iin.ap-northeast-1.rds.amazonaws.com',
         'PORT' : '5432'
         
     }
