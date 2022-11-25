@@ -98,7 +98,7 @@ DATABASES = {
         'NAME': 'ZAP_DB',
         'USER': 'postgres',
         'PASSWORD' : 'password',
-        'HOST' : 'zaponlinedb.c8z8dgj66iin.ap-northeast-1.rds.amazonaws.com',
+        'HOST' : 'localhost',
         'PORT' : '5432'
         
     }
