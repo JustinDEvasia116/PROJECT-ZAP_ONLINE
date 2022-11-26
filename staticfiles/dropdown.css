@@ -1,0 +1,26 @@
+.nav_area::after
+{
+  content: '';
+  clear: both;
+  display: block;
+}
+.nav_area > ul > li{
+    float: left;
+    position: relative;
+}
+
+
+
+
+.nav_area ul ul{
+    position: absolute;
+    padding: 0%;
+    min-width: 160px;
+    display: none;
+    top: 100%;
+    left: 0;
+
+}
+.nav_area  ul li:hover > ul{
+    display: block;
+}
