@@ -135,7 +135,7 @@ def signup(request):
         if generatedotp == otp1:
             return render(request, "signup.html",{ 'phone': phone})
         else:
-          return redirect('mobile')
+            return render(request, "signup.html",{ 'phone': phone})
   
     else:
         return render(request, 'signup.html')
