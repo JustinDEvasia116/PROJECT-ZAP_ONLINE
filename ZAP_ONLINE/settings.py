@@ -21,7 +21,7 @@ from pathlib import Path
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 TWILIO_ACCOUNT_SID='AC6167737a8a886026afeb10da8f33e195'
-TWILIO_AUTH_TOKEN='bc075e28689ad72c5118f36d2674c737'
+TWILIO_AUTH_TOKEN='528120e83558a450fc93eb403ec753be'
 client = Client(TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN)
 
 # Quick-start development settings - unsuitable for production
