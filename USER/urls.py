@@ -13,6 +13,7 @@ urlpatterns =[
     # path("mobile_otp",views.otp_signup,name="signupotp"),
     path('otp/<uid>',views.otplogin, name='otplogin'),
     path('getotp',views.getotp, name='getotp'),
+    path('otppage',views.otppage, name='otppage'),
     path("home",views.homepage,name="home"),
     path("",views.startpage,name="start"),
     path('logout',views.logout, name='logout'),

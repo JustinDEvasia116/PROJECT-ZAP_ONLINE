@@ -51,49 +51,6 @@ def loginpage(request):
         return render(request, 'login.html')
 
 
-# def guestsignup(request):
-#     print(request.user.id)
-#     id = request.user.id
-    
-#     if request.method == 'POST'  and 'otp' not in request.POST:
-#         first_name = request.POST['first_name']
-#         last_name = request.POST['last_name']
-#         phone = request.POST['phone']
-#         email = request.POST['email']
-#         username = request.POST['username']
-#         password = request.POST['password']
-#         print("username=", username)
-#         print(password)
-        
-       
-       
-#         user = User.objects.create_user(id=id,
-#         first_name=first_name, last_name=last_name,  username=username, email=email, password=password)
-#         user.save_base()
-#         user_id = User.objects.get(username=username)
-#         account = Accounts.objects.create(user=user_id, phone=phone)
-#         account.save()
-#         guest = Guest.objects.get(user_id=id)
-#         guest.delete()
-#         print('user created')
-#         return render(request,'login.html')
-        
-#     elif request.method == 'POST':
-#         phone = request.POST['phone']
-#         # otp=968542
-#         global generatedotp
-#         otp = random.randint(100000, 999999)
-#         generatedotp=otp
-        
-       
-#         if otp == generatedotp:
-#             return render(request, "signup.html",{ 'phone': phone})
-#         else:
-#           return redirect('mobile')
-  
-#     else:
-#         return render(request, 'guestsignup.html')
-
 
 
 def signup(request):
@@ -126,16 +83,18 @@ def signup(request):
         
     elif request.method == 'POST':
         phone = request.POST['phone']
+        otp1 =int( request.POST['otp'])
         # otp=968542
         # otp = random.randint(100000, 999999)
         global generatedotp
-        otp1 =int( request.POST['otp'])
+        
         
         print(otp1)
         if generatedotp == otp1:
             return render(request, "signup.html",{ 'phone': phone})
         else:
-            return render(request, "signup.html",{ 'phone': phone})
+            messages.info(request, "INVALID OTP")
+            return redirect(to='otppage')
   
     else:
         return render(request, 'signup.html')
@@ -308,9 +267,11 @@ def mobile_signup(request):
             except (TwilioRestException,TwilioException):
                 messages.info(request, "Something Error occured, please try again later")
                 return redirect(to='mobile')
-     
-
     return render(request,"enterphone.html")
+
+def otppage(request):
+    
+    return render(request,"enterotp.html")
 
 
 
