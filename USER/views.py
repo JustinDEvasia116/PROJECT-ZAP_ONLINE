@@ -93,8 +93,8 @@ def signup(request):
         if generatedotp == otp1:
             return render(request, "signup.html",{ 'phone': phone})
         else:
-            messages.info(request, "INVALID OTP")
-            return redirect(to='otppage')
+            
+            return render(request, "enterotp.html",{ 'otp': otp1})
   
     else:
         return render(request, 'signup.html')
