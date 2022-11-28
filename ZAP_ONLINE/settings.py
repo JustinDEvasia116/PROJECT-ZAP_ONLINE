@@ -21,7 +21,7 @@ from pathlib import Path
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 TWILIO_ACCOUNT_SID='AC6167737a8a886026afeb10da8f33e195'
-TWILIO_AUTH_TOKEN='01b4f26b7966591238a4345124ad1bdf'
+TWILIO_AUTH_TOKEN='bc075e28689ad72c5118f36d2674c737'
 client = Client(TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN)
 
 # Quick-start development settings - unsuitable for production
@@ -35,7 +35,7 @@ DEBUG = True
 
 ALLOWED_HOSTS = ["18.181.76.107","0.0.0.0","localhost","www.zaponline.info","zaponline.info","127.0.0.1"]
 
-
+CSRF_TRUSTED_ORIGINS = ['https://zaponline.info','https://www.zaponline.info']
 # Application definition
 
 INSTALLED_APPS = [
