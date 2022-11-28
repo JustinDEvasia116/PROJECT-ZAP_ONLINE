@@ -178,7 +178,7 @@ def otplogin(request,uid):
         accounts = Accounts.objects.get(uid=uid)
      
         if otp == accounts.otp:
-            login(request,accounts.user)
+            login(request,accounts.user,backend='django.contrib.auth.backends.ModelBackend')
             return redirect('home')
         else:
           return redirect(f'/otp/{uid}')
