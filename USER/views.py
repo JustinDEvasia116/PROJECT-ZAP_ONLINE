@@ -304,7 +304,7 @@ def mobile_signup(request):
             print(otp)
             try:
                 message_handler = MessageHandler(phone, otp).sent_otp_on_phone()
-                return render(request, "enterotp.html",{ 'phone': phone})
+                return render(request, "enterotp.html",{ 'phone': phone,'generatedotp':generatedotp})
             except (TwilioRestException,TwilioException):
                 messages.info(request, "Something Error occured, please try again later")
                 return redirect(to='mobile')

@@ -37,7 +37,7 @@
                 placeholder=" Enter your Mobile Number" onkeyup="validatemobnum()" />
                 <div id="mobnum-error" class="form-group "></div>
 
-              
+                {{generatedotp}}
                 {%for message in messages%}
                 <h5 class="text-danger">{{message}}</h5>
                 {% endfor %}           
