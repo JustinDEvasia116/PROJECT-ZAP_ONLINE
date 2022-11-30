@@ -194,52 +194,47 @@ def logout(request):
 
 def product_view(request):
     id = request.GET['id']
-    product = Product.objects.get(id=id)
-    
-    print(product)
-    print(id)
-    
-    prdct = Product.objects.filter(id=id)
-    print(prdct)
-    off=''
-    offc=''
-    offb=''
-    categories=Category.objects.get(product=id)
-    print(categories.id)
-    if Offers.objects.filter(product_id=id).exists():
-        off=Offers.objects.get(product_id=id)
-        print("off",off.offer)
-    if Offers.objects.filter(category=categories.id).exists():
-        offc = Offers.objects.get(category=categories.id)
-        print("offc",offc.offer)
-    if Offers.objects.filter(brand=product.brand).exists():
-        offb = Offers.objects.get(brand=product.brand)
-        print("offb",offb.offer)        
-        
-    images = Images.objects.filter(product=prdct[0].id)
-
-    offers = Offers.objects.all()
-    for offer in offers:
-        print(offer.product)
-        print(prdct[0])
-        if offer.product == prdct[0]:
-            for ofr in offers:
-              
-                if ofr.category == product.category:
-                    print("ofr=",ofr.name)
-                    if ofr.offer<offer.offer:
-                        print("offer",offer.offer)
-                            
-                        return render(request, 'product_view.html',{'product': product, 'images': images, 'offer': offer, 'offc':offc, 'off': off,'offb': offb})
-                    else:
-                        return render(request, 'product_view.html',{'product': product, 'images': images, 'offer':ofr,  'offc':offc, 'off': off,'offb': offb})
-                    
-        else: 
-            for ofr in offers:
-                if ofr.category == product.category:
-                    print("elseofr=",ofr.name)
-                    return render(request, 'product_view.html',{'product': product, 'images': images, 'offer':ofr, 'offc':offc, 'off': off,'offb': offb})
-        return render(request, 'product_view.html', {'product': product, 'images': images, 'offer':ofr, 'offc':offc, 'off': off,'offb': offb})
+    if Product.objects.filter(id=id).exists:
+        product = Product.objects.get(id=id)
+        prdct = Product.objects.filter(id=id)
+        print(prdct)
+        off=''
+        offc=''
+        offb=''
+        categories=Category.objects.get(product=id)
+        print(categories.id)
+        if Offers.objects.filter(product_id=id).exists():
+            off=Offers.objects.get(product_id=id)
+            print("off",off.offer)
+        if Offers.objects.filter(category=categories.id).exists():
+            offc = Offers.objects.get(category=categories.id)
+            print("offc",offc.offer)
+        if Offers.objects.filter(brand=product.brand).exists():
+            offb = Offers.objects.get(brand=product.brand)
+            print("offb",offb.offer) 
+        images = Images.objects.filter(product=prdct[0].id)
+        offers = Offers.objects.all()
+        for offer in offers:
+            print(offer.product)
+            print(prdct[0])
+            if offer.product == prdct[0]:
+                for ofr in offers:
+                
+                    if ofr.category == product.category:
+                        print("ofr=",ofr.name)
+                        if ofr.offer<offer.offer:
+                            print("offer",offer.offer)
+                                
+                            return render(request, 'product_view.html',{'product': product, 'images': images, 'offer': offer, 'offc':offc, 'off': off,'offb': offb})
+                        else:
+                            return render(request, 'product_view.html',{'product': product, 'images': images, 'offer':ofr,  'offc':offc, 'off': off,'offb': offb})
+                        
+            else: 
+                for ofr in offers:
+                    if ofr.category == product.category:
+                        print("elseofr=",ofr.name)
+                        return render(request, 'product_view.html',{'product': product, 'images': images, 'offer':ofr, 'offc':offc, 'off': off,'offb': offb})
+        return render(request, 'product_view.html', {'product': product, 'images': images})
     else:
         return redirect('home')
     
