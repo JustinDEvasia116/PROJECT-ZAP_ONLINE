@@ -95,11 +95,23 @@ def addcategory(request):
     if request.method == 'POST':
         name = request.POST['catname']
         id = request.POST['category']
-        categories= Category.objects.get(id=id)
-        category = Category.objects.create(name=name)
-        category.sub_categories.add(categories)
-     
-       
+        if len(name) == 0:
+            messages.info(request, 'Please enter Category name')
+            return redirect(to='category')
+        if id == '0':
+            if Category.objects.filter(name=name).exists():
+                messages.info(request, 'Category Already Exist')
+                return redirect(to='category')
+            else:
+                category = Category.objects.create(name=name)
+                return redirect(to='category')
+        elif Category.objects.filter(name=name).exists():
+             messages.info(request, 'Category Already Exist')
+             return redirect('category')
+        else:
+            categories= Category.objects.get(id=id)
+            category = Category.objects.create(name=name)
+            category.sub_categories.add(categories)
         return redirect('category')
     else:
         category=Category.objects.all()
@@ -147,8 +159,10 @@ def category(request):
         
         categories = Category.objects.get(id=ids)
         print(categories)
-        subcategories=categories.sub_categories.all().order_by('id')[1:]
-       
+        if ids == '1':
+            subcategories=categories.sub_categories.all().order_by('id')
+        else:
+            subcategories=categories.sub_categories.all().order_by('id')[1:]
         print(subcategories)
         return render(request, 'category.html', {'categories': categories,'subcategories': subcategories,'allcategory':allcategory})
         

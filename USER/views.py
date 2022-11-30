@@ -461,16 +461,23 @@ def checkout(request):
                     subtotal = subtotal+x
         shipping = 0
         message=False
-        coupon = Coupon.objects.get(code=code)
-        min_amount = coupon.min_amount*2
-        print(min_amount)
-        if total>min_amount:
-            total = total-coupon.discount
+
+        if Coupon.objects.filter(code=code).exists():
+            coupon = Coupon.objects.get(code=code)
+            min_amount = coupon.min_amount*2
+            print(min_amount)
+            if total>min_amount:
+                total = total-coupon.discount
+            else:
+                message = "Minimum Amount is not reached"
+                
+            print(message)
+            print(total)
+            return render(request, 'payment.html', { 'subtotal':subtotal,'total': total,'message':message, 'addresses': addresses,'cart':cart, 'code':code, 'offer':coupon})
         else:
-            message = "Minimum Amount is not reached"    
-        print(message)
-        print(total)
-        return render(request, 'payment.html', { 'subtotal':subtotal,'total': total,'message':message, 'addresses': addresses,'cart':cart, 'code':code, 'offer':coupon})
+            message = "Coupon Does Not Exist"
+            return render(request, 'payment.html', { 'subtotal':subtotal,'total': total,'message':message, 'addresses': addresses,'cart':cart,})
+              
     else:
         print('else===')
         user = request.user
