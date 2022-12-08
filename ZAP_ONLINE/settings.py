@@ -13,6 +13,8 @@ https://docs.djangoproject.com/en/4.1/ref/settings/
 
 
 import os
+
+
 from twilio.rest import Client
 
 
@@ -20,9 +22,9 @@ from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
-TWILIO_ACCOUNT_SID='AC6167737a8a886026afeb10da8f33e195'
-TWILIO_AUTH_TOKEN='528120e83558a450fc93eb403ec753be'
-client = Client(TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN)
+TWILIO_ACCOUNT_SID = os.environ.get('TWILIO_ACCOUNT_SID','twilioaccount')
+TWILIO_AUTH_TOKEN = os.environ.get('TWILIO_AUTH_TOKEN','twiliocode')
+client = Client  (TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN)
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.1/howto/deployment/checklist/
@@ -31,11 +33,12 @@ client = Client(TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN)
 SECRET_KEY = 'django-insecure-xv(5#qufq6a=8!%=y5_$&-s(a^6alo4tadnpo&jr8q+gac9fx^'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = str(os.environ.get('DEBUG')) == "1"
 
-ALLOWED_HOSTS = ["18.181.76.107","0.0.0.0","localhost","www.zaponline.info","zaponline.info","127.0.0.1"]
+ALLOWED_HOSTS = ["18.181.76.107", "0.0.0.0", "localhost",
+                 "www.zaponline.info", "zaponline.info", "127.0.0.1"]
 
-CSRF_TRUSTED_ORIGINS = ['https://zaponline.info','https://www.zaponline.info']
+CSRF_TRUSTED_ORIGINS = ['https://zaponline.info', 'https://www.zaponline.info']
 # Application definition
 
 INSTALLED_APPS = [
@@ -50,7 +53,7 @@ INSTALLED_APPS = [
     'django_twilio',
     "guest_user",
     'mathfilters',
-    
+
 ]
 
 MIDDLEWARE = [
@@ -69,9 +72,9 @@ TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'DIRS': [
-               BASE_DIR/"USER"/"templates",
-              BASE_DIR/"ADMIN"/"templates",
-              BASE_DIR/"templates"
+            BASE_DIR/"USER"/"templates",
+            BASE_DIR/"ADMIN"/"templates",
+            BASE_DIR/"templates"
 
         ],
         'APP_DIRS': True,
@@ -92,17 +95,18 @@ WSGI_APPLICATION = 'ZAP_ONLINE.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
 
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'postgres',
         'USER': 'postgres',
-        'PASSWORD' : 'password',
-        'HOST' : 'zaponlinedb.c8z8dgj66iin.ap-northeast-1.rds.amazonaws.com',
-        'PORT' : '5432'
-        
+        'PASSWORD': 'password',
+        'HOST': 'zaponlinedb.c8z8dgj66iin.ap-northeast-1.rds.amazonaws.com',
+        'PORT': '5432'
+
     }
-} 
+}
 
 # Password validation
 # https://docs.djangoproject.com/en/4.1/ref/settings/#auth-password-validators
@@ -123,9 +127,9 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 AUTHENTICATION_BACKENDS = [
-   "django.contrib.auth.backends.ModelBackend",
-   # it should be the last entry to prevent unauthorized access
-   "guest_user.backends.GuestBackend",
+    "django.contrib.auth.backends.ModelBackend",
+    # it should be the last entry to prevent unauthorized access
+    "guest_user.backends.GuestBackend",
 ]
 
 # Internationalization
@@ -140,19 +144,20 @@ USE_I18N = True
 USE_TZ = True
 
 
+
+
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.1/howto/static-files/
 
 STATIC_URL = '/static/'
 STATICFILES_DIRS = (
-  os.path.join(BASE_DIR, 'static'),
+    os.path.join(BASE_DIR, 'static'),
 )
-
 
 
 MEDIA_URL = '/media/'
 
-MEDIA_ROOT = os.path.join(BASE_DIR,'media')
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
